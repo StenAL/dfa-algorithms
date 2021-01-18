@@ -1,13 +1,10 @@
 import './App.scss';
+import MainPage from "./components/MainPage";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Hello world!
-        </p>
-      </header>
+        <MainPage/>
     </div>
   );
 }
