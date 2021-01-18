@@ -5,4 +5,8 @@ export interface Algorithm {
     step: () => void
 }
 
+export enum EquivalenceTestingResult {
+    UNFINISHED, EQUIVALENT, NON_EQUIVALENT
+}
+
 export type AlgorithmState = TableFillingAlgorithmState

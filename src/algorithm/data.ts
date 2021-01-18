@@ -1,5 +1,5 @@
 import {DFA, State} from "../types/DFA";
-import TableFillingAlgorithm from "./TableFillingAlgorithm";
+import TableFillingAlgorithm, {TableFillingAlgorithmState} from "./TableFillingAlgorithm";
 
 const alphabet = ["0", "1"]
 
@@ -70,5 +70,7 @@ export const dfaB: DFA = {
 }
 
 const algo = new TableFillingAlgorithm(dfaA, dfaB)
-algo.step()
-algo.step()
+while (algo.state !== TableFillingAlgorithmState.FINAL) {
+    algo.step()
+}
+console.log(algo.result)
