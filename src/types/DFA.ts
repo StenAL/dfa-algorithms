@@ -1,7 +1,7 @@
 export interface DFA {
     states: State[],
     startingState: State
-    finalStates: State[],
+    finalStates: Set<State>,
     alphabet: string[]
 }
 

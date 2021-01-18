@@ -1,30 +1,35 @@
 import {DFA, State} from "../types/DFA";
 import {Algorithm} from "../types/Algorithm";
+import HashMap from "hashmap";
+
 
 export enum TableFillingAlgorithmState {
     INITIAL,
     EMPTY_TABLE,
-    TABLE_COMPLETE,
+    ACCEPTING_PAIRS_DISTINGUISHED,
     FINAL
 }
+
+
 
 interface TableFillingAlgorithmInterface extends Algorithm {
     input1: DFA;
     input2: DFA;
-    pairs: Map<[State, State], string>;
+    pairs: HashMap<[State, State], string>;
 
 }
+
 
 export default class TableFillingAlgorithm implements TableFillingAlgorithmInterface {
     input1: DFA;
     input2: DFA;
-    pairs: Map<[State, State], string>;
+    pairs: HashMap<[State, State], string>;
 
     constructor(input1: DFA, input2: DFA) {
         this.state = TableFillingAlgorithmState.INITIAL
         this.input1 = input1
         this.input2 = input2
-        this.pairs = new Map()
+        this.pairs = new HashMap()
     }
 
     step() {
@@ -33,8 +38,9 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
                 this.createTable();
                 break;
             case TableFillingAlgorithmState.EMPTY_TABLE:
+                this.initializeTable()
                 break;
-            case TableFillingAlgorithmState.TABLE_COMPLETE:
+            case TableFillingAlgorithmState.ACCEPTING_PAIRS_DISTINGUISHED:
                 break;
             case TableFillingAlgorithmState.FINAL:
                 break;
@@ -51,12 +57,19 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
             }
         }
         this.state = TableFillingAlgorithmState.EMPTY_TABLE
-        console.log(this.pairs)
     }
 
     initializeTable() {
-
+        const acceptingStates = new Set([...this.input1.finalStates, ...this.input2.finalStates])
+        for (let pair of this.pairs.keys()) {
+            if (acceptingStates.has(pair[0]) !== acceptingStates.has(pair[1])) {
+                this.pairs.set(pair, "X")
+            }
+        }
+        this.state = TableFillingAlgorithmState.ACCEPTING_PAIRS_DISTINGUISHED
     }
+
+    markPairs() {}
 
     state: TableFillingAlgorithmState;
 }

@@ -33,7 +33,7 @@ q3.transitions.set("0", q3)
 q3.transitions.set("1", q3)
 
 export const dfaA: DFA = {
-    alphabet: alphabet, finalStates: [q2], startingState: q0, states: [q0, q1, q2, q3]
+    alphabet: alphabet, finalStates: new Set([q2]), startingState: q0, states: [q0, q1, q2, q3]
 }
 
 const q4: State = {
@@ -66,8 +66,9 @@ q7.transitions.set("0", q7)
 q7.transitions.set("1", q7)
 
 export const dfaB: DFA = {
-    alphabet: alphabet, finalStates: [q6], startingState: q4, states: [q4, q5, q6, q7]
+    alphabet: alphabet, finalStates: new Set([q6]), startingState: q4, states: [q4, q5, q6, q7]
 }
 
 const algo = new TableFillingAlgorithm(dfaA, dfaB)
+algo.step()
 algo.step()
