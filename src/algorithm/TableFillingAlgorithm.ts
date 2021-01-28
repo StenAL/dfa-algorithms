@@ -34,6 +34,7 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
         this.pairs = new HashMap()
         this.unmarkedPairs = new Set()
         this.result = EquivalenceTestingResult.UNFINISHED
+        this.type = "table-filling"
     }
 
     step() {
@@ -124,4 +125,5 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
 
     state: TableFillingAlgorithmState;
     unmarkedPairs: Set<[State, State]>;
+    type: "table-filling";
 }

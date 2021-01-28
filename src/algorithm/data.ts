@@ -69,8 +69,8 @@ export const dfaB: DFA = {
     alphabet: alphabet, finalStates: new Set([q6]), startingState: q4, states: [q4, q5, q6, q7]
 }
 
-const algo = new TableFillingAlgorithm(dfaA, dfaB)
-while (algo.state !== TableFillingAlgorithmState.FINAL) {
-    algo.step()
-}
-console.log(algo.result)
+// const algo = new TableFillingAlgorithm(dfaA, dfaB)
+// while (algo.state !== TableFillingAlgorithmState.FINAL) {
+//     algo.step()
+// }
+// console.log(algo.result)
