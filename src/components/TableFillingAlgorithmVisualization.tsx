@@ -31,7 +31,7 @@ export default function TableFillingAlgorithmVisualization({algorithm}: Algorith
     rows[0].unshift("")
 
     const pairs = rows.map((row, j) =>
-        <div className={"table-filling-row"}>
+        <div className={"table-filling-row"} key={`${j}`}>
         {row.map((el, i) => <div className={"table-filling-cell"} key={`${i}-${j}`}>{el}</div>)}
     </div>)
     return <div>
