@@ -5,7 +5,7 @@ export interface DFA {
     alphabet: string[]
 }
 
-type Transitions = Map<string, State>
+export type Transitions = Map<string, State>
 
 export interface State {
     name: string,

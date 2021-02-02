@@ -3,16 +3,35 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.table-filling-row {
+.table-filling-row, .transition-row {
   display: flex;
   flex-direction: row;
 }
 
-.table-filling-cell {
+.table-filling-cell, .transition-cell {
   width: 10rem;
   height: 3rem;
+}
+
+.transition-header {
+  font-weight: bold;
+}
+
+.invalid-input {
+  border: 1px solid red;
+}
+
+.transitions {
+  margin: 0 auto;
+}
+
+.transition-cell {
+  input {
+    width:2rem;
+  }
 }
