@@ -120,6 +120,7 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
         const q2 = this.input2.startingState
         const startingPair = this.getPair(q1, q2)
         this.result = this.pairs.get(startingPair) === "" ? EquivalenceTestingResult.EQUIVALENT : EquivalenceTestingResult.NON_EQUIVALENT
+        console.log("done, result:" + this.result)
         this.state = TableFillingAlgorithmState.FINAL
     }
 

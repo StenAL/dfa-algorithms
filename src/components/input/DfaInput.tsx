@@ -1,9 +1,15 @@
 import {useState} from "react";
+import {DFA} from "../../types/DFA";
 import InputConverter from "./InputConverter";
 import TransitionsInput from "./TransitionsInput";
+
 export type TransitionData = Map<string, Map<string, string>>
 
-export default function DfaInput() {
+interface DfaInputProps {
+    convertInputCallback: (dfa: DFA) => void;
+}
+
+export default function DfaInput({convertInputCallback}: DfaInputProps) {
     const [states, setStates] = useState<string[]>([]);
     const [finalStates, setFinalStates] = useState<string[]>([]);
     const [alphabet, setAlphabet] = useState<string[]>([]);
@@ -20,7 +26,7 @@ export default function DfaInput() {
             if (newStates.length > 0 && newStates[newStates.length - 1] === "") {
                 newStates.pop()
             }
-            const transitionsCopy : TransitionData = new Map();
+            const transitionsCopy: TransitionData = new Map();
             for (let state of newStates) {
                 if (transitions.has(state)) {
                     transitionsCopy.set(state, transitions.get(state)!);
@@ -41,7 +47,7 @@ export default function DfaInput() {
             if (newAlphabet.length > 0 && newAlphabet[newAlphabet.length - 1] === "") {
                 newAlphabet.pop()
             }
-            const transitionsCopy : TransitionData = new Map(transitions);
+            const transitionsCopy: TransitionData = new Map(transitions);
 
             for (let state of states) {
                 const t = transitionsCopy.get(state)!;
@@ -66,12 +72,15 @@ export default function DfaInput() {
             }
             setFinalStates(newFinalStates);
         }} className={finalStatesValid ? "" : "invalid-input"}/>
-        {states.length > 0 ? <TransitionsInput states={states} alphabet={alphabet} transitions={transitions} setTransition={(from, symbol, to) => {
-            const transitionsCopy : TransitionData = new Map(transitions);
-            transitionsCopy.get(from)!.set(symbol, to);
-            setTransitions(transitionsCopy);
-        }} setTransitionsValid={setTransitionsValid}/> : ""}
+        {states.length > 0 ? <TransitionsInput states={states} alphabet={alphabet} transitions={transitions}
+                                               setTransition={(from, symbol, to) => {
+                                                   const transitionsCopy: TransitionData = new Map(transitions);
+                                                   transitionsCopy.get(from)!.set(symbol, to);
+                                                   setTransitions(transitionsCopy);
+                                               }} setTransitionsValid={setTransitionsValid}/> : ""}
         <InputConverter transitions={transitions} alphabet={alphabet} finalStates={finalStates} states={states}
-                        validInput={statesValid && alphabetValid && finalStatesValid && transitionsValid}/>
+                        validInput={statesValid && alphabetValid && finalStatesValid && transitionsValid}
+                        convertInputCallback={convertInputCallback}
+        />
     </div>)
 }

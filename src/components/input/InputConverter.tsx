@@ -7,9 +7,17 @@ interface InputConverterProps {
     finalStates: string[],
     alphabet: string[],
     validInput: boolean;
+    convertInputCallback: (dfa: DFA) => void;
 }
 
-export default function InputConverter({states, transitions, alphabet, finalStates, validInput} : InputConverterProps) {
+export default function InputConverter({
+                                           states,
+                                           transitions,
+                                           alphabet,
+                                           finalStates,
+                                           validInput,
+                                           convertInputCallback
+                                       }: InputConverterProps) {
     const createDfa = () => {
         const stateMap = new Map<string, State>();
         for (let state of states) {
@@ -30,13 +38,14 @@ export default function InputConverter({states, transitions, alphabet, finalStat
         for (let finalState of finalStates) {
             dfaFinalStates.add(stateMap.get(finalState)!)
         }
-        const dfa : DFA = {
+        const dfa: DFA = {
             startingState: stateMap.get(states[0])!,
             alphabet: alphabet,
             states: Array.from(stateMap.values()),
             finalStates: dfaFinalStates,
         }
-        console.log(dfa);
+        convertInputCallback(dfa);
+
     }
 
 
