@@ -1,3 +1,4 @@
+import {useEffect} from "react";
 import {DFA, State, Transitions} from "../../types/DFA";
 import {TransitionData} from "./DfaInput";
 
@@ -7,7 +8,7 @@ interface InputConverterProps {
     finalStates: string[],
     alphabet: string[],
     validInput: boolean;
-    convertInputCallback: (dfa: DFA) => void;
+    convertInputCallback: (dfa: DFA | undefined) => void;
 }
 
 export default function InputConverter({
@@ -47,7 +48,14 @@ export default function InputConverter({
         convertInputCallback(dfa);
 
     }
+    useEffect(() => {
+        if (validInput) {
+            createDfa();
+        } else {
+            convertInputCallback(undefined)
+        }
+    }, [validInput]);
 
 
-    return <button disabled={!validInput} onClick={() => createDfa()}>Create DFA</button>
+    return <p>{validInput ? "✓" : "X"}</p>
 }

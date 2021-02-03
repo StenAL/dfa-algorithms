@@ -1,7 +1,3 @@
-import TableFillingAlgorithm from "../algorithm/TableFillingAlgorithm";
-import AlgorithmVisualization from "./AlgorithmVisualization";
-import {dfaA, dfaB} from "../algorithm/data"
-import DfaInput from "./input/DfaInput";
 import React from "react";
 import {
     BrowserRouter as Router,

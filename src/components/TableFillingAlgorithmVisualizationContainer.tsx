@@ -1,10 +1,10 @@
 import {useState} from "react";
 import {Link, Route} from "react-router-dom";
+import {dfaA, dfaB} from "../algorithm/data";
 import TableFillingAlgorithm from "../algorithm/TableFillingAlgorithm";
 import {DFA} from "../types/DFA";
 import AlgorithmVisualization from "./AlgorithmVisualization";
 import DfaInput from "./input/DfaInput";
-import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualization";
 
 enum Mode {
     EQUIVALENCE_TESTING,
@@ -24,9 +24,18 @@ export default function TableFillingAlgorithmVisualizationContainer() {
     return (
         <>
             <Route path={"/table-filling/input"}>
-                <DfaInput convertInputCallback={(dfa) => setInput1(dfa)}/>
-                {mode === Mode.EQUIVALENCE_TESTING ? <DfaInput convertInputCallback={(dfa) => setInput2(dfa)}/> : ""}
+                <p>Input:</p>
+                <div className={"inputs-container"}>
+                    <DfaInput convertInputCallback={(dfa) => setInput1(dfa)}/>
+                    {mode === Mode.EQUIVALENCE_TESTING ?
+                        <DfaInput convertInputCallback={(dfa) => setInput2(dfa)}/> : ""}
+                </div>
                 {inputValid ? <Link to={"/table-filling/algorithm"}>Run</Link> : ""}
+                <p>or use a pre-generated input: **todo: add more**</p>
+                <Link to={"/table-filling/algorithm"}><button onClick={() => {
+                    setInput1(dfaA);
+                    setInput2(dfaB);
+                }}>Example inputs</button></Link>
             </Route>
             <Route path={"/table-filling/algorithm"}>
                 <AlgorithmVisualization algorithm={new TableFillingAlgorithm(input1!, input2!)}/>
