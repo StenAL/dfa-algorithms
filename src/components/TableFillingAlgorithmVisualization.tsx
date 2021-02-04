@@ -1,5 +1,5 @@
 import TableFillingAlgorithm, { TableFillingAlgorithmState } from "../algorithm/TableFillingAlgorithm";
-import { CommonAlgorithmState, EquivalenceTestingResult } from "../types/Algorithm";
+import { AlgorithmMode, CommonAlgorithmState, EquivalenceTestingResult } from "../types/Algorithm";
 
 interface AlgorithmVisualizationProps {
     algorithm: TableFillingAlgorithm;
@@ -11,11 +11,14 @@ export default function TableFillingAlgorithmVisualization({
     const rows: string[][] = [];
     let prevTitle = "";
     let row: string[] = [""];
-    const allStates = algorithm.input1.states.concat(algorithm.input2.states);
-
+    let allStates;
+    if (algorithm.mode === AlgorithmMode.EQUIVALENCE_TESTING) {
+        allStates = algorithm.input1.states.concat(algorithm.input2.states);
+    } else {
+        allStates = algorithm.input1.states;
+    }
     for (let pair of algorithm.pairs.entries()) {
         const title1 = pair[0][0].name;
-        const title2 = pair[0][1].name;
         if (title1 !== prevTitle) { // new row in table
             if (prevTitle !== "") {
                 rows.push(row);
@@ -80,13 +83,13 @@ export default function TableFillingAlgorithmVisualization({
 
     }
     return (
-        <div className={"table-filling-visualization"}>
-            <p>Current state: {stateDescription}</p>
+        <>
+            <p className={"table-filling-state"}>Current state: {stateDescription}</p>
             {pairs.length > 1 ? (
                 <div className={"table-filling-table"}>{pairs}</div>
             ) : (
                 ""
             )}
-        </div>
+        </>
     );
 }

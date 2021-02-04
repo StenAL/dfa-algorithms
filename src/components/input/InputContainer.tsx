@@ -22,6 +22,7 @@ export default function InputContainer({modes, runCallback, runLink}: InputConta
     } else if (mode === AlgorithmMode.STATE_MINIMIZATION && input1) {
         inputValid = true;
     }
+    // todo: only have single alphabet even for two DFAs
     // todo: check that input1 and input2 state names have no overlap
     return (<>
         {modes.length > 1 ?
