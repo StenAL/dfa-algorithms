@@ -12,12 +12,18 @@ body {
   flex-direction: row;
 }
 
-.table-filling-cell {
-  width: 10rem;
+.table-filling-cell, .transition-cell {
+  width: 3rem;
   height: 3rem;
+  margin: 1px;
+  //border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.transition-header {
+.transition-header, .table-filling-header {
   font-weight: bold;
 }
 
@@ -25,22 +31,15 @@ body {
   border: 1px solid red;
 }
 
-.transitions {
-  margin: 0 auto;
-}
 
-.transition-cell {
-  width: 3rem;
-  height: 3rem;
-  margin: 1px;
-  input {
-    width:2rem;
-  }
+.transition-cell input {
+  width: 2rem;
 }
 
 .inputs-container {
   display: flex;
   flex-direction: row;
+  justify-content: center;
 }
 
 .dfa-input {
@@ -56,9 +55,37 @@ body {
     max-width: 250px;
     display: flex;
     flex-direction: column;
+
     input {
       margin-bottom: 2rem;
     }
   }
+}
 
+.valid-indicator {
+  color: green;
+}
+
+.disabled-link {
+  cursor: default;
+}
+
+.algorithm-visualization {
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.algorithm-log {
+  max-height: 200px;
+  width: 400px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.algorithm-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

@@ -25,7 +25,8 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
     input1: DFA;
     input2: DFA;
     pairs: HashMap<[State, State], string>;
-    result: EquivalenceTestingResult
+    result: EquivalenceTestingResult;
+    log: ((message: string) => void) | undefined;
 
     constructor(input1: DFA, input2: DFA) {
         this.state = TableFillingAlgorithmState.INITIAL
@@ -35,6 +36,7 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
         this.unmarkedPairs = new Set()
         this.result = EquivalenceTestingResult.UNFINISHED
         this.type = "table-filling"
+        this.log = undefined;
     }
 
     step() {
@@ -57,6 +59,9 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
     }
 
     createTable() {
+        if (this.log) {
+            this.log("Creating initial table from DFAs");
+        }
         const allStates = this.input1.states.concat(this.input2.states)
         for (let i = 0; i < allStates.length; i++) {
             const state1 = allStates[i];
@@ -65,6 +70,9 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
                 const pair: [State, State] = [state1, state2]
                 this.pairs.set(pair, "")
                 this.unmarkedPairs.add(pair)
+                if (this.log) {
+                    this.log(`Added pair (${state1.name},${state2.name}) to table`);
+                }
             }
         }
         this.state = TableFillingAlgorithmState.EMPTY_TABLE
@@ -73,12 +81,21 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
     initializeTable() {
         const acceptingStates = new Set([...this.input1.finalStates, ...this.input2.finalStates])
         const nonAcceptingStates = this.input1.states.concat(this.input2.states).filter(s => !acceptingStates.has(s))
+        let markedCount = 0
         for (let acceptingState of acceptingStates) {
             for (let nonAcceptingState of nonAcceptingStates) {
                 const pair = this.getPair(acceptingState, nonAcceptingState)
                 this.pairs.set(pair, "X") // set to empty string
+                markedCount++;
                 this.unmarkedPairs.delete(pair)
+                if (this.log) {
+                    this.log(`Marked pair (${acceptingState.name},${nonAcceptingState.name})`);
+                }
             }
+        }
+
+        if (this.log) {
+            this.log(`Marked ${markedCount} pairs initially`);
         }
         this.state = TableFillingAlgorithmState.MARKING_PAIRS
     }
@@ -101,16 +118,23 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
                 if (this.pairs.get(successorPair) !== "") {
                     this.pairs.set(unmarkedPair, "X") // set to symbol
                     this.unmarkedPairs.delete(unmarkedPair)
+                    if (this.log) {
+                        this.log(`Marked pair (${q.name},${p.name})`);
+                    }
                 }
             }
         }
         // new pairs have been marked
         if (unmarkedPairsCopy.size !== this.unmarkedPairs.size) {
-            console.log(`Marked ${unmarkedPairsCopy.size - this.unmarkedPairs.size} pairs`)
+            // console.log(`Marked ${unmarkedPairsCopy.size - this.unmarkedPairs.size} pairs`)
+            if (this.log) {
+                this.log(`Marked ${unmarkedPairsCopy.size - this.unmarkedPairs.size} pairs this iteration.`);
+            }
             this.state = TableFillingAlgorithmState.MARKING_PAIRS
         } else {
-            console.log("Done marking")
-            console.log(this.pairs)
+            if (this.log) {
+                this.log(`Marked no additional pairs in an iteration, all distinguishable pairs have been marked.`);
+            }
             this.state = TableFillingAlgorithmState.ALL_PAIRS_MARKED
         }
     }
@@ -121,6 +145,13 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
         const startingPair = this.getPair(q1, q2)
         this.result = this.pairs.get(startingPair) === "" ? EquivalenceTestingResult.EQUIVALENT : EquivalenceTestingResult.NON_EQUIVALENT
         console.log("done, result:" + this.result)
+        if (this.log) {
+            if (this.result === EquivalenceTestingResult.EQUIVALENT) {
+                this.log(`Starting states ${q1.name} and ${q2.name} are indistinguishable, therefore the DFAs are equivalent`)
+            } else {
+                this.log(`Starting states ${q1.name} and ${q2.name} are distinguishable, therefore the DFAs are non-equivalent`)
+            }
+        }
         this.state = TableFillingAlgorithmState.FINAL
     }
 

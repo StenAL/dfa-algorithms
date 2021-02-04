@@ -7,7 +7,6 @@ import {
 import TableFillingAlgorithmVisualizationContainer from "./TableFillingAlgorithmVisualizationContainer";
 
 export default function MainPage() {
-    // const tableFillingAlgorithm = new TableFillingAlgorithm(dfaA, dfaB)
     return (<Router>
         <div>
             <Link to={"/"}><h1>DFA algorithms</h1></Link>
@@ -17,7 +16,6 @@ export default function MainPage() {
             </Route>
             <Route path={"/table-filling/"}>
                 <TableFillingAlgorithmVisualizationContainer/>
-                {/*<AlgorithmVisualization algorithm={tableFillingAlgorithm}/>*/}
             </Route>
         </div>
     </Router>)

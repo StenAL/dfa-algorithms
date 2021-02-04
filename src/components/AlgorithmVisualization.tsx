@@ -1,5 +1,6 @@
 import {useState} from "react";
 import TableFillingAlgorithm from "../algorithm/TableFillingAlgorithm";
+import AlgorithmLog from "./AlgorithmLog";
 import AlgorithmStepControls from "./AlgorithmStepControls";
 import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualization";
 import {Algorithm} from "../types/Algorithm";
@@ -8,12 +9,12 @@ interface AlgorithmVisualizationProps {
     algorithm: Algorithm;
 }
 
-function useForceUpdate(){
+function useForceUpdate() {
     const [, setValue] = useState(0);
     return () => setValue(value => value + 1); // update the state to force render
 }
 
-export default function AlgorithmVisualization({algorithm} : AlgorithmVisualizationProps) {
+export default function AlgorithmVisualization({algorithm}: AlgorithmVisualizationProps) {
     const forceUpdate = useForceUpdate();
     let visualization = <p>Unsupported (so far)</p>
     let title = "Unspecified"
@@ -26,9 +27,12 @@ export default function AlgorithmVisualization({algorithm} : AlgorithmVisualizat
             visualization = <p>Unsupported</p>
             title = "Other"
     }
-    return <div>
+    return <div className={"algorithm-container"}>
         <h2>{title}</h2>
-        {visualization}
-        <AlgorithmStepControls algorithm={algorithm} stepForwardCallback={() => forceUpdate()}/>
+        <AlgorithmLog algorithm={algorithm}/>
+        <div className={"algorithm-visualization"}>
+            {visualization}
+            <AlgorithmStepControls algorithm={algorithm} stepForwardCallback={() => forceUpdate()}/>
+        </div>
     </div>
 }

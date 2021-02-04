@@ -32,10 +32,15 @@ export default function TableFillingAlgorithmVisualization({algorithm}: Algorith
 
     const pairs = rows.map((row, j) =>
         <div className={"table-filling-row"} key={`${j}`}>
-        {row.map((el, i) => <div className={"table-filling-cell"} key={`${i}-${j}`}>{el}</div>)}
-    </div>)
+            {row.map((el, i) => {
+                const header = i === 0 || j === 0;
+                return <div className={"table-filling-cell" + (header ? " table-filling-header" : "")}
+                            key={`${i}-${j}`}>{el}</div>
+            })}
+        </div>)
+    const state = "s" // todo generate string based on algorithm state
     return <div>
-        <h3>Pairs</h3>
-        {pairs}
+        <p></p>
+        {pairs.length > 1 ? <div className={"table-filling-table"}>{pairs}</div> : ""}
     </div>
 }

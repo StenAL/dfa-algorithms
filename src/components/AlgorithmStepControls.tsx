@@ -1,3 +1,4 @@
+import {TableFillingAlgorithmState} from "../algorithm/TableFillingAlgorithm";
 import {Algorithm} from "../types/Algorithm";
 
 interface AlgorithmStepControlsProps {
@@ -7,8 +8,8 @@ interface AlgorithmStepControlsProps {
 
 export default function AlgorithmStepControls({algorithm, stepForwardCallback}: AlgorithmStepControlsProps) {
     return <div className={"step-controls"}>
-        <button>{"<"}</button>
-        <button onClick={() => {
+        <button disabled={true}>{"<"}</button>
+        <button disabled={algorithm.state === TableFillingAlgorithmState.FINAL} onClick={() => {
             algorithm.step()
             stepForwardCallback()
         }}>{">"}</button>
