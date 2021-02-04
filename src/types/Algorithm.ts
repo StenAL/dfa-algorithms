@@ -4,6 +4,7 @@ export interface Algorithm {
     type: "table-filling" | "other";
     state: AlgorithmState;
     step: () => void;
+    reset: () => void;
     log?: (message: string) => void;
 }
 
@@ -13,4 +14,14 @@ export enum EquivalenceTestingResult {
     NON_EQUIVALENT,
 }
 
-export type AlgorithmState = TableFillingAlgorithmState;
+export enum CommonAlgorithmState {
+    INITIAL= 1000,
+    FINAL
+}
+
+export type AlgorithmState = TableFillingAlgorithmState | CommonAlgorithmState;
+
+export enum AlgorithmMode {
+    EQUIVALENCE_TESTING,
+    MINIMIZATION,
+}

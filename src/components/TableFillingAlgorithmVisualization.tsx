@@ -1,4 +1,5 @@
-import TableFillingAlgorithm from "../algorithm/TableFillingAlgorithm";
+import TableFillingAlgorithm, { TableFillingAlgorithmState } from "../algorithm/TableFillingAlgorithm";
+import { CommonAlgorithmState, EquivalenceTestingResult } from "../types/Algorithm";
 
 interface AlgorithmVisualizationProps {
     algorithm: TableFillingAlgorithm;
@@ -51,10 +52,30 @@ export default function TableFillingAlgorithmVisualization({
             })}
         </div>
     ));
-    const state = "s"; // todo generate string based on algorithm state
+    let stateDescription = ""
+    switch (algorithm.state) {
+        case CommonAlgorithmState.INITIAL:
+            stateDescription = "Initial state"
+            break;
+        case TableFillingAlgorithmState.EMPTY_TABLE:
+            stateDescription = "Table created"
+            break;
+        case TableFillingAlgorithmState.MARKING_PAIRS:
+            stateDescription = "Marking pairs"
+            break;
+        case TableFillingAlgorithmState.ALL_PAIRS_MARKED:
+            stateDescription = "All pairs marked"
+            break;
+        case CommonAlgorithmState.FINAL:
+            stateDescription = "Final state"
+            const resultString = "Result: DFA are " + (algorithm.result === EquivalenceTestingResult.EQUIVALENT ? " equivalent" : "non-equivalent")
+            stateDescription += ". " + resultString;
+            break;
+
+    }
     return (
-        <div>
-            <p></p>
+        <div className={"table-filling-visualization"}>
+            <p>Current state: {stateDescription}</p>
             {pairs.length > 1 ? (
                 <div className={"table-filling-table"}>{pairs}</div>
             ) : (

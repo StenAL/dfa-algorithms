@@ -15,8 +15,8 @@ function useForceUpdate() {
 }
 
 export default function AlgorithmVisualization({
-    algorithm,
-}: AlgorithmVisualizationProps) {
+                                                   algorithm
+                                               }: AlgorithmVisualizationProps) {
     const forceUpdate = useForceUpdate();
     let visualization = <p>Unsupported (so far)</p>;
     let title = "Unspecified";
@@ -37,13 +37,12 @@ export default function AlgorithmVisualization({
         <div className={"algorithm-container"}>
             <h2>{title}</h2>
             <AlgorithmLog algorithm={algorithm} />
-            <div className={"algorithm-visualization"}>
-                {visualization}
-                <AlgorithmStepControls
-                    algorithm={algorithm}
-                    stepForwardCallback={() => forceUpdate()}
-                />
-            </div>
+            {visualization}
+            <AlgorithmStepControls
+                algorithm={algorithm}
+                stepBackwardCallback={() => forceUpdate()}
+                stepForwardCallback={() => forceUpdate()}
+            />
         </div>
     );
 }

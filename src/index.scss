@@ -72,7 +72,7 @@ body {
     cursor: default;
 }
 
-.algorithm-visualization {
+.table-filling-table {
     border: 1px solid black;
     border-radius: 4px;
     padding: 10px;
@@ -90,4 +90,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.algorithm-mode-option {
+    position: relative;
+    bottom: 8px;
+    margin: 0 5px;
 }
