@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
-import AlgorithmVisualization from "./AlgorithmVisualization";
+import AlgorithmVisualization from "./visualization/AlgorithmVisualization";
 
 export default function MainPage() {
     return (

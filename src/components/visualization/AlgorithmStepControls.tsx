@@ -1,4 +1,4 @@
-import { Algorithm, CommonAlgorithmState } from "../types/Algorithm";
+import { Algorithm, CommonAlgorithmState } from "../../types/Algorithm";
 
 interface AlgorithmStepControlsProps {
     algorithm: Algorithm;
@@ -18,7 +18,7 @@ export default function AlgorithmStepControls({
                 stepBackwardCallback();
             }}>{"<<"}</button>
             <button disabled={true} onClick={() => {
-                algorithm.step();
+                // todo: step backwards
                 stepBackwardCallback();
             }}>{"<"}</button>
             <button

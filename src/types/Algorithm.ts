@@ -5,7 +5,12 @@ export interface Algorithm {
     state: AlgorithmState;
     step: () => void;
     reset: () => void;
-    log?: (message: string) => void;
+    log?: Log
+}
+
+export interface Log {
+    log: (message: string) => void;
+    clear: () => void;
 }
 
 export type AlgorithmType = "table-filling" | "hopcroft" | "other";
@@ -25,5 +30,5 @@ export type AlgorithmState = TableFillingAlgorithmState | CommonAlgorithmState;
 
 export enum AlgorithmMode {
     EQUIVALENCE_TESTING,
-    MINIMIZATION,
+    STATE_MINIMIZATION,
 }

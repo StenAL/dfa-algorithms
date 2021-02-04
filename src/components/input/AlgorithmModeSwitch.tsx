@@ -11,11 +11,11 @@ export default function AlgorithmModeSwitch({mode, callback} : AlgorithmModeSwit
         <p>Choose mode:</p>
         <span className={"algorithm-mode-option"}>Equivalence testing</span>
         <Switch
-            checked={mode === AlgorithmMode.MINIMIZATION}
+            checked={mode === AlgorithmMode.STATE_MINIMIZATION}
             activeBoxShadow={'0 0 2px 2px #3bf'}
             onChange={() => {
                 mode === AlgorithmMode.EQUIVALENCE_TESTING
-                    ? callback(AlgorithmMode.MINIMIZATION)
+                    ? callback(AlgorithmMode.STATE_MINIMIZATION)
                     : callback(AlgorithmMode.EQUIVALENCE_TESTING);
             }}
             checkedIcon={false}

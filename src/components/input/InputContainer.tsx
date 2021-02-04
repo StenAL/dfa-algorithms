@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { dfaA, dfaB } from "../../algorithm/data";
 import { AlgorithmMode } from "../../types/Algorithm";
 import { DFA } from "../../types/DFA";
@@ -19,9 +19,10 @@ export default function InputContainer({modes, runCallback, runLink}: InputConta
     let inputValid = false;
     if (mode === AlgorithmMode.EQUIVALENCE_TESTING && input1 && input2) {
         inputValid = true;
-    } else if (mode === AlgorithmMode.MINIMIZATION && input1) {
+    } else if (mode === AlgorithmMode.STATE_MINIMIZATION && input1) {
         inputValid = true;
     }
+    // todo: check that input1 and input2 state names have no overlap
     return (<>
         {modes.length > 1 ?
             <AlgorithmModeSwitch mode={mode} callback={(mode) => setMode(mode)} /> : ""
@@ -42,7 +43,7 @@ export default function InputContainer({modes, runCallback, runLink}: InputConta
         >
             <button disabled={!inputValid} onClick={() => runCallback(input1!, input2)}>Run</button>
         </Link>
-        <p>or use a pre-generated input: **todo: add more**</p>
+        <p>or use a pre-generated input:</p>
         <Link to={runLink}>
             <button
                 onClick={() => runCallback(dfaA, dfaB)}

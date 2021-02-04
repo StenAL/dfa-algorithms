@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Algorithm } from "../types/Algorithm";
+import { Algorithm } from "../../types/Algorithm";
 
 interface AlgorithmLogProps {
     algorithm: Algorithm;
@@ -7,8 +7,9 @@ interface AlgorithmLogProps {
 
 export default function AlgorithmLog({ algorithm }: AlgorithmLogProps) {
     const [messages, setMessages] = useState<string[]>([]);
-    algorithm.log = (message) => {
-        setMessages((prevState) => prevState.concat(message));
+    algorithm.log = {
+        log: (message) => setMessages((prevState) => prevState.concat(message)),
+        clear: () => setMessages([]),
     };
 
     const messageViews = messages

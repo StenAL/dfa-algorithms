@@ -68,7 +68,7 @@ export default function TableFillingAlgorithmVisualization({
             break;
         case CommonAlgorithmState.FINAL:
             stateDescription = "Final state"
-            const resultString = "Result: DFA are " + (algorithm.result === EquivalenceTestingResult.EQUIVALENT ? " equivalent" : "non-equivalent")
+            const resultString = "Result: DFAs are " + (algorithm.result === EquivalenceTestingResult.EQUIVALENT ? " equivalent" : "non-equivalent")
             stateDescription += ". " + resultString;
             break;
 
