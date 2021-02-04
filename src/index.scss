@@ -1,91 +1,93 @@
 body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
-.table-filling-row, .transition-row {
-  display: flex;
-  flex-direction: row;
+.table-filling-row,
+.transition-row {
+    display: flex;
+    flex-direction: row;
 }
 
-.table-filling-cell, .transition-cell {
-  width: 3rem;
-  height: 3rem;
-  margin: 1px;
-  //border: 1px solid black;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.table-filling-cell,
+.transition-cell {
+    width: 3rem;
+    height: 3rem;
+    margin: 1px;
+    //border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.transition-header, .table-filling-header {
-  font-weight: bold;
+.transition-header,
+.table-filling-header {
+    font-weight: bold;
 }
 
 .invalid-input {
-  border: 1px solid red;
+    border: 1px solid red;
 }
 
-
 .transition-cell input {
-  width: 2rem;
+    width: 2rem;
 }
 
 .inputs-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .dfa-input {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-  margin: 1rem;
-  border: 1px solid grey;
-  border-radius: 6px;
-
-  .input-fields {
-    max-width: 250px;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    margin: 1rem;
+    border: 1px solid grey;
+    border-radius: 6px;
 
-    input {
-      margin-bottom: 2rem;
+    .input-fields {
+        max-width: 250px;
+        display: flex;
+        flex-direction: column;
+
+        input {
+            margin-bottom: 2rem;
+        }
     }
-  }
 }
 
 .valid-indicator {
-  color: green;
+    color: green;
 }
 
 .disabled-link {
-  cursor: default;
+    cursor: default;
 }
 
 .algorithm-visualization {
-  border: 1px solid black;
-  border-radius: 4px;
-  padding: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 10px;
 }
 
 .algorithm-log {
-  max-height: 200px;
-  width: 400px;
-  overflow: auto;
-  display: flex;
-  flex-direction: column-reverse;
+    max-height: 200px;
+    width: 400px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .algorithm-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

@@ -1,24 +1,24 @@
-import {useEffect} from "react";
-import {DFA, State, Transitions} from "../../types/DFA";
-import {TransitionData} from "./DfaInput";
+import { useEffect } from "react";
+import { DFA, State, Transitions } from "../../types/DFA";
+import { TransitionData } from "./DfaInput";
 
 interface InputConverterProps {
     states: string[];
-    transitions: TransitionData,
-    finalStates: string[],
-    alphabet: string[],
+    transitions: TransitionData;
+    finalStates: string[];
+    alphabet: string[];
     validInput: boolean;
     convertInputCallback: (dfa: DFA | undefined) => void;
 }
 
 export default function InputConverter({
-                                           states,
-                                           transitions,
-                                           alphabet,
-                                           finalStates,
-                                           validInput,
-                                           convertInputCallback
-                                       }: InputConverterProps) {
+    states,
+    transitions,
+    alphabet,
+    finalStates,
+    validInput,
+    convertInputCallback,
+}: InputConverterProps) {
     const createDfa = () => {
         const stateMap = new Map<string, State>();
         for (let state of states) {
@@ -31,31 +31,33 @@ export default function InputConverter({
             const transitionData = transitions.get(state)!;
             const dfaTransitions: Transitions = new Map<string, State>();
             for (let entry of transitionData.entries()) {
-                dfaTransitions.set(entry[0], stateMap.get(entry[1])!)
+                dfaTransitions.set(entry[0], stateMap.get(entry[1])!);
             }
             stateMap.get(state)!.transitions = dfaTransitions;
         }
         const dfaFinalStates = new Set<State>();
         for (let finalState of finalStates) {
-            dfaFinalStates.add(stateMap.get(finalState)!)
+            dfaFinalStates.add(stateMap.get(finalState)!);
         }
         const dfa: DFA = {
             startingState: stateMap.get(states[0])!,
             alphabet: alphabet,
             states: Array.from(stateMap.values()),
             finalStates: dfaFinalStates,
-        }
+        };
         convertInputCallback(dfa);
-
-    }
+    };
     useEffect(() => {
         if (validInput) {
             createDfa();
         } else {
-            convertInputCallback(undefined)
+            convertInputCallback(undefined);
         }
     }, [validInput]);
 
-
-    return <p className={validInput ? "valid-indicator" : ""}>{validInput ? "✓" : "X"}</p>
+    return (
+        <p className={validInput ? "valid-indicator" : ""}>
+            {validInput ? "✓" : "X"}
+        </p>
+    );
 }

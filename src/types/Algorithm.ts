@@ -1,4 +1,4 @@
-import {TableFillingAlgorithmState} from "../algorithm/TableFillingAlgorithm";
+import { TableFillingAlgorithmState } from "../algorithm/TableFillingAlgorithm";
 
 export interface Algorithm {
     type: "table-filling" | "other";
@@ -8,7 +8,9 @@ export interface Algorithm {
 }
 
 export enum EquivalenceTestingResult {
-    UNFINISHED, EQUIVALENT, NON_EQUIVALENT
+    UNFINISHED,
+    EQUIVALENT,
+    NON_EQUIVALENT,
 }
 
-export type AlgorithmState = TableFillingAlgorithmState
+export type AlgorithmState = TableFillingAlgorithmState;

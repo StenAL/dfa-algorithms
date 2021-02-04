@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
-import {Transitions} from "../../types/DFA"
-import {TransitionData} from "./DfaInput";
+import { useEffect, useState } from "react";
+import { Transitions } from "../../types/DFA";
+import { TransitionData } from "./DfaInput";
 
 interface TransitionsInputProps {
     states: string[];
@@ -11,50 +11,73 @@ interface TransitionsInputProps {
 }
 
 export default function TransitionsInput({
-                                             states,
-                                             alphabet,
-                                             transitions,
-                                             setTransition,
-                                             setTransitionsValid
-                                         }: TransitionsInputProps) {
+    states,
+    alphabet,
+    transitions,
+    setTransition,
+    setTransitionsValid,
+}: TransitionsInputProps) {
     const rows: string[][] = [];
-    let row: string[] = [""]
+    let row: string[] = [""];
     for (let state of states) {
         row.push(state);
     }
     rows.push(row);
-    row = []
+    row = [];
 
     for (let symbol of alphabet) {
-        row.push(symbol)
+        row.push(symbol);
         for (let state of states) {
-            row.push(state)
+            row.push(state);
         }
-        rows.push(row)
-        row = []
+        rows.push(row);
+        row = [];
     }
 
     let transitionsValid = true;
-    const elements = rows.map((row, j) =>
+    const elements = rows.map((row, j) => (
         <div className={"transition-row"} key={`${j}`}>
             {row.map((el, i) => {
                 const header = i === 0 || j === 0;
                 const symbol = rows[j][0];
                 const from = rows[j][i];
                 const to = transitions.get(from)?.get(symbol) ?? "";
-                let validTo = header || states.includes(to)
+                let validTo = header || states.includes(to);
                 transitionsValid = transitionsValid && validTo;
-                return (<div className={"transition-cell" + (header ? " transition-header" : "")} key={`${i}-${j}`}>
-                    {header ? el : <input type={"text"} className={(validTo ? "" : "invalid-input")}
-                                          placeholder={states.length > 0 ? states[0] : "q0"}
-                                          value={to}
-                                          onChange={(event) => setTransition(from, symbol, event.target.value)}/>}
-                </div>)
+                return (
+                    <div
+                        className={
+                            "transition-cell" +
+                            (header ? " transition-header" : "")
+                        }
+                        key={`${i}-${j}`}
+                    >
+                        {header ? (
+                            el
+                        ) : (
+                            <input
+                                type={"text"}
+                                className={validTo ? "" : "invalid-input"}
+                                placeholder={
+                                    states.length > 0 ? states[0] : "q0"
+                                }
+                                value={to}
+                                onChange={(event) =>
+                                    setTransition(
+                                        from,
+                                        symbol,
+                                        event.target.value
+                                    )
+                                }
+                            />
+                        )}
+                    </div>
+                );
             })}
-        </div>)
+        </div>
+    ));
     useEffect(() => {
-            setTransitionsValid(transitionsValid);
-        }
-    )
-    return (<div className={"transitions"}>{elements}</div>)
+        setTransitionsValid(transitionsValid);
+    });
+    return <div className={"transitions"}>{elements}</div>;
 }
