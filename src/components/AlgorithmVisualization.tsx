@@ -6,12 +6,7 @@ import AlgorithmStepControls from "./AlgorithmStepControls";
 import InputContainer from "./input/InputContainer";
 import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualization";
 import { Algorithm, AlgorithmMode, AlgorithmType } from "../types/Algorithm";
-
-
-function useForceUpdate() {
-    const [, setValue] = useState(0);
-    return () => setValue((value) => value + 1); // update the state to force render
-}
+import {useForceUpdate} from "../util/Hooks";
 
 interface AlgorithmVisualizationRouteParams {
     algorithmType: AlgorithmType;
