@@ -46,7 +46,7 @@ export default function InputContainer({modes, runCallback, runLink}: InputConta
         <p>or use a pre-generated input:</p>
         <Link to={runLink}>
             <button
-                onClick={() => runCallback(dfaA, dfaB)}
+                onClick={() => runCallback(dfaA, mode === AlgorithmMode.EQUIVALENCE_TESTING ? dfaB : undefined)}
             >
                 Example inputs
             </button>

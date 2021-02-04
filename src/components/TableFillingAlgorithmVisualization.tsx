@@ -10,28 +10,34 @@ export default function TableFillingAlgorithmVisualization({
 }: AlgorithmVisualizationProps) {
     const rows: string[][] = [];
     let prevTitle = "";
-    let row: string[] = [];
-    let fillingColumnTitles = true;
+    let row: string[] = [""];
+    const allStates = algorithm.input1.states.concat(algorithm.input2.states);
+
     for (let pair of algorithm.pairs.entries()) {
         const title1 = pair[0][0].name;
         const title2 = pair[0][1].name;
-        if (title1 !== prevTitle) {
-            // new row in table
+        if (title1 !== prevTitle) { // new row in table
             if (prevTitle !== "") {
-                fillingColumnTitles = false;
+                rows.push(row);
             }
             prevTitle = title1;
-            rows.push(row);
             row = [];
-            row.push(title1);
         }
-
-        if (fillingColumnTitles) {
-            rows[0].push(title2);
-        }
-        row.push(`[${pair[1]}]`);
+        row.unshift(`[${pair[1]}]`);
     }
     rows.push(row); // push final row
+    if (rows.length > 1) {
+        const titleRow = [];
+        for (let i = 1; i < allStates.length; i++) {
+            const state = allStates[i];
+            titleRow.unshift(state.name)
+        }
+        rows.unshift(titleRow)
+        for (let i = 1; i < allStates.length; i++) {
+            const state = allStates[i-1];
+            rows[i].unshift(state.name)
+        }
+    }
     rows[0].unshift("");
 
     const pairs = rows.map((row, j) => (

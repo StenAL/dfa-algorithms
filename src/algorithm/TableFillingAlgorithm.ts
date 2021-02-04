@@ -12,7 +12,7 @@ interface TableFillingAlgorithmInterface extends Algorithm {
     input1: DFA;
     input2: DFA;
     pairs: HashMap<[State, State], string>;
-    unmarkedPairs: Set<[State, State]>;
+    unmarkedPairs: HashMap<[State, State], undefined>;
     result: EquivalenceTestingResult;
     iteration: number;
     mode: AlgorithmMode;
@@ -26,7 +26,7 @@ export default class TableFillingAlgorithm
     result: EquivalenceTestingResult;
     log?: Log;
     state: TableFillingAlgorithmState | CommonAlgorithmState;
-    unmarkedPairs: Set<[State, State]>;
+    unmarkedPairs: HashMap<[State, State], undefined>;
     type: "table-filling";
     iteration: number;
     mode: AlgorithmMode;
@@ -38,7 +38,7 @@ export default class TableFillingAlgorithm
         this.log = undefined;
         this.state = CommonAlgorithmState.INITIAL;
         this.pairs = new HashMap();
-        this.unmarkedPairs = new Set();
+        this.unmarkedPairs = new HashMap<[State, State], undefined>();
         this.result = EquivalenceTestingResult.UNFINISHED;
         this.iteration = 1;
         this.mode = input2 ? AlgorithmMode.EQUIVALENCE_TESTING : AlgorithmMode.STATE_MINIMIZATION;
@@ -47,7 +47,7 @@ export default class TableFillingAlgorithm
     reset(): void {
         this.state = CommonAlgorithmState.INITIAL;
         this.pairs = new HashMap();
-        this.unmarkedPairs = new Set();
+        this.unmarkedPairs = new HashMap<[State, State], never>();
         this.result = EquivalenceTestingResult.UNFINISHED;
         this.iteration = 1;
         this.log?.clear();
@@ -74,21 +74,24 @@ export default class TableFillingAlgorithm
 
     createTable() {
         if (this.log) {
-            this.log.log(("Creating initial table from DFAs"));
+            this.log.log(("Creating initial table from DFA states."));
         }
-        const allStates = this.input1.states.concat(this.input2.states);
+        let allStates: State[];
+        if (this.mode === AlgorithmMode.EQUIVALENCE_TESTING) {
+            allStates = this.input1.states.concat(this.input2.states);
+        } else {
+            allStates = this.input1.states;
+        }
         for (let i = 0; i < allStates.length; i++) {
             const state1 = allStates[i];
             for (let j = i + 1; j < allStates.length; j++) {
                 const state2 = allStates[j];
                 const pair: [State, State] = [state1, state2];
                 this.pairs.set(pair, "");
-                this.unmarkedPairs.add(pair);
-                if (this.log) {
-                    this.log.log((
-                        `Added pair (${state1.name},${state2.name}) to table`
-                    ));
-                }
+                this.unmarkedPairs.set(pair, undefined);
+                this.log?.log((
+                    `Added pair (${state1.name},${state2.name}) to table`
+                ));
             }
         }
         this.state = TableFillingAlgorithmState.EMPTY_TABLE;
@@ -108,7 +111,6 @@ export default class TableFillingAlgorithm
                 const pair = this.getPair(acceptingState, nonAcceptingState);
                 this.pairs.set(pair, "X"); // set to empty string
                 markedCount++;
-                this.unmarkedPairs.delete(pair);
                 this.log?.log((
                     `Marked pair (${acceptingState.name},${nonAcceptingState.name})`
                 ));
@@ -128,8 +130,8 @@ export default class TableFillingAlgorithm
     }
 
     markPairs() {
-        const unmarkedPairsCopy = new Set(this.unmarkedPairs);
-        for (let unmarkedPair of unmarkedPairsCopy) {
+        const unmarkedPairsCopy = new HashMap(this.unmarkedPairs);
+        for (let unmarkedPair of unmarkedPairsCopy.keys()) {
             for (let symbol of this.input1.alphabet) {
                 const q = unmarkedPair[0].transitions.get(symbol)!;
                 const p = unmarkedPair[1].transitions.get(symbol)!;
@@ -137,14 +139,15 @@ export default class TableFillingAlgorithm
                 if (this.pairs.get(successorPair) !== "") {
                     this.pairs.set(unmarkedPair, "X"); // set to symbol
                     this.unmarkedPairs.delete(unmarkedPair);
+                    console.log((`Marked pair (${q.name},${p.name})`));
                     this.log?.log((`Marked pair (${q.name},${p.name})`));
                 }
             }
         }
         // new pairs have been marked
-        if (unmarkedPairsCopy.size !== this.unmarkedPairs.size) {
+        if (unmarkedPairsCopy.count() !== this.unmarkedPairs.count()) {
             // console.log(`Marked ${unmarkedPairsCopy.size - this.unmarkedPairs.size} pairs`)
-            const markedCount = unmarkedPairsCopy.size - this.unmarkedPairs.size;
+            const markedCount = unmarkedPairsCopy.count() - this.unmarkedPairs.count();
             this.log?.log((
                 `Iteration ${this.iteration}: marked ${markedCount} pair${markedCount === 1 ? "" : "s"}.`
             ));
