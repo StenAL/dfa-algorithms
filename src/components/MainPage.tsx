@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Link, Route } from "react-router-dom";
-import TableFillingAlgorithmVisualizationContainer from "./TableFillingAlgorithmVisualizationContainer";
+import AlgorithmVisualization from "./AlgorithmVisualization";
 
 export default function MainPage() {
     return (
@@ -11,12 +11,12 @@ export default function MainPage() {
                 </Link>
                 <Route path={"/"} exact={true}>
                     <h2>What do you want to run?</h2>
-                    <Link to={"/table-filling/input"}>
+                    <Link to={"/algorithm/table-filling/input"}>
                         Table-filling algorithm
                     </Link>
                 </Route>
-                <Route path={"/table-filling/"}>
-                    <TableFillingAlgorithmVisualizationContainer />
+                <Route path={"/algorithm/:algorithmType/"}>
+                    <AlgorithmVisualization />
                 </Route>
             </div>
         </Router>

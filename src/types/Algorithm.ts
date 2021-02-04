@@ -1,12 +1,14 @@
 import { TableFillingAlgorithmState } from "../algorithm/TableFillingAlgorithm";
 
 export interface Algorithm {
-    type: "table-filling" | "other";
+    type: AlgorithmType;
     state: AlgorithmState;
     step: () => void;
     reset: () => void;
     log?: (message: string) => void;
 }
+
+export type AlgorithmType = "table-filling" | "hopcroft" | "other";
 
 export enum EquivalenceTestingResult {
     UNFINISHED,

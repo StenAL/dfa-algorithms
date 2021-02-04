@@ -1,48 +1,74 @@
 import { useState } from "react";
+import { Route, useParams } from "react-router-dom";
 import TableFillingAlgorithm from "../algorithm/TableFillingAlgorithm";
 import AlgorithmLog from "./AlgorithmLog";
 import AlgorithmStepControls from "./AlgorithmStepControls";
+import InputContainer from "./input/InputContainer";
 import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualization";
-import { Algorithm } from "../types/Algorithm";
+import { Algorithm, AlgorithmMode, AlgorithmType } from "../types/Algorithm";
 
-interface AlgorithmVisualizationProps {
-    algorithm: Algorithm;
-}
 
 function useForceUpdate() {
     const [, setValue] = useState(0);
     return () => setValue((value) => value + 1); // update the state to force render
 }
 
-export default function AlgorithmVisualization({
-                                                   algorithm
-                                               }: AlgorithmVisualizationProps) {
+interface AlgorithmVisualizationRouteParams {
+    algorithmType: AlgorithmType;
+}
+
+export default function AlgorithmVisualization() {
+    const [algorithm, setAlgorithm] = useState<Algorithm>();
+    const { algorithmType } = useParams<AlgorithmVisualizationRouteParams>();
     const forceUpdate = useForceUpdate();
-    let visualization = <p>Unsupported (so far)</p>;
-    let title = "Unspecified";
-    switch (algorithm.type) {
+
+    let visualization: JSX.Element | undefined = undefined;
+    let title: string = "";
+    let algorithmModes: AlgorithmMode[] = [];
+    switch (algorithmType) {
         case "table-filling":
-            visualization = (
-                <TableFillingAlgorithmVisualization
-                    algorithm={algorithm as TableFillingAlgorithm}
-                />
-            );
             title = "The Table-Filling Algorithm";
+            algorithmModes = [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.MINIMIZATION]
+            visualization = (
+                <TableFillingAlgorithmVisualization algorithm={algorithm as TableFillingAlgorithm} />
+            );
+            break;
+        case "hopcroft":
+            title = "Hopcroft";
+            algorithmModes = [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.MINIMIZATION]
             break;
         case "other":
-            visualization = <p>Unsupported</p>;
             title = "Other";
+            algorithmModes = []
     }
     return (
-        <div className={"algorithm-container"}>
+        <>
             <h2>{title}</h2>
-            <AlgorithmLog algorithm={algorithm} />
-            {visualization}
-            <AlgorithmStepControls
-                algorithm={algorithm}
-                stepBackwardCallback={() => forceUpdate()}
-                stepForwardCallback={() => forceUpdate()}
-            />
-        </div>
+            <Route path={"/algorithm/:algorithmType/input"}>
+                <InputContainer modes={algorithmModes}
+                                runLink={`/algorithm/${algorithmType}/run`} runCallback={(input1, input2) => {
+                    switch (algorithmType) {
+                        case "table-filling":
+                            setAlgorithm(new TableFillingAlgorithm(input1, input2!));
+                            break;
+                        case "hopcroft":
+                            break;
+                        case "other":
+                            break;
+                    }
+                }} />
+            </Route>
+            <Route path={"/algorithm/:algorithmType/run"}>
+                <div className={"algorithm-container"}>
+                    <AlgorithmLog algorithm={algorithm!} />
+                    {visualization}
+                    <AlgorithmStepControls
+                        algorithm={algorithm!}
+                        stepBackwardCallback={() => forceUpdate()}
+                        stepForwardCallback={() => forceUpdate()}
+                    />
+                </div>
+            </Route>
+        </>
     );
 }
