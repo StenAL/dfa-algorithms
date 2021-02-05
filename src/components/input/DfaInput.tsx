@@ -11,15 +11,17 @@ interface DfaInputProps {
     convertInputCallback: (dfa: DFA | undefined) => void;
 }
 
-export default function DfaInput({ convertInputCallback, alphabet, alphabetValid }: DfaInputProps) {
+export default function DfaInput({
+    convertInputCallback,
+    alphabet,
+    alphabetValid,
+}: DfaInputProps) {
     const [states, setStates] = useState<string[]>([]);
     const [finalStates, setFinalStates] = useState<string[]>([]);
     const [transitions, setTransitions] = useState<TransitionData>(new Map());
     const [transitionsValid, setTransitionsValid] = useState<boolean>(false);
     useEffect(() => {
-        const transitionsCopy: TransitionData = new Map(
-            transitions
-        );
+        const transitionsCopy: TransitionData = new Map(transitions);
 
         for (let state of states) {
             const t = transitionsCopy.get(state)!;
@@ -35,7 +37,7 @@ export default function DfaInput({ convertInputCallback, alphabet, alphabetValid
             }
         }
         setTransitions(transitionsCopy);
-    }, [alphabet])
+    }, [alphabet]);
 
     const statesValid =
         states.length > 0 && new Set(states).size === states.length;
