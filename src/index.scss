@@ -1,10 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+:root {
+    --pastel-red: #ff6961;
+    --pastel-green: #77dd77;
+}
+
 body {
     margin: 0;
-    font-family: "Segoe UI", sans-serif;
+    font-family: "Open Sans", sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    background: #f9f9f9;
 }
 
 .table-filling-row,
@@ -31,14 +38,32 @@ body {
 }
 
 .invalid-input {
-    border: 1px solid red;
+    border: 1px solid var(--pastel-red);
 }
 
 .transition-cell input {
     width: 2rem;
 }
 
-.inputs-container {
+.input-container, .input-fields-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h3 {
+        margin-bottom: 0;
+    }
+}
+
+.alphabet-input {
+    margin: 1rem 0;
+    max-width: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dfa-inputs-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -53,7 +78,7 @@ body {
     border: 1px solid grey;
     border-radius: 6px;
 
-    .input-fields {
+    .dfa-fields-container {
         max-width: 250px;
         display: flex;
         flex-direction: column;
@@ -64,8 +89,15 @@ body {
     }
 }
 
+.invalid-indicator, .valid-indicator {
+    font-size: 1.5rem;
+}
+
+.invalid-indicator {
+    color: var(--pastel-red);
+}
 .valid-indicator {
-    color: green;
+    color: var(--pastel-green);
 }
 
 .disabled-link {
@@ -96,8 +128,4 @@ body {
     position: relative;
     bottom: 8px;
     margin: 0 5px;
-}
-
-.table-filling-state {
-    //width: 400px;
 }

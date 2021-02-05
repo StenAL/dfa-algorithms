@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DFA } from "../../types/DFA";
 import InputConverter from "./InputConverter";
 import TransitionsInput from "./TransitionsInput";
@@ -6,27 +6,46 @@ import TransitionsInput from "./TransitionsInput";
 export type TransitionData = Map<string, Map<string, string>>;
 
 interface DfaInputProps {
+    alphabet: string[];
+    alphabetValid: boolean;
     convertInputCallback: (dfa: DFA | undefined) => void;
 }
 
-export default function DfaInput({ convertInputCallback }: DfaInputProps) {
+export default function DfaInput({ convertInputCallback, alphabet, alphabetValid }: DfaInputProps) {
     const [states, setStates] = useState<string[]>([]);
     const [finalStates, setFinalStates] = useState<string[]>([]);
-    const [alphabet, setAlphabet] = useState<string[]>([]);
     const [transitions, setTransitions] = useState<TransitionData>(new Map());
     const [transitionsValid, setTransitionsValid] = useState<boolean>(false);
+    useEffect(() => {
+        const transitionsCopy: TransitionData = new Map(
+            transitions
+        );
+
+        for (let state of states) {
+            const t = transitionsCopy.get(state)!;
+            for (let symbol of t.keys()) {
+                if (!alphabet.includes(symbol)) {
+                    t.delete(symbol);
+                }
+            }
+            for (let symbol of alphabet) {
+                if (!t.has(symbol)) {
+                    t.set(symbol, "");
+                }
+            }
+        }
+        setTransitions(transitionsCopy);
+    }, [alphabet])
 
     const statesValid =
         states.length > 0 && new Set(states).size === states.length;
     const finalStatesValid =
         new Set(finalStates).size === finalStates.length &&
         finalStates.every((s) => states.includes(s));
-    const alphabetValid =
-        alphabet.length > 0 && new Set(alphabet).size === alphabet.length;
 
     return (
         <div className={"dfa-input"}>
-            <div className={"input-fields"}>
+            <div className={"dfa-fields-container"}>
                 <label htmlFor={"states"}>States</label>
                 <input
                     name={"states"}
@@ -59,41 +78,6 @@ export default function DfaInput({ convertInputCallback }: DfaInputProps) {
                         setTransitions(transitionsCopy);
                     }}
                     className={statesValid ? "" : "invalid-input"}
-                />
-                <label htmlFor={"alphabet"}>Alphabet</label>
-                <input
-                    name={"alphabet"}
-                    type={"text"}
-                    placeholder={"0,1,..."}
-                    onChange={(event) => {
-                        const newAlphabet = event.target.value.split(",");
-                        if (
-                            newAlphabet.length > 0 &&
-                            newAlphabet[newAlphabet.length - 1] === ""
-                        ) {
-                            newAlphabet.pop();
-                        }
-                        const transitionsCopy: TransitionData = new Map(
-                            transitions
-                        );
-
-                        for (let state of states) {
-                            const t = transitionsCopy.get(state)!;
-                            for (let symbol of t.keys()) {
-                                if (!newAlphabet.includes(symbol)) {
-                                    t.delete(symbol);
-                                }
-                            }
-                            for (let symbol of newAlphabet) {
-                                if (!t.has(symbol)) {
-                                    t.set(symbol, "");
-                                }
-                            }
-                        }
-                        setAlphabet(newAlphabet);
-                        setTransitions(transitionsCopy);
-                    }}
-                    className={alphabetValid ? "" : "invalid-input"}
                 />
                 <label htmlFor={"finalStates"}>Final states</label>
                 <input

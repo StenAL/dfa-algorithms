@@ -10,7 +10,7 @@ export default function TableFillingAlgorithmVisualization({
 }: AlgorithmVisualizationProps) {
     const rows: string[][] = [];
     let prevTitle = "";
-    let row: string[] = [""];
+    let row: string[] = [];
     let allStates;
     if (algorithm.mode === AlgorithmMode.EQUIVALENCE_TESTING) {
         allStates = algorithm.input1.states.concat(algorithm.input2.states);
@@ -29,7 +29,7 @@ export default function TableFillingAlgorithmVisualization({
         row.unshift(`[${pair[1]}]`);
     }
     rows.push(row); // push final row
-    if (rows.length > 1) {
+    if (rows.length > 1 || (rows.length === 1 && rows[0].length > 0) ) {
         const titleRow = [];
         for (let i = 1; i < allStates.length; i++) {
             const state = allStates[i];
@@ -77,7 +77,12 @@ export default function TableFillingAlgorithmVisualization({
             break;
         case CommonAlgorithmState.FINAL:
             stateDescription = "Final state"
-            const resultString = "Result: DFAs are " + (algorithm.result === EquivalenceTestingResult.EQUIVALENT ? " equivalent" : "non-equivalent")
+            let resultString;
+            if (algorithm.mode === AlgorithmMode.EQUIVALENCE_TESTING) {
+                resultString = "Result: DFAs are " + (algorithm.result === EquivalenceTestingResult.EQUIVALENT ? " equivalent" : "non-equivalent")
+            } else {
+                resultString = "States **todo** can be combined."
+            }
             stateDescription += ". " + resultString;
             break;
 

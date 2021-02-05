@@ -20,10 +20,10 @@ export default function AlgorithmModeSwitch({mode, callback} : AlgorithmModeSwit
             }}
             checkedIcon={false}
             uncheckedIcon={false}
-            offHandleColor={"#95E2FF"}
-            onHandleColor={"#95E2FF"}
-            offColor={"#888"}
-            onColor={"#888"}
+            offHandleColor={"#89CFF0"}
+            onHandleColor={"#89CFF0"}
+            offColor={"#aaa"}
+            onColor={"#aaa"}
             width={75}
         />
         <span className={"algorithm-mode-option"}>State minimization</span>

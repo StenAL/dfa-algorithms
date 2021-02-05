@@ -53,7 +53,7 @@ export default function InputConverter({
     }, [validInput]);
 
     return (
-        <p className={validInput ? "valid-indicator" : ""}>
+        <p className={validInput ? "valid-indicator" : "invalid-indicator"}>
             {validInput ? "✓" : "X"}
         </p>
     );
