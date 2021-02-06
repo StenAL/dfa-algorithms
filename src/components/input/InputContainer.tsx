@@ -34,7 +34,6 @@ export default function InputContainer({
     return (
         <div className={"input-container"}>
             <div className={"input-fields-container"}>
-                <h3>Input custom DFA(s)</h3>
                 {modes.length > 1 ? (
                     <AlgorithmModeSwitch
                         mode={mode}
@@ -43,6 +42,7 @@ export default function InputContainer({
                 ) : (
                     ""
                 )}
+                <h3 className={"input-header"}>Input custom DFA(s)</h3>
                 <div className={"alphabet-input"}>
                     <label htmlFor={"alphabet"}>Alphabet</label>
                     <input
