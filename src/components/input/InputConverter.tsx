@@ -50,6 +50,7 @@ export default function InputConverter({
         } else {
             convertInputCallback(undefined);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [validInput]);
 
     return (

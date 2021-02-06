@@ -1,0 +1,87 @@
+name: Build, test, deploy
+# Trigger on push or pull request
+on:
+    push:
+        branches:
+            - main
+        paths: # limit workflow only to changes in src and public folders
+            - "src/**"
+            - "public/**"
+    pull_request:
+        branches:
+            - main
+        paths:
+            - "src/**"
+            - "public/**"
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout current repository
+              uses: actions/checkout@v2
+
+            - name: set up Node.js 14.x
+              uses: actions/setup-node@v2
+              with:
+                  node-version: "14.x"
+
+            - name: npm install
+              run: npm ci
+
+            - name: compile TypeScript
+              run: npm run compile
+
+            - name: check formatting
+              run: npx prettier --check .
+
+            - name: build static files
+              if: github.ref == 'refs/heads/main'
+              run: npm run build
+
+            - name: create build artifact
+              if: github.ref == 'refs/heads/main'
+              uses: actions/upload-artifact@v2
+              with:
+                  name: build
+                  path: build
+
+    test:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout Github repository
+              uses: actions/checkout@v2
+
+            - name: set up Node.js 14.x
+              uses: actions/setup-node@v2
+              with:
+                  node-version: "14.x"
+
+            - name: npm install
+              run: npm ci
+
+            - name: npm test
+              run: npm test
+
+    publish:
+        needs: [build, test]
+        if: github.ref == 'refs/heads/main'
+        runs-on: ubuntu-latest
+        steps:
+            - name: download build artifact
+              uses: actions/download-artifact@v2
+              with:
+                  name: build
+                  path: build
+
+            - name: deploy assets to server
+              uses: appleboy/scp-action@master
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USER }}
+                  key: ${{ secrets.SSH_KEY }}
+                  port: ${{ secrets.SSH_PORT }}
+                  source: "build/**"
+                  target: "/var/www/dfa"
+                  strip_components: 1

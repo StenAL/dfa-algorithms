@@ -37,6 +37,7 @@ export default function DfaInput({
             }
         }
         setTransitions(transitionsCopy);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alphabet]);
 
     const statesValid =

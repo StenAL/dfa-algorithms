@@ -24,8 +24,9 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "dev": "node --loader ts-node/esm --experimental-specifier-resolution=node --no-warnings src/algorithm/data.ts",
+        "compile": "tsc -p tsconfig.json",
         "build": "react-scripts build",
+        "dev": "node --loader ts-node/esm --experimental-specifier-resolution=node --no-warnings src/algorithm/data.ts",
         "test": "react-scripts test --watchAll=false",
         "eject": "react-scripts eject"
     },
