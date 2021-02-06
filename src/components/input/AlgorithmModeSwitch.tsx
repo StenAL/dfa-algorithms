@@ -12,7 +12,7 @@ export default function AlgorithmModeSwitch({
 }: AlgorithmModeSwitchProps) {
     return (
         <div className={"algorithm-mode-switch"}>
-            <p>Choose mode:</p>
+            <h3>Choose mode:</h3>
             <span className={"algorithm-mode-option"}>Equivalence testing</span>
             <Switch
                 checked={mode === AlgorithmMode.STATE_MINIMIZATION}
