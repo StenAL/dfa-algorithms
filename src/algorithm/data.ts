@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { DFA, State } from "../types/DFA";
 import TableFillingAlgorithm, {
     TableFillingAlgorithmState,
