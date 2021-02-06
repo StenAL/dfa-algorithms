@@ -1,5 +1,11 @@
 import HashMap from "hashmap";
-import { Algorithm, AlgorithmMode, CommonAlgorithmState, EquivalenceTestingResult, Log } from "../types/Algorithm";
+import {
+    Algorithm,
+    AlgorithmMode,
+    CommonAlgorithmState,
+    EquivalenceTestingResult,
+    Log,
+} from "../types/Algorithm";
 import { DFA, State } from "../types/DFA";
 
 export enum TableFillingAlgorithmState {
@@ -41,7 +47,9 @@ export default class TableFillingAlgorithm
         this.unmarkedPairs = new HashMap<[State, State], undefined>();
         this.result = EquivalenceTestingResult.UNFINISHED;
         this.iteration = 1;
-        this.mode = input2 ? AlgorithmMode.EQUIVALENCE_TESTING : AlgorithmMode.STATE_MINIMIZATION;
+        this.mode = input2
+            ? AlgorithmMode.EQUIVALENCE_TESTING
+            : AlgorithmMode.STATE_MINIMIZATION;
     }
 
     reset(): void {
@@ -78,7 +86,7 @@ export default class TableFillingAlgorithm
 
     createTable() {
         if (this.log) {
-            this.log.log(("Creating initial table from DFA states."));
+            this.log.log("Creating initial table from DFA states.");
         }
         let allStates: State[];
         if (this.mode === AlgorithmMode.EQUIVALENCE_TESTING) {
@@ -93,14 +101,12 @@ export default class TableFillingAlgorithm
                 const pair: [State, State] = [state1, state2];
                 this.pairs.set(pair, "");
                 this.unmarkedPairs.set(pair, undefined);
-                this.log?.log((
+                this.log?.log(
                     `Added pair (${state1.name},${state2.name}) to table`
-                ));
+                );
             }
         }
-        this.log?.log((
-            `Added ${this.pairs.count()} pairs to table`
-        ));
+        this.log?.log(`Added ${this.pairs.count()} pairs to table`);
         this.state = TableFillingAlgorithmState.EMPTY_TABLE;
     }
 
@@ -110,15 +116,16 @@ export default class TableFillingAlgorithm
         if (this.mode === AlgorithmMode.EQUIVALENCE_TESTING) {
             acceptingStates = new Set([
                 ...this.input1.finalStates,
-                ...this.input2.finalStates
+                ...this.input2.finalStates,
             ]);
             nonAcceptingStates = this.input1.states
                 .concat(this.input2.states)
                 .filter((s) => !acceptingStates.has(s));
         } else {
-            acceptingStates = new Set(this.input1.finalStates,);
-            nonAcceptingStates = this.input1.states
-                .filter((s) => !acceptingStates.has(s));
+            acceptingStates = new Set(this.input1.finalStates);
+            nonAcceptingStates = this.input1.states.filter(
+                (s) => !acceptingStates.has(s)
+            );
         }
         let markedCount = 0;
         for (let acceptingState of acceptingStates) {
@@ -127,13 +134,15 @@ export default class TableFillingAlgorithm
                 this.pairs.set(pair, "X"); // set to empty string in witness mode
                 this.unmarkedPairs.delete(pair);
                 markedCount++;
-                this.log?.log((
+                this.log?.log(
                     `Marked pair (${acceptingState.name},${nonAcceptingState.name})`
-                ));
+                );
             }
         }
 
-        this.log?.log((`Marked ${markedCount} initial pair${markedCount === 1 ? "" : "s"}.`));
+        this.log?.log(
+            `Marked ${markedCount} initial pair${markedCount === 1 ? "" : "s"}.`
+        );
         this.state = TableFillingAlgorithmState.MARKING_PAIRS;
     }
 
@@ -156,22 +165,28 @@ export default class TableFillingAlgorithm
                     this.pairs.set(unmarkedPair, "X"); // set to symbol in witness mode
                     if (this.unmarkedPairs.has(unmarkedPair)) {
                         this.unmarkedPairs.delete(unmarkedPair);
-                        this.log?.log((`Marked pair (${unmarkedPair[0].name},${unmarkedPair[1].name})`));
+                        this.log?.log(
+                            `Marked pair (${unmarkedPair[0].name},${unmarkedPair[1].name})`
+                        );
                     }
                 }
             }
         }
 
-        if (unmarkedPairsCopy.count() !== this.unmarkedPairs.count()) { // new pairs have been marked
-            const markedCount = unmarkedPairsCopy.count() - this.unmarkedPairs.count();
-            this.log?.log((
-                `Iteration ${this.iteration}: marked ${markedCount} pair${markedCount === 1 ? "" : "s"}.`
-            ));
+        if (unmarkedPairsCopy.count() !== this.unmarkedPairs.count()) {
+            // new pairs have been marked
+            const markedCount =
+                unmarkedPairsCopy.count() - this.unmarkedPairs.count();
+            this.log?.log(
+                `Iteration ${this.iteration}: marked ${markedCount} pair${
+                    markedCount === 1 ? "" : "s"
+                }.`
+            );
             this.state = TableFillingAlgorithmState.MARKING_PAIRS;
         } else {
-            this.log?.log((
+            this.log?.log(
                 `Iteration ${this.iteration}: no additional pairs have been marked. All distinguishable pairs have been identified.`
-            ));
+            );
             this.state = TableFillingAlgorithmState.ALL_PAIRS_MARKED;
         }
         this.iteration++;
@@ -186,21 +201,20 @@ export default class TableFillingAlgorithm
                 ? EquivalenceTestingResult.EQUIVALENT
                 : EquivalenceTestingResult.NON_EQUIVALENT;
         if (this.result === EquivalenceTestingResult.EQUIVALENT) {
-            this.log?.log((
+            this.log?.log(
                 `Starting states ${q1.name} and ${q2.name} are indistinguishable, therefore the DFAs are equivalent`
-            ));
+            );
         } else {
-            this.log?.log((
+            this.log?.log(
                 `Starting states ${q1.name} and ${q2.name} are distinguishable, therefore the DFAs are non-equivalent`
-            ));
+            );
         }
         this.state = CommonAlgorithmState.FINAL;
     }
 
     identifyIndistinguishableGroups() {
         // TODO
-        this.log?.log("Identifying indistinguishable groups: *TODO*")
+        this.log?.log("Identifying indistinguishable groups: *TODO*");
         this.state = CommonAlgorithmState.FINAL;
     }
-
 }

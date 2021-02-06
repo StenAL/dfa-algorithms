@@ -67,20 +67,20 @@ it("disables invalid step buttons", function () {
     let stepBackwardButton = wrapper.find("button").at(1);
     let stepForwardButton = wrapper.find("button").at(2);
     let skipButton = wrapper.find("button").at(3);
-    expect(resetButton.get(0).props.disabled).toBe(true)
-    expect(stepBackwardButton.get(0).props.disabled).toBe(true)
-    expect(stepForwardButton.get(0).props.disabled).toBe(false)
-    expect(skipButton.get(0).props.disabled).toBe(false)
+    expect(resetButton.get(0).props.disabled).toBe(true);
+    expect(stepBackwardButton.get(0).props.disabled).toBe(true);
+    expect(stepForwardButton.get(0).props.disabled).toBe(false);
+    expect(skipButton.get(0).props.disabled).toBe(false);
 
     stepForwardButton.simulate("click");
-    wrapper.setProps({})
+    wrapper.setProps({});
     resetButton = wrapper.find("button").at(0);
-    expect(resetButton.get(0).props.disabled).toBe(false)
+    expect(resetButton.get(0).props.disabled).toBe(false);
 
     stepForwardButton.simulate("click");
-    wrapper.setProps({})
+    wrapper.setProps({});
     stepForwardButton = wrapper.find("button").at(2);
     skipButton = wrapper.find("button").at(3);
-    expect(stepForwardButton.get(0).props.disabled).toBe(true)
-    expect(skipButton.get(0).props.disabled).toBe(true)
+    expect(stepForwardButton.get(0).props.disabled).toBe(true);
+    expect(skipButton.get(0).props.disabled).toBe(true);
 });

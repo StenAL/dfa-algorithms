@@ -7,20 +7,30 @@ interface AlgorithmStepControlsProps {
 }
 
 export default function AlgorithmStepControls({
-                                                  algorithm,
-                                                  stepBackwardCallback,
-                                                  stepForwardCallback
-                                              }: AlgorithmStepControlsProps) {
+    algorithm,
+    stepBackwardCallback,
+    stepForwardCallback,
+}: AlgorithmStepControlsProps) {
     return (
         <div className={"step-controls"}>
-            <button disabled={algorithm.state === CommonAlgorithmState.INITIAL} onClick={() => {
-                algorithm.reset();
-                stepBackwardCallback();
-            }}>{"<<"}</button>
-            <button disabled={true} onClick={() => {
-                // todo: step backwards
-                stepBackwardCallback();
-            }}>{"<"}</button>
+            <button
+                disabled={algorithm.state === CommonAlgorithmState.INITIAL}
+                onClick={() => {
+                    algorithm.reset();
+                    stepBackwardCallback();
+                }}
+            >
+                {"<<"}
+            </button>
+            <button
+                disabled={true}
+                onClick={() => {
+                    // todo: step backwards
+                    stepBackwardCallback();
+                }}
+            >
+                {"<"}
+            </button>
             <button
                 disabled={algorithm.state === CommonAlgorithmState.FINAL}
                 onClick={() => {

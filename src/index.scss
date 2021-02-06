@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
 :root {
     --pastel-red: #ff6961;
     --pastel-green: #77dd77;
@@ -45,7 +45,8 @@ body {
     width: 2rem;
 }
 
-.input-container, .input-fields-container {
+.input-container,
+.input-fields-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -89,7 +90,8 @@ body {
     }
 }
 
-.invalid-indicator, .valid-indicator {
+.invalid-indicator,
+.valid-indicator {
     font-size: 1.5rem;
 }
 

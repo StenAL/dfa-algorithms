@@ -82,25 +82,25 @@ it("should remove transitions when states are removed", function () {
     stateInput.simulate("change", { target: { value: "q1" } });
     transitionInput = wrapper.find(TransitionsInput);
     expect(transitionInput.props().transitions).toEqual(
-      new Map([
-          [
-              "q1",
-              new Map([
-                  ["0", "q2"],
-                  ["1", "q2"],
-              ]),
-          ],
-      ])
+        new Map([
+            [
+                "q1",
+                new Map([
+                    ["0", "q2"],
+                    ["1", "q2"],
+                ]),
+            ],
+        ])
     );
 });
 
 it("should remove transitions when alphabet is changed", function () {
     const wrapper = mount(
-      <DfaInput
-        alphabet={["0", "1"]}
-        alphabetValid={true}
-        convertInputCallback={() => {}}
-      />
+        <DfaInput
+            alphabet={["0", "1"]}
+            alphabetValid={true}
+            convertInputCallback={() => {}}
+        />
     );
     let stateInput = wrapper.find('input[name="states"]');
     stateInput.simulate("change", { target: { value: "q1,q2" } });
@@ -111,39 +111,29 @@ it("should remove transitions when alphabet is changed", function () {
     act(() => setTransition("q2", "0", "q2"));
     act(() => setTransition("q2", "1", "q2"));
     expect(transitionInput.props().transitions).toEqual(
-      new Map([
-          [
-              "q1",
-              new Map([
-                  ["0", "q2"],
-                  ["1", "q2"],
-              ]),
-          ],
-          [
-              "q2",
-              new Map([
-                  ["0", "q2"],
-                  ["1", "q2"],
-              ]),
-          ],
-      ])
+        new Map([
+            [
+                "q1",
+                new Map([
+                    ["0", "q2"],
+                    ["1", "q2"],
+                ]),
+            ],
+            [
+                "q2",
+                new Map([
+                    ["0", "q2"],
+                    ["1", "q2"],
+                ]),
+            ],
+        ])
     );
-    wrapper.setProps({alphabet: ["0"]})
+    wrapper.setProps({ alphabet: ["0"] });
     transitionInput = wrapper.find(TransitionsInput);
     expect(transitionInput.props().transitions).toEqual(
-      new Map([
-          [
-              "q1",
-              new Map([
-                  ["0", "q2"],
-              ]),
-          ],
-          [
-              "q2",
-              new Map([
-                  ["0", "q2"],
-              ]),
-          ],
-      ])
+        new Map([
+            ["q1", new Map([["0", "q2"]])],
+            ["q2", new Map([["0", "q2"]])],
+        ])
     );
 });

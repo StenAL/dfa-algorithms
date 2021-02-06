@@ -5,7 +5,7 @@ export interface Algorithm {
     state: AlgorithmState;
     step: () => void;
     reset: () => void;
-    log?: Log
+    log?: Log;
 }
 
 export interface Log {
@@ -22,8 +22,8 @@ export enum EquivalenceTestingResult {
 }
 
 export enum CommonAlgorithmState {
-    INITIAL= 1000,
-    FINAL
+    INITIAL = 1000,
+    FINAL,
 }
 
 export type AlgorithmState = TableFillingAlgorithmState | CommonAlgorithmState;
