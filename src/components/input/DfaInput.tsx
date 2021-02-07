@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { default as Tooltip } from "react-tooltip";
 import { DFA } from "../../types/DFA";
 import InputConverter from "./InputConverter";
 import TransitionsInput from "./TransitionsInput";
@@ -49,7 +50,34 @@ export default function DfaInput({
     return (
         <div className={"dfa-input"}>
             <div className={"dfa-fields-container"}>
-                <label htmlFor={"states"}>States</label>
+                <label htmlFor={"states"}>
+                    States
+                    <span
+                        className={"info-tooltip"}
+                        data-tip
+                        data-for="states-help"
+                    >
+                        ?
+                    </span>
+                </label>
+                <Tooltip
+                    place={"top"}
+                    type={"info"}
+                    id="states-help"
+                    effect={"solid"}
+                    multiline={true}
+                >
+                    <span>
+                        The states of the DFA in the form of comma-separated
+                        list
+                        <br /> e.g. 'q0,q1,q2' or 'p,q'. Can not contain
+                        duplicate states.
+                        <br />
+                        <br />
+                        The first state listed is assumed to be the starting
+                        state of the DFA.
+                    </span>
+                </Tooltip>
                 <input
                     name={"states"}
                     type={"text"}
@@ -82,7 +110,30 @@ export default function DfaInput({
                     }}
                     className={statesValid ? "" : "invalid-input"}
                 />
-                <label htmlFor={"finalStates"}>Final states</label>
+                <label htmlFor={"finalStates"}>
+                    Final states
+                    <span
+                        className={"info-tooltip"}
+                        data-tip
+                        data-for="final-states-help"
+                    >
+                        ?
+                    </span>
+                </label>
+                <Tooltip
+                    place={"top"}
+                    type={"info"}
+                    id="final-states-help"
+                    effect={"solid"}
+                    multiline={true}
+                >
+                    <span>
+                        The final (accepting) states of the DFA in the form of
+                        comma-separated list.
+                        <br /> These states must be listed in the 'States'
+                        field. Can not contain duplicates.
+                    </span>
+                </Tooltip>
                 <input
                     name={"finalStates"}
                     type={"text"}

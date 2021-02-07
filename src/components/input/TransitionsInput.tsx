@@ -78,5 +78,10 @@ export default function TransitionsInput({
     useEffect(() => {
         setTransitionsValid(transitionsValid);
     });
-    return <div className={"transitions"}>{elements}</div>;
+    return (
+        <div className={"transitions"}>
+            <p className={"transitions-"}>Transitions</p>
+            {elements}
+        </div>
+    );
 }
