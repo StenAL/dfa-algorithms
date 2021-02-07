@@ -2,6 +2,7 @@
 :root {
     --pastel-red: #ff6961;
     --pastel-green: #77dd77;
+    --pastel-blue: #89cff0;
 }
 
 body {
@@ -12,6 +13,12 @@ body {
     align-items: center;
     text-align: center;
     background: #f9f9f9;
+}
+
+.transitions {
+    p {
+        margin-bottom: 0;
+    }
 }
 
 .table-filling-row,
@@ -130,4 +137,20 @@ body {
     position: relative;
     bottom: 8px;
     margin: 0 5px;
+}
+
+.info-tooltip {
+    background: var(--pastel-blue);
+    width: 1rem;
+    height: 1rem;
+    display: inline-block;
+    color: white;
+    font-size: 1em;
+    line-height: 1em;
+    margin-left: 0.3em;
+    border-radius: 0.75em;
+}
+
+.__react_component_tooltip.show {
+    opacity: 1 !important;
 }

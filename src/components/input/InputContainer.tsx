@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { default as Tooltip } from "react-tooltip";
 import { dfaA, dfaB } from "../../algorithm/data";
 import { AlgorithmMode } from "../../types/Algorithm";
 import { DFA } from "../../types/DFA";
@@ -44,7 +45,30 @@ export default function InputContainer({
                 )}
                 <h3 className={"input-header"}>Input custom DFA(s)</h3>
                 <div className={"alphabet-input"}>
-                    <label htmlFor={"alphabet"}>Alphabet</label>
+                    <label htmlFor={"alphabet"}>
+                        Alphabet
+                        <span
+                            className={"info-tooltip"}
+                            data-tip
+                            data-for="alphabet-help"
+                        >
+                            ?
+                        </span>
+                    </label>
+                    <Tooltip
+                        place={"top"}
+                        type={"info"}
+                        id="alphabet-help"
+                        effect={"solid"}
+                        multiline={true}
+                    >
+                        <span>
+                            The alphabet the DFA(s) will use in the form of a
+                            comma-separated list
+                            <br /> e.g. '0,1,2' or 'a,b'. Can not contain
+                            duplicate symbols
+                        </span>
+                    </Tooltip>
                     <input
                         name={"alphabet"}
                         type={"text"}
