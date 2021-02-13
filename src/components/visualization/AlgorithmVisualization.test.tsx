@@ -5,6 +5,8 @@ import { Link, MemoryRouter, Route } from "react-router-dom";
 import { DFA, State } from "../../types/DFA";
 import InputContainer from "../input/InputContainer";
 import TableFillingAlgorithmVisualization from "../TableFillingAlgorithmVisualization";
+import AlgorithmLog from "./AlgorithmLog";
+import AlgorithmStepControls from "./AlgorithmStepControls";
 import AlgorithmVisualization from "./AlgorithmVisualization";
 
 const q1: State = {
@@ -43,6 +45,8 @@ it("initializes table-filling algorithm correctly", function () {
     expect(wrapper.find(TableFillingAlgorithmVisualization).exists()).toBe(
         false
     );
+    expect(wrapper.find(AlgorithmLog).exists()).toBe(false);
+    expect(wrapper.find(AlgorithmStepControls).exists()).toBe(false);
     const runInputCallback = wrapper.find(InputContainer).props().runCallback;
     act(() => {
         runInputCallback(dfa, dfa, false);
@@ -53,4 +57,6 @@ it("initializes table-filling algorithm correctly", function () {
     expect(wrapper.find(TableFillingAlgorithmVisualization).exists()).toBe(
         true
     );
+    expect(wrapper.find(AlgorithmLog).exists()).toBe(true);
+    expect(wrapper.find(AlgorithmStepControls).exists()).toBe(true);
 });

@@ -8,6 +8,8 @@ it("renders messages logged by algorithm", function () {
         reset: () => {},
         type: "table-filling",
         step: () => {},
+        produceWitness: false,
+        witness: "",
     };
 
     const wrapper = shallow(<AlgorithmLog algorithm={algorithm} />);
@@ -21,6 +23,8 @@ it("does not render cleared messages", function () {
         reset: () => {},
         type: "table-filling",
         step: () => {},
+        produceWitness: false,
+        witness: "",
     };
 
     const wrapper = shallow(<AlgorithmLog algorithm={algorithm} />);

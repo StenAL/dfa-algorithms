@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Link, Route } from "react-router-dom";
 import AlgorithmVisualization from "./visualization/AlgorithmVisualization";
 
 export default function MainPage() {
-    // test
     return (
         <Router>
             <div>
