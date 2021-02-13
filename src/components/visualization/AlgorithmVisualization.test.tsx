@@ -45,7 +45,7 @@ it("initializes table-filling algorithm correctly", function () {
     );
     const runInputCallback = wrapper.find(InputContainer).props().runCallback;
     act(() => {
-        runInputCallback(dfa, dfa);
+        runInputCallback(dfa, dfa, false);
     });
 
     expect(wrapper.find(Link).at(0).text()).toBe("Run");

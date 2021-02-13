@@ -11,9 +11,11 @@ export default function AlgorithmModeSwitch({
     callback,
 }: AlgorithmModeSwitchProps) {
     return (
-        <div className={"algorithm-mode-switch"}>
+        <div className={"algorithm-switch"}>
             <h3>Choose mode:</h3>
-            <span className={"algorithm-mode-option"}>Equivalence testing</span>
+            <span className={"switch-option right-align"}>
+                Equivalence testing
+            </span>
             <Switch
                 checked={mode === AlgorithmMode.STATE_MINIMIZATION}
                 activeBoxShadow={"0 0 2px 2px #3bf"}
@@ -30,7 +32,9 @@ export default function AlgorithmModeSwitch({
                 onColor={"#aaa"}
                 width={75}
             />
-            <span className={"algorithm-mode-option"}>State minimization</span>
+            <span className={"switch-option left-align"}>
+                State minimization
+            </span>
         </div>
     );
 }
