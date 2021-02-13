@@ -6,6 +6,8 @@ export interface Algorithm {
     step: () => void;
     reset: () => void;
     log?: Log;
+    produceWitness: boolean;
+    witness: string;
 }
 
 export interface Log {

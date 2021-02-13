@@ -12,6 +12,7 @@ export enum TableFillingAlgorithmState {
     EMPTY_TABLE,
     MARKING_PAIRS,
     ALL_PAIRS_MARKED,
+    CONSTRUCTING_WITNESS,
 }
 
 interface TableFillingAlgorithmInterface extends Algorithm {
@@ -36,8 +37,10 @@ export default class TableFillingAlgorithm
     type: "table-filling";
     iteration: number;
     mode: AlgorithmMode;
+    produceWitness: boolean;
+    witness: string;
 
-    constructor(input1: DFA, input2?: DFA) {
+    constructor(input1: DFA, input2?: DFA, produceWitness?: boolean) {
         this.type = "table-filling";
         this.input1 = input1;
         this.input2 = input2 ?? input1;
@@ -50,6 +53,8 @@ export default class TableFillingAlgorithm
         this.mode = input2
             ? AlgorithmMode.EQUIVALENCE_TESTING
             : AlgorithmMode.STATE_MINIMIZATION;
+        this.produceWitness = produceWitness ?? false;
+        this.witness = "";
     }
 
     reset(): void {
@@ -59,6 +64,7 @@ export default class TableFillingAlgorithm
         this.result = EquivalenceTestingResult.UNFINISHED;
         this.iteration = 1;
         this.log?.clear();
+        this.witness = "";
     }
 
     step() {
@@ -78,6 +84,9 @@ export default class TableFillingAlgorithm
                 } else if (this.mode === AlgorithmMode.STATE_MINIMIZATION) {
                     this.identifyIndistinguishableGroups();
                 }
+                break;
+            case TableFillingAlgorithmState.CONSTRUCTING_WITNESS:
+                this.constructWitness();
                 break;
             case CommonAlgorithmState.FINAL:
                 break;
@@ -131,7 +140,14 @@ export default class TableFillingAlgorithm
         for (let acceptingState of acceptingStates) {
             for (let nonAcceptingState of nonAcceptingStates) {
                 const pair = this.getPair(acceptingState, nonAcceptingState);
-                this.pairs.set(pair, "X"); // set to empty string in witness mode
+                if (
+                    this.mode === AlgorithmMode.EQUIVALENCE_TESTING &&
+                    this.produceWitness
+                ) {
+                    this.pairs.set(pair, "ε");
+                } else {
+                    this.pairs.set(pair, "X");
+                }
                 this.unmarkedPairs.delete(pair);
                 markedCount++;
                 this.log?.log(
@@ -162,7 +178,15 @@ export default class TableFillingAlgorithm
                 const p = unmarkedPair[1].transitions.get(symbol)!;
                 const successorPair = this.getPair(q, p);
                 if (this.pairs.get(successorPair) !== "") {
-                    this.pairs.set(unmarkedPair, "X"); // set to symbol in witness mode
+                    if (
+                        this.mode === AlgorithmMode.EQUIVALENCE_TESTING &&
+                        this.produceWitness
+                    ) {
+                        this.pairs.set(unmarkedPair, symbol);
+                    } else {
+                        this.pairs.set(unmarkedPair, "X");
+                    }
+
                     if (this.unmarkedPairs.has(unmarkedPair)) {
                         this.unmarkedPairs.delete(unmarkedPair);
                         this.log?.log(
@@ -209,6 +233,62 @@ export default class TableFillingAlgorithm
                 `Starting states ${q1.name} and ${q2.name} are distinguishable, therefore the DFAs are non-equivalent`
             );
         }
+        if (!this.produceWitness) {
+            this.state = CommonAlgorithmState.FINAL;
+        } else {
+            this.state = TableFillingAlgorithmState.CONSTRUCTING_WITNESS;
+        }
+    }
+
+    constructWitness() {
+        let witness = "";
+        let p = this.input1.startingState;
+        let q = this.input2.startingState;
+        let symbol = this.pairs.get(this.getPair(p, q));
+        if (symbol === "ε") {
+            this.log?.log(
+                `Witness: the DFAs can be distinguished by the empty string ''`
+            );
+        }
+        this.log?.log(
+            `Constructing witness: Comparing starting states ${p.name} and ${q.name}`
+        );
+        while (
+            this.input1.finalStates.has(p) === this.input2.finalStates.has(q)
+        ) {
+            this.log?.log(
+                `${p.name} and ${q.name} are distinguished by the symbol ${symbol}`
+            );
+            witness += symbol;
+            this.log?.log(
+                `Appending ${symbol} to the witness string, it is now ${witness}`
+            );
+            let previousP = p.name;
+            let previousQ = q.name;
+            p = p.transitions.get(symbol)!;
+            q = q.transitions.get(symbol)!;
+            this.log?.log(
+                `On input ${symbol}, ${previousP} transitions to ${p.name} and ${previousQ} transitions to ${q.name}`
+            );
+            symbol = this.pairs.get(this.getPair(p, q));
+        }
+
+        if (this.input1.finalStates.has(p)) {
+            this.log?.log(
+                `${p.name} is an accepting state while ${q.name} is not.`
+            );
+            this.log?.log(
+                `Witness: ${witness}. Input 1 accepts the witness string while input 2 rejects it.`
+            );
+        } else {
+            this.log?.log(
+                `${q.name} is an accepting state while ${p.name} is not.`
+            );
+            this.log?.log(
+                `Witness: ${witness}. Input 2 accepts the witness string while input 1 rejects it.`
+            );
+        }
+        this.witness = witness;
         this.state = CommonAlgorithmState.FINAL;
     }
 

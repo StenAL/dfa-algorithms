@@ -6,10 +6,15 @@ import { AlgorithmMode } from "../../types/Algorithm";
 import { DFA } from "../../types/DFA";
 import AlgorithmModeSwitch from "./AlgorithmModeSwitch";
 import DfaInput from "./DfaInput";
+import WitnessSwitch from "./WitnessSwitch";
 
 interface InputContainerProps {
     modes: AlgorithmMode[];
-    runCallback: (input1: DFA, input2: DFA | undefined) => void;
+    runCallback: (
+        input1: DFA,
+        input2: DFA | undefined,
+        produceWitness: boolean | undefined
+    ) => void;
     runLink: string;
 }
 
@@ -21,9 +26,11 @@ export default function InputContainer({
     const [input1, setInput1] = useState<DFA>();
     const [input2, setInput2] = useState<DFA>();
     const [alphabet, setAlphabet] = useState<string[]>([]);
+    const [produceWitness, setProduceWitness] = useState(false);
     const [mode, setMode] = useState<AlgorithmMode>(
         modes.length === 1 ? modes[0] : AlgorithmMode.EQUIVALENCE_TESTING
     );
+
     const alphabetValid =
         alphabet.length > 0 && new Set(alphabet).size === alphabet.length;
     let inputValid = false;
@@ -32,18 +39,29 @@ export default function InputContainer({
     } else if (mode === AlgorithmMode.STATE_MINIMIZATION && input1) {
         inputValid = true;
     }
+
     return (
         <div className={"input-container"}>
             <div className={"input-fields-container"}>
                 {modes.length > 1 ? (
                     <AlgorithmModeSwitch
                         mode={mode}
-                        callback={(mode) => setMode(mode)}
+                        callback={(mode) => {
+                            setMode(mode);
+                        }}
                     />
                 ) : (
                     ""
                 )}
-                <h3 className={"input-header"}>Input custom DFA(s)</h3>
+                {mode === AlgorithmMode.EQUIVALENCE_TESTING ? (
+                    <WitnessSwitch
+                        produceWitness={produceWitness}
+                        callback={setProduceWitness}
+                    />
+                ) : (
+                    ""
+                )}
+                <h3>Input custom DFA(s)</h3>
                 <div className={"alphabet-input"}>
                     <label htmlFor={"alphabet"}>
                         Alphabet
@@ -108,7 +126,9 @@ export default function InputContainer({
                 >
                     <button
                         disabled={!inputValid}
-                        onClick={() => runCallback(input1!, input2)}
+                        onClick={() =>
+                            runCallback(input1!, input2, produceWitness)
+                        }
                     >
                         Run
                     </button>
@@ -123,7 +143,8 @@ export default function InputContainer({
                                 dfaA,
                                 mode === AlgorithmMode.EQUIVALENCE_TESTING
                                     ? dfaB
-                                    : undefined
+                                    : undefined,
+                                produceWitness
                             )
                         }
                     >

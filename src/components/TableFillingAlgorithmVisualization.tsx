@@ -82,6 +82,9 @@ export default function TableFillingAlgorithmVisualization({
         case TableFillingAlgorithmState.ALL_PAIRS_MARKED:
             stateDescription = "All pairs marked";
             break;
+        case TableFillingAlgorithmState.CONSTRUCTING_WITNESS:
+            stateDescription = "bla";
+            break;
         case CommonAlgorithmState.FINAL:
             stateDescription = "Final state";
             let resultString;
@@ -91,6 +94,13 @@ export default function TableFillingAlgorithmVisualization({
                     (algorithm.result === EquivalenceTestingResult.EQUIVALENT
                         ? " equivalent"
                         : "non-equivalent");
+                if (
+                    algorithm.result ===
+                        EquivalenceTestingResult.NON_EQUIVALENT &&
+                    algorithm.produceWitness
+                ) {
+                    resultString += `. Witness: ${algorithm.witness}`;
+                }
             } else {
                 resultString = "States **todo** can be combined.";
             }

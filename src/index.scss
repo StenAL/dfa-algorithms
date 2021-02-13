@@ -133,12 +133,26 @@ body {
     align-items: center;
 }
 
-.algorithm-mode-option {
+.switch-option {
     position: relative;
     bottom: 8px;
     margin: 0 5px;
+    width: 150px;
+    display: inline-block;
+
+    .info-tooltip {
+        position: relative;
+        top: 1px;
+    }
 }
 
+.left-align {
+    text-align: left;
+}
+
+.right-align {
+    text-align: right;
+}
 .info-tooltip {
     background: var(--pastel-blue);
     width: 1rem;
@@ -149,6 +163,7 @@ body {
     line-height: 1em;
     margin-left: 0.3em;
     border-radius: 0.75em;
+    text-align: center;
 }
 
 .__react_component_tooltip.show {

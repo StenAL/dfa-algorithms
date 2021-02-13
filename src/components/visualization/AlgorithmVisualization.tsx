@@ -51,11 +51,15 @@ export default function AlgorithmVisualization() {
                 <InputContainer
                     modes={algorithmModes}
                     runLink={`/algorithm/${algorithmType}/run`}
-                    runCallback={(input1, input2) => {
+                    runCallback={(input1, input2, produceWitness) => {
                         switch (algorithmType) {
                             case "table-filling":
                                 setAlgorithm(
-                                    new TableFillingAlgorithm(input1, input2)
+                                    new TableFillingAlgorithm(
+                                        input1,
+                                        input2,
+                                        produceWitness
+                                    )
                                 );
                                 break;
                             case "hopcroft":
