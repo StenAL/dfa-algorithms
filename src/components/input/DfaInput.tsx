@@ -12,11 +12,7 @@ interface DfaInputProps {
     convertInputCallback: (dfa: DFA | undefined) => void;
 }
 
-export default function DfaInput({
-    convertInputCallback,
-    alphabet,
-    alphabetValid,
-}: DfaInputProps) {
+export default function DfaInput({ convertInputCallback, alphabet, alphabetValid }: DfaInputProps) {
     const [states, setStates] = useState<string[]>([]);
     const [finalStates, setFinalStates] = useState<string[]>([]);
     const [transitions, setTransitions] = useState<TransitionData>(new Map());
@@ -41,8 +37,7 @@ export default function DfaInput({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alphabet]);
 
-    const statesValid =
-        states.length > 0 && new Set(states).size === states.length;
+    const statesValid = states.length > 0 && new Set(states).size === states.length;
     const finalStatesValid =
         new Set(finalStates).size === finalStates.length &&
         finalStates.every((s) => states.includes(s));
@@ -52,11 +47,7 @@ export default function DfaInput({
             <div className={"dfa-fields-container"}>
                 <label htmlFor={"states"}>
                     States
-                    <span
-                        className={"info-tooltip"}
-                        data-tip
-                        data-for="states-help"
-                    >
+                    <span className={"info-tooltip"} data-tip data-for="states-help">
                         ?
                     </span>
                 </label>
@@ -68,14 +59,11 @@ export default function DfaInput({
                     multiline={true}
                 >
                     <span>
-                        The states of the DFA in the form of comma-separated
-                        list
-                        <br /> e.g. 'q0,q1,q2' or 'p,q'. Can not contain
-                        duplicate states.
+                        The states of the DFA in the form of comma-separated list
+                        <br /> e.g. 'q0,q1,q2' or 'p,q'. Can not contain duplicate states.
                         <br />
                         <br />
-                        The first state listed is assumed to be the starting
-                        state of the DFA.
+                        The first state listed is assumed to be the starting state of the DFA.
                     </span>
                 </Tooltip>
                 <input
@@ -84,19 +72,13 @@ export default function DfaInput({
                     placeholder={"q1,q2..."}
                     onChange={(event) => {
                         const newStates = event.target.value.split(",");
-                        if (
-                            newStates.length > 0 &&
-                            newStates[newStates.length - 1] === ""
-                        ) {
+                        if (newStates.length > 0 && newStates[newStates.length - 1] === "") {
                             newStates.pop();
                         }
                         const transitionsCopy: TransitionData = new Map();
                         for (let state of newStates) {
                             if (transitions.has(state)) {
-                                transitionsCopy.set(
-                                    state,
-                                    transitions.get(state)!
-                                );
+                                transitionsCopy.set(state, transitions.get(state)!);
                             } else {
                                 const newStateTransitions = new Map();
                                 transitionsCopy.set(state, newStateTransitions);
@@ -112,11 +94,7 @@ export default function DfaInput({
                 />
                 <label htmlFor={"finalStates"}>
                     Final states
-                    <span
-                        className={"info-tooltip"}
-                        data-tip
-                        data-for="final-states-help"
-                    >
+                    <span className={"info-tooltip"} data-tip data-for="final-states-help">
                         ?
                     </span>
                 </label>
@@ -128,10 +106,9 @@ export default function DfaInput({
                     multiline={true}
                 >
                     <span>
-                        The final (accepting) states of the DFA in the form of
-                        comma-separated list.
-                        <br /> These states must be listed in the 'States'
-                        field. Can not contain duplicates.
+                        The final (accepting) states of the DFA in the form of comma-separated list.
+                        <br /> These states must be listed in the 'States' field. Can not contain
+                        duplicates.
                     </span>
                 </Tooltip>
                 <input
@@ -157,9 +134,7 @@ export default function DfaInput({
                     alphabet={alphabet}
                     transitions={transitions}
                     setTransition={(from, symbol, to) => {
-                        const transitionsCopy: TransitionData = new Map(
-                            transitions
-                        );
+                        const transitionsCopy: TransitionData = new Map(transitions);
                         transitionsCopy.get(from)!.set(symbol, to);
                         setTransitions(transitionsCopy);
                     }}
@@ -173,12 +148,7 @@ export default function DfaInput({
                 alphabet={alphabet}
                 finalStates={finalStates}
                 states={states}
-                validInput={
-                    statesValid &&
-                    alphabetValid &&
-                    finalStatesValid &&
-                    transitionsValid
-                }
+                validInput={statesValid && alphabetValid && finalStatesValid && transitionsValid}
                 convertInputCallback={convertInputCallback}
             />
         </div>

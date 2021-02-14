@@ -1,8 +1,4 @@
-import {
-    fireEvent,
-    getByDisplayValue,
-    getByText,
-} from "@testing-library/react";
+import { fireEvent, getByDisplayValue, getByText } from "@testing-library/react";
 import { mount } from "enzyme";
 import React from "react";
 import { act } from "react-dom/test-utils";
@@ -33,16 +29,10 @@ it("renders mode switch only when multiple modes are available and witness switc
     expect(wrapper.find(AlgorithmModeSwitch).exists()).toBe(false);
     expect(wrapper.find(WitnessSwitch).exists()).toBe(false);
     wrapper.setProps({
-        modes: [
-            AlgorithmMode.EQUIVALENCE_TESTING,
-            AlgorithmMode.STATE_MINIMIZATION,
-        ],
+        modes: [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.STATE_MINIMIZATION],
     });
     act(() => {
-        wrapper
-            .find(AlgorithmModeSwitch)
-            .props()
-            .callback(AlgorithmMode.EQUIVALENCE_TESTING);
+        wrapper.find(AlgorithmModeSwitch).props().callback(AlgorithmMode.EQUIVALENCE_TESTING);
     });
     wrapper.setProps({});
     expect(wrapper.find(AlgorithmModeSwitch).exists()).toBe(true);

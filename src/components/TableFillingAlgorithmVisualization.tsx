@@ -1,11 +1,7 @@
 import TableFillingAlgorithm, {
     TableFillingAlgorithmState,
 } from "../algorithm/TableFillingAlgorithm";
-import {
-    AlgorithmMode,
-    CommonAlgorithmState,
-    EquivalenceTestingResult,
-} from "../types/Algorithm";
+import { AlgorithmMode, CommonAlgorithmState, EquivalenceTestingResult } from "../types/Algorithm";
 
 interface AlgorithmVisualizationProps {
     algorithm: TableFillingAlgorithm;
@@ -56,10 +52,7 @@ export default function TableFillingAlgorithmVisualization({
                 const header = i === 0 || j === 0;
                 return (
                     <div
-                        className={
-                            "table-filling-cell" +
-                            (header ? " table-filling-header" : "")
-                        }
+                        className={"table-filling-cell" + (header ? " table-filling-header" : "")}
                         key={`${i}-${j}`}
                     >
                         {el}
@@ -98,8 +91,7 @@ export default function TableFillingAlgorithmVisualization({
                         ? " equivalent"
                         : "non-equivalent");
                 if (
-                    algorithm.result ===
-                        EquivalenceTestingResult.NON_EQUIVALENT &&
+                    algorithm.result === EquivalenceTestingResult.NON_EQUIVALENT &&
                     algorithm.produceWitness
                 ) {
                     resultString += `. Witness: ${algorithm.witness}.`;
@@ -120,14 +112,8 @@ export default function TableFillingAlgorithmVisualization({
     }
     return (
         <>
-            <p className={"table-filling-state"}>
-                Current state: {stateDescription}
-            </p>
-            {pairs.length > 1 ? (
-                <div className={"table-filling-table"}>{pairs}</div>
-            ) : (
-                ""
-            )}
+            <p className={"table-filling-state"}>Current state: {stateDescription}</p>
+            {pairs.length > 1 ? <div className={"table-filling-table"}>{pairs}</div> : ""}
         </>
     );
 }

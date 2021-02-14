@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { CommonAlgorithmState } from "../types/Algorithm";
 import { DFA, State } from "../types/DFA";
-import TableFillingAlgorithm, {
-    TableFillingAlgorithmState,
-} from "./TableFillingAlgorithm";
+import TableFillingAlgorithm, { TableFillingAlgorithmState } from "./TableFillingAlgorithm";
 
 const alphabet = ["0", "1"];
 

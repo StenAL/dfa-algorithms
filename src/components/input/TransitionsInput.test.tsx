@@ -11,9 +11,7 @@ it("detects invalid transitions", function () {
             states={["q1"]}
             alphabet={["0"]}
             transitions={transitions}
-            setTransition={(from, symbol, to) =>
-                transitions.get(from)!.set(symbol, to)
-            }
+            setTransition={(from, symbol, to) => transitions.get(from)!.set(symbol, to)}
             setTransitionsValid={(result) => {
                 valid = result;
             }}

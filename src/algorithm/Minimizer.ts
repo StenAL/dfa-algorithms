@@ -1,10 +1,10 @@
 import { DFA, State, Transitions } from "../types/DFA";
 
 const combineStates = (dfa: DFA, statesToBeCombined: State[][]): DFA => {
-    const oldStateToCombinedState: Map<
-        State,
-        State[]
-    > = mapStateToCombinedStates(dfa, statesToBeCombined);
+    const oldStateToCombinedState: Map<State, State[]> = mapStateToCombinedStates(
+        dfa,
+        statesToBeCombined
+    );
     const oldStateToNewState: Map<State, State> = new Map<State, State>();
     const newStateToRepresentative: Map<State, State> = new Map<State, State>();
     const newStates: State[] = [];
@@ -42,9 +42,7 @@ const combineStates = (dfa: DFA, statesToBeCombined: State[][]): DFA => {
 
     const startingState = oldStateToNewState.get(dfa.startingState)!;
     const finalStates = new Set(
-        Array.from(dfa.finalStates).map(
-            (finalState) => oldStateToNewState.get(finalState)!
-        )
+        Array.from(dfa.finalStates).map((finalState) => oldStateToNewState.get(finalState)!)
     );
     return {
         finalStates,

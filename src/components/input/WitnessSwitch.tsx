@@ -6,10 +6,7 @@ interface WitnessSwitchProps {
     callback: (produceWitness: boolean) => void;
 }
 
-export default function WitnessSwitch({
-    produceWitness,
-    callback,
-}: WitnessSwitchProps) {
+export default function WitnessSwitch({ produceWitness, callback }: WitnessSwitchProps) {
     return (
         <div className={"algorithm-switch"}>
             <span className={"switch-option right-align"}>No witness</span>
@@ -27,11 +24,7 @@ export default function WitnessSwitch({
             />
             <span className={"switch-option left-align"}>
                 Witness string
-                <span
-                    className={"info-tooltip"}
-                    data-tip
-                    data-for="witness-help"
-                >
+                <span className={"info-tooltip"} data-tip data-for="witness-help">
                     ?
                 </span>
             </span>
@@ -43,12 +36,11 @@ export default function WitnessSwitch({
                 multiline={true}
             >
                 <span>
-                    A witness string is an example string that indicates why two
-                    DFA are not equivalent, meaning one DFA accepts the witness
-                    while the other rejects it.
+                    A witness string is an example string that indicates why two DFA are not
+                    equivalent, meaning one DFA accepts the witness while the other rejects it.
                     <br />
-                    Computing a witness string takes more time and memory than
-                    just determining the equivalence of DFAs.
+                    Computing a witness string takes more time and memory than just determining the
+                    equivalence of DFAs.
                 </span>
             </Tooltip>
         </div>

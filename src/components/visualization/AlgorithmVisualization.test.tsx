@@ -30,21 +30,14 @@ const dfa: DFA = {
 
 it("initializes table-filling algorithm correctly", function () {
     const wrapper = mount(
-        <MemoryRouter
-            initialEntries={["/algorithm/table-filling/input"]}
-            initialIndex={0}
-        >
+        <MemoryRouter initialEntries={["/algorithm/table-filling/input"]} initialIndex={0}>
             <Route path={"/algorithm/:algorithmType/"}>
                 <AlgorithmVisualization />
             </Route>
         </MemoryRouter>
     );
-    expect(
-        wrapper.find("h2").text().includes("The Table-Filling Algorithm")
-    ).toBe(true);
-    expect(wrapper.find(TableFillingAlgorithmVisualization).exists()).toBe(
-        false
-    );
+    expect(wrapper.find("h2").text().includes("The Table-Filling Algorithm")).toBe(true);
+    expect(wrapper.find(TableFillingAlgorithmVisualization).exists()).toBe(false);
     expect(wrapper.find(AlgorithmLog).exists()).toBe(false);
     expect(wrapper.find(AlgorithmStepControls).exists()).toBe(false);
     const runInputCallback = wrapper.find(InputContainer).props().runCallback;
@@ -54,9 +47,7 @@ it("initializes table-filling algorithm correctly", function () {
 
     expect(wrapper.find(Link).at(0).text()).toBe("Run");
     wrapper.find(Link).at(0).simulate("click", { button: 0 });
-    expect(wrapper.find(TableFillingAlgorithmVisualization).exists()).toBe(
-        true
-    );
+    expect(wrapper.find(TableFillingAlgorithmVisualization).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).exists()).toBe(true);
     expect(wrapper.find(AlgorithmStepControls).exists()).toBe(true);
 });
