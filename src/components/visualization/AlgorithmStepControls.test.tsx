@@ -9,7 +9,7 @@ it("buttons call corresponding algorithm functions and invoke callback", functio
         reset: function () {
             this.state = CommonAlgorithmState.INITIAL;
         },
-        type: "table-filling",
+        type: "tableFilling",
         step: function () {
             if (this.state === CommonAlgorithmState.INITIAL) {
                 this.state = TableFillingAlgorithmState.ALL_PAIRS_MARKED;
@@ -52,7 +52,7 @@ it("disables invalid step buttons", function () {
         reset: function () {
             this.state = CommonAlgorithmState.INITIAL;
         },
-        type: "table-filling",
+        type: "tableFilling",
         step: function () {
             if (this.state === CommonAlgorithmState.INITIAL) {
                 this.state = TableFillingAlgorithmState.ALL_PAIRS_MARKED;

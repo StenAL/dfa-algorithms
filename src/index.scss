@@ -3,9 +3,12 @@
     --pastel-red: #ff6961;
     --pastel-green: #77dd77;
     --pastel-blue: #89cff0;
+    --purple: #a084ce;
 }
 
-body {
+html,
+body,
+#root {
     margin: 0;
     font-family: "Open Sans", sans-serif;
     display: flex;
@@ -13,6 +16,12 @@ body {
     align-items: center;
     text-align: center;
     background: #f9f9f9;
+    min-height: 100vh;
+}
+
+a,
+a:visited {
+    color: var(--purple);
 }
 
 .transitions {
@@ -32,7 +41,6 @@ body {
     width: 3rem;
     height: 3rem;
     margin: 1px;
-    //border: 1px solid black;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -173,4 +181,38 @@ body {
 .pre-generated-inputs-container {
     display: flex;
     flex-direction: column;
+}
+
+.algorithm-picker {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    background: #e3e3e3;
+    text-align: left;
+    padding: 10px;
+    border-radius: 4px;
+    label {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 4px;
+        margin: 5px 10px;
+        padding: 5px 10px 5px 15px;
+        height: 2rem;
+        border: 1px solid black;
+
+        &.disabled-algorithm {
+            color: #a0a0a0;
+            background-color: #ccc;
+            border: 1px solid #a0a0a0;
+            cursor: not-allowed;
+        }
+    }
+}
+
+footer {
+    margin: auto 0 5vh;
+    font-size: 14px;
+    color: #a0a0a0;
+    float: bottom;
 }
