@@ -34,7 +34,7 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
     log?: Log;
     state: TableFillingAlgorithmState | CommonAlgorithmState;
     unmarkedPairs: HashMap<[State, State], undefined>;
-    type: "table-filling";
+    type: "tableFilling" | "tableFillingWitness";
     iteration: number;
 
     mode: AlgorithmMode;
@@ -46,7 +46,7 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
     indistinguishableStateGroups: State[][];
 
     constructor(input1: DFA, input2?: DFA, produceWitness?: boolean) {
-        this.type = "table-filling";
+        this.type = produceWitness ? "tableFillingWitness" : "tableFilling";
         this.input1 = input1;
         this.input2 = input2 ?? input1;
         this.log = undefined;

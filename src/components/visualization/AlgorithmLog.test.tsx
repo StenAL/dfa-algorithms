@@ -6,7 +6,7 @@ it("renders messages logged by algorithm", function () {
     const algorithm: Algorithm = {
         state: CommonAlgorithmState.INITIAL,
         reset: () => {},
-        type: "table-filling",
+        type: "tableFilling",
         step: () => {},
         produceWitness: false,
         witness: "",
@@ -21,7 +21,7 @@ it("does not render cleared messages", function () {
     const algorithm: Algorithm = {
         state: CommonAlgorithmState.INITIAL,
         reset: () => {},
-        type: "table-filling",
+        type: "tableFilling",
         step: () => {},
         produceWitness: false,
         witness: "",

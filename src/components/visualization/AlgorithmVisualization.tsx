@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Route, useParams } from "react-router-dom";
 import TableFillingAlgorithm from "../../algorithm/TableFillingAlgorithm";
-import { Algorithm, AlgorithmMode, AlgorithmType } from "../../types/Algorithm";
+import { Algorithm, AlgorithmMode } from "../../types/Algorithm";
 import { useForceUpdate } from "../../util/Hooks";
 import AlgorithmModeSwitch from "../input/AlgorithmModeSwitch";
 import AlgorithmInput from "../input/AlgorithmInput";
@@ -11,7 +11,7 @@ import AlgorithmLog from "./AlgorithmLog";
 import AlgorithmStepControls from "./AlgorithmStepControls";
 
 interface AlgorithmVisualizationRouteParams {
-    algorithmType: AlgorithmType;
+    algorithmType: "table-filling" | "hopcroft" | "nearly-linear";
 }
 
 export default function AlgorithmVisualization() {
@@ -35,11 +35,11 @@ export default function AlgorithmVisualization() {
             );
             break;
         case "hopcroft":
-            title = "Hopcroft";
+            title = "The n-lg-n Hopcroft Algorithm";
             supportedModes = [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.STATE_MINIMIZATION];
             break;
-        case "other":
-            title = "Other";
+        case "nearly-linear":
+            title = "The (Nearly) Linear Algorithm";
             supportedModes = [];
     }
     return (
@@ -73,7 +73,7 @@ export default function AlgorithmVisualization() {
                                 break;
                             case "hopcroft":
                                 break;
-                            case "other":
+                            case "nearly-linear":
                                 break;
                         }
                     }}

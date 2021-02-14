@@ -15,7 +15,17 @@ export interface Log {
     clear: () => void;
 }
 
-export type AlgorithmType = "table-filling" | "hopcroft" | "other";
+export type AlgorithmType =
+    | "tableFilling"
+    | "tableFillingWitness"
+    | "hopcroft"
+    | "hopcroftWitness"
+    | "nearlyLinear"
+    | "nearlyLinearWitness";
+
+export type AlgorithmsSelected = {
+    [type in AlgorithmType]: boolean;
+};
 
 export enum EquivalenceTestingResult {
     NOT_AVAILABLE,
