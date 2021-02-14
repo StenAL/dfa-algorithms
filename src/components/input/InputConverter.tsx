@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { DFA, State, Transitions } from "../../types/DFA";
-import { TransitionData } from "./DfaInput";
+import { TransitionData } from "./StatesInput";
 
 interface InputConverterProps {
     states: string[];

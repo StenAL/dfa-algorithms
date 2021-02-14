@@ -2,8 +2,11 @@ import { mount } from "enzyme";
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { Link, MemoryRouter, Route } from "react-router-dom";
+import { AlgorithmMode } from "../../types/Algorithm";
 import { DFA, State } from "../../types/DFA";
-import InputContainer from "../input/InputContainer";
+import AlgorithmInput from "../input/AlgorithmInput";
+import AlgorithmModeSwitch from "../input/AlgorithmModeSwitch";
+import WitnessSwitch from "../input/WitnessSwitch";
 import TableFillingAlgorithmVisualization from "../TableFillingAlgorithmVisualization";
 import AlgorithmLog from "./AlgorithmLog";
 import AlgorithmStepControls from "./AlgorithmStepControls";
@@ -28,6 +31,24 @@ const dfa: DFA = {
     startingState: q1,
 };
 
+it("renders witness switch only in EQUIVALENCE_TESTING mode", function () {
+    const wrapper = mount(
+        <MemoryRouter initialEntries={["/algorithm/table-filling/input"]} initialIndex={0}>
+            <Route path={"/algorithm/:algorithmType/"}>
+                <AlgorithmVisualization />
+            </Route>
+        </MemoryRouter>
+    );
+    expect(wrapper.find(AlgorithmModeSwitch).exists()).toBe(true);
+    expect(wrapper.find(WitnessSwitch).exists()).toBe(true);
+
+    act(() => {
+        wrapper.find(AlgorithmModeSwitch).props().callback(AlgorithmMode.STATE_MINIMIZATION);
+    });
+    wrapper.setProps({});
+    expect(wrapper.find(WitnessSwitch).exists()).toBe(false);
+});
+
 it("initializes table-filling algorithm correctly", function () {
     const wrapper = mount(
         <MemoryRouter initialEntries={["/algorithm/table-filling/input"]} initialIndex={0}>
@@ -40,9 +61,9 @@ it("initializes table-filling algorithm correctly", function () {
     expect(wrapper.find(TableFillingAlgorithmVisualization).exists()).toBe(false);
     expect(wrapper.find(AlgorithmLog).exists()).toBe(false);
     expect(wrapper.find(AlgorithmStepControls).exists()).toBe(false);
-    const runInputCallback = wrapper.find(InputContainer).props().runCallback;
+    const runInputCallback = wrapper.find(AlgorithmInput).props().runCallback;
     act(() => {
-        runInputCallback(dfa, dfa, false);
+        runInputCallback(dfa, dfa);
     });
 
     expect(wrapper.find(Link).at(0).text()).toBe("Run");

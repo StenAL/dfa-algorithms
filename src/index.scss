@@ -77,7 +77,7 @@ body {
     justify-content: center;
 }
 
-.dfa-input {
+.states-input-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -86,7 +86,7 @@ body {
     border: 1px solid grey;
     border-radius: 6px;
 
-    .dfa-fields-container {
+    .states-input {
         max-width: 250px;
         display: flex;
         flex-direction: column;
@@ -168,4 +168,9 @@ body {
 
 .__react_component_tooltip.show {
     opacity: 1 !important;
+}
+
+.pre-generated-inputs-container {
+    display: flex;
+    flex-direction: column;
 }
