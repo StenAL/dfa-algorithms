@@ -13,9 +13,7 @@ it("buttons call corresponding algorithm functions and invoke callback", functio
         step: function () {
             if (this.state === CommonAlgorithmState.INITIAL) {
                 this.state = TableFillingAlgorithmState.ALL_PAIRS_MARKED;
-            } else if (
-                this.state === TableFillingAlgorithmState.ALL_PAIRS_MARKED
-            ) {
+            } else if (this.state === TableFillingAlgorithmState.ALL_PAIRS_MARKED) {
                 this.state = CommonAlgorithmState.FINAL;
             }
         },
@@ -58,9 +56,7 @@ it("disables invalid step buttons", function () {
         step: function () {
             if (this.state === CommonAlgorithmState.INITIAL) {
                 this.state = TableFillingAlgorithmState.ALL_PAIRS_MARKED;
-            } else if (
-                this.state === TableFillingAlgorithmState.ALL_PAIRS_MARKED
-            ) {
+            } else if (this.state === TableFillingAlgorithmState.ALL_PAIRS_MARKED) {
                 this.state = CommonAlgorithmState.FINAL;
             }
         },

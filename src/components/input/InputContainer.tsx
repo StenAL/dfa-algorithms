@@ -18,11 +18,7 @@ interface InputContainerProps {
     runLink: string;
 }
 
-export default function InputContainer({
-    modes,
-    runCallback,
-    runLink,
-}: InputContainerProps) {
+export default function InputContainer({ modes, runCallback, runLink }: InputContainerProps) {
     const [input1, setInput1] = useState<DFA>();
     const [input2, setInput2] = useState<DFA>();
     const [alphabet, setAlphabet] = useState<string[]>([]);
@@ -31,8 +27,7 @@ export default function InputContainer({
         modes.length === 1 ? modes[0] : AlgorithmMode.EQUIVALENCE_TESTING
     );
 
-    const alphabetValid =
-        alphabet.length > 0 && new Set(alphabet).size === alphabet.length;
+    const alphabetValid = alphabet.length > 0 && new Set(alphabet).size === alphabet.length;
     let inputValid = false;
     if (mode === AlgorithmMode.EQUIVALENCE_TESTING && input1 && input2) {
         inputValid = true;
@@ -54,10 +49,7 @@ export default function InputContainer({
                     ""
                 )}
                 {mode === AlgorithmMode.EQUIVALENCE_TESTING ? (
-                    <WitnessSwitch
-                        produceWitness={produceWitness}
-                        callback={setProduceWitness}
-                    />
+                    <WitnessSwitch produceWitness={produceWitness} callback={setProduceWitness} />
                 ) : (
                     ""
                 )}
@@ -65,11 +57,7 @@ export default function InputContainer({
                 <div className={"alphabet-input"}>
                     <label htmlFor={"alphabet"}>
                         Alphabet
-                        <span
-                            className={"info-tooltip"}
-                            data-tip
-                            data-for="alphabet-help"
-                        >
+                        <span className={"info-tooltip"} data-tip data-for="alphabet-help">
                             ?
                         </span>
                     </label>
@@ -81,10 +69,8 @@ export default function InputContainer({
                         multiline={true}
                     >
                         <span>
-                            The alphabet the DFA(s) will use in the form of a
-                            comma-separated list
-                            <br /> e.g. '0,1,2' or 'a,b'. Can not contain
-                            duplicate symbols
+                            The alphabet the DFA(s) will use in the form of a comma-separated list
+                            <br /> e.g. '0,1,2' or 'a,b'. Can not contain duplicate symbols
                         </span>
                     </Tooltip>
                     <input
@@ -120,15 +106,10 @@ export default function InputContainer({
                         ""
                     )}
                 </div>
-                <Link
-                    className={inputValid ? "" : "disabled-link"}
-                    to={runLink}
-                >
+                <Link className={inputValid ? "" : "disabled-link"} to={runLink}>
                     <button
                         disabled={!inputValid}
-                        onClick={() =>
-                            runCallback(input1!, input2, produceWitness)
-                        }
+                        onClick={() => runCallback(input1!, input2, produceWitness)}
                     >
                         Run
                     </button>
@@ -141,9 +122,7 @@ export default function InputContainer({
                         onClick={() =>
                             runCallback(
                                 dfaA,
-                                mode === AlgorithmMode.EQUIVALENCE_TESTING
-                                    ? dfaB
-                                    : undefined,
+                                mode === AlgorithmMode.EQUIVALENCE_TESTING ? dfaB : undefined,
                                 produceWitness
                             )
                         }

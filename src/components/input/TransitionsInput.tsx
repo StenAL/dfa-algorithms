@@ -45,10 +45,7 @@ export default function TransitionsInput({
                 transitionsValid = transitionsValid && validTo;
                 return (
                     <div
-                        className={
-                            "transition-cell" +
-                            (header ? " transition-header" : "")
-                        }
+                        className={"transition-cell" + (header ? " transition-header" : "")}
                         key={`${i}-${j}`}
                     >
                         {header ? (
@@ -57,16 +54,10 @@ export default function TransitionsInput({
                             <input
                                 type={"text"}
                                 className={validTo ? "" : "invalid-input"}
-                                placeholder={
-                                    states.length > 0 ? states[0] : "q0"
-                                }
+                                placeholder={states.length > 0 ? states[0] : "q0"}
                                 value={to}
                                 onChange={(event) =>
-                                    setTransition(
-                                        from,
-                                        symbol,
-                                        event.target.value
-                                    )
+                                    setTransition(from, symbol, event.target.value)
                                 }
                             />
                         )}

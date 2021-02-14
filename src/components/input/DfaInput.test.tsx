@@ -6,11 +6,7 @@ import TransitionsInput from "./TransitionsInput";
 
 it("should disallow duplicate state names", function () {
     const wrapper = shallow(
-        <DfaInput
-            alphabet={["0", "1"]}
-            alphabetValid={true}
-            convertInputCallback={() => {}}
-        />
+        <DfaInput alphabet={["0", "1"]} alphabetValid={true} convertInputCallback={() => {}} />
     );
     let stateInput = wrapper.find('input[name="states"]');
     expect(stateInput.hasClass("invalid-input")).toBe(true);
@@ -22,11 +18,7 @@ it("should disallow duplicate state names", function () {
 
 it("should only allow valid final states", function () {
     const wrapper = shallow(
-        <DfaInput
-            alphabet={["0", "1"]}
-            alphabetValid={true}
-            convertInputCallback={() => {}}
-        />
+        <DfaInput alphabet={["0", "1"]} alphabetValid={true} convertInputCallback={() => {}} />
     );
     let stateInput = wrapper.find('input[name="states"]');
     let finalStateInput = wrapper.find('input[name="finalStates"]');
@@ -47,11 +39,7 @@ it("should only allow valid final states", function () {
 
 it("should remove transitions when states are removed", function () {
     const wrapper = mount(
-        <DfaInput
-            alphabet={["0", "1"]}
-            alphabetValid={true}
-            convertInputCallback={() => {}}
-        />
+        <DfaInput alphabet={["0", "1"]} alphabetValid={true} convertInputCallback={() => {}} />
     );
     let stateInput = wrapper.find('input[name="states"]');
     stateInput.simulate("change", { target: { value: "q1,q2" } });
@@ -96,11 +84,7 @@ it("should remove transitions when states are removed", function () {
 
 it("should remove transitions when alphabet is changed", function () {
     const wrapper = mount(
-        <DfaInput
-            alphabet={["0", "1"]}
-            alphabetValid={true}
-            convertInputCallback={() => {}}
-        />
+        <DfaInput alphabet={["0", "1"]} alphabetValid={true} convertInputCallback={() => {}} />
     );
     let stateInput = wrapper.find('input[name="states"]');
     stateInput.simulate("change", { target: { value: "q1,q2" } });

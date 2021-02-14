@@ -8,9 +8,7 @@ import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualiza
 
 it("renders cells for each pair in table", function () {
     const algorithm = new TableFillingAlgorithm(dfaA, dfaB);
-    const wrapper = shallow(
-        <TableFillingAlgorithmVisualization algorithm={algorithm} />
-    );
+    const wrapper = shallow(<TableFillingAlgorithmVisualization algorithm={algorithm} />);
     expect(wrapper.find(".table-filling-cell").exists()).toBe(false); // no pairs yet
     algorithm.step();
     expect(algorithm.state).toBe(TableFillingAlgorithmState.EMPTY_TABLE);
@@ -26,9 +24,7 @@ it("renders cells for each pair in table", function () {
 
 it("marks pairs correctly, displays witness", function () {
     const algorithm = new TableFillingAlgorithm(dfaA, dfaB, true);
-    const wrapper = shallow(
-        <TableFillingAlgorithmVisualization algorithm={algorithm} />
-    );
+    const wrapper = shallow(<TableFillingAlgorithmVisualization algorithm={algorithm} />);
     while (algorithm.state !== CommonAlgorithmState.FINAL) {
         algorithm.step();
     }
@@ -54,17 +50,13 @@ it("marks pairs correctly, displays witness", function () {
 
 it("renders state minimization table correctly", function () {
     const algorithm = new TableFillingAlgorithm(dfaA);
-    const wrapper = shallow(
-        <TableFillingAlgorithmVisualization algorithm={algorithm} />
-    );
+    const wrapper = shallow(<TableFillingAlgorithmVisualization algorithm={algorithm} />);
     algorithm.step();
     expect(algorithm.state).toBe(TableFillingAlgorithmState.EMPTY_TABLE);
     expect(algorithm.pairs.entries().length).toBe(6);
     wrapper.setProps({});
     const headerCount = (dfaA.states.length - 1) * 2 + 1;
-    expect(wrapper.find(".table-filling-row").length).toBe(
-        dfaA.states.length - 1 + 1
-    );
+    expect(wrapper.find(".table-filling-row").length).toBe(dfaA.states.length - 1 + 1);
     expect(wrapper.find(".table-filling-header").length).toBe(headerCount);
     expect(wrapper.find(".table-filling-cell").length).toBe(6 + headerCount);
     while (algorithm.state !== CommonAlgorithmState.FINAL) {

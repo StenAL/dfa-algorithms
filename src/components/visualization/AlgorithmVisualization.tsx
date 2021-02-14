@@ -23,10 +23,7 @@ export default function AlgorithmVisualization() {
     switch (algorithmType) {
         case "table-filling":
             title = "The Table-Filling Algorithm";
-            algorithmModes = [
-                AlgorithmMode.EQUIVALENCE_TESTING,
-                AlgorithmMode.STATE_MINIMIZATION,
-            ];
+            algorithmModes = [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.STATE_MINIMIZATION];
             visualization = (
                 <TableFillingAlgorithmVisualization
                     algorithm={algorithm as TableFillingAlgorithm}
@@ -35,10 +32,7 @@ export default function AlgorithmVisualization() {
             break;
         case "hopcroft":
             title = "Hopcroft";
-            algorithmModes = [
-                AlgorithmMode.EQUIVALENCE_TESTING,
-                AlgorithmMode.STATE_MINIMIZATION,
-            ];
+            algorithmModes = [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.STATE_MINIMIZATION];
             break;
         case "other":
             title = "Other";
@@ -55,11 +49,7 @@ export default function AlgorithmVisualization() {
                         switch (algorithmType) {
                             case "table-filling":
                                 setAlgorithm(
-                                    new TableFillingAlgorithm(
-                                        input1,
-                                        input2,
-                                        produceWitness
-                                    )
+                                    new TableFillingAlgorithm(input1, input2, produceWitness)
                                 );
                                 break;
                             case "hopcroft":
