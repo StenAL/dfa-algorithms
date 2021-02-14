@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Route, useParams } from "react-router-dom";
 import TableFillingAlgorithm from "../../algorithm/TableFillingAlgorithm";
-import AlgorithmLog from "./AlgorithmLog";
-import AlgorithmStepControls from "./AlgorithmStepControls";
-import InputContainer from "../input/InputContainer";
-import TableFillingAlgorithmVisualization from "../TableFillingAlgorithmVisualization";
 import { Algorithm, AlgorithmMode, AlgorithmType } from "../../types/Algorithm";
 import { useForceUpdate } from "../../util/Hooks";
+import AlgorithmModeSwitch from "../input/AlgorithmModeSwitch";
+import AlgorithmInput from "../input/AlgorithmInput";
+import WitnessSwitch from "../input/WitnessSwitch";
+import TableFillingAlgorithmVisualization from "../TableFillingAlgorithmVisualization";
+import AlgorithmLog from "./AlgorithmLog";
+import AlgorithmStepControls from "./AlgorithmStepControls";
 
 interface AlgorithmVisualizationRouteParams {
     algorithmType: AlgorithmType;
@@ -16,14 +18,16 @@ export default function AlgorithmVisualization() {
     const [algorithm, setAlgorithm] = useState<Algorithm>();
     const { algorithmType } = useParams<AlgorithmVisualizationRouteParams>();
     const forceUpdate = useForceUpdate();
+    const [mode, setMode] = useState<AlgorithmMode>(AlgorithmMode.EQUIVALENCE_TESTING);
+    const [produceWitness, setProduceWitness] = useState(false);
 
     let visualization: JSX.Element | undefined = undefined;
     let title: string = "";
-    let algorithmModes: AlgorithmMode[] = [];
+    let supportedModes: AlgorithmMode[] = [];
     switch (algorithmType) {
         case "table-filling":
             title = "The Table-Filling Algorithm";
-            algorithmModes = [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.STATE_MINIMIZATION];
+            supportedModes = [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.STATE_MINIMIZATION];
             visualization = (
                 <TableFillingAlgorithmVisualization
                     algorithm={algorithm as TableFillingAlgorithm}
@@ -32,20 +36,35 @@ export default function AlgorithmVisualization() {
             break;
         case "hopcroft":
             title = "Hopcroft";
-            algorithmModes = [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.STATE_MINIMIZATION];
+            supportedModes = [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.STATE_MINIMIZATION];
             break;
         case "other":
             title = "Other";
-            algorithmModes = [];
+            supportedModes = [];
     }
     return (
         <>
             <h2>{title}</h2>
             <Route path={"/algorithm/:algorithmType/input"}>
-                <InputContainer
-                    modes={algorithmModes}
+                {supportedModes.length > 1 ? (
+                    <AlgorithmModeSwitch
+                        mode={mode}
+                        callback={(m) => {
+                            setMode(m);
+                        }}
+                    />
+                ) : (
+                    ""
+                )}
+                {mode === AlgorithmMode.EQUIVALENCE_TESTING ? (
+                    <WitnessSwitch produceWitness={produceWitness} callback={setProduceWitness} />
+                ) : (
+                    ""
+                )}
+                <AlgorithmInput
+                    mode={mode}
                     runLink={`/algorithm/${algorithmType}/run`}
-                    runCallback={(input1, input2, produceWitness) => {
+                    runCallback={(input1, input2) => {
                         switch (algorithmType) {
                             case "table-filling":
                                 setAlgorithm(

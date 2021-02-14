@@ -4,28 +4,18 @@ import { default as Tooltip } from "react-tooltip";
 import { dfaA, dfaB } from "../../algorithm/data";
 import { AlgorithmMode } from "../../types/Algorithm";
 import { DFA } from "../../types/DFA";
-import AlgorithmModeSwitch from "./AlgorithmModeSwitch";
-import DfaInput from "./DfaInput";
-import WitnessSwitch from "./WitnessSwitch";
+import StatesInput from "./StatesInput";
 
-interface InputContainerProps {
-    modes: AlgorithmMode[];
-    runCallback: (
-        input1: DFA,
-        input2: DFA | undefined,
-        produceWitness: boolean | undefined
-    ) => void;
+interface AlgorithmInputProps {
+    mode: AlgorithmMode;
+    runCallback: (input1: DFA, input2: DFA | undefined) => void;
     runLink: string;
 }
 
-export default function InputContainer({ modes, runCallback, runLink }: InputContainerProps) {
+export default function AlgorithmInput({ mode, runCallback, runLink }: AlgorithmInputProps) {
     const [input1, setInput1] = useState<DFA>();
     const [input2, setInput2] = useState<DFA>();
     const [alphabet, setAlphabet] = useState<string[]>([]);
-    const [produceWitness, setProduceWitness] = useState(false);
-    const [mode, setMode] = useState<AlgorithmMode>(
-        modes.length === 1 ? modes[0] : AlgorithmMode.EQUIVALENCE_TESTING
-    );
 
     const alphabetValid = alphabet.length > 0 && new Set(alphabet).size === alphabet.length;
     let inputValid = false;
@@ -38,21 +28,6 @@ export default function InputContainer({ modes, runCallback, runLink }: InputCon
     return (
         <div className={"input-container"}>
             <div className={"input-fields-container"}>
-                {modes.length > 1 ? (
-                    <AlgorithmModeSwitch
-                        mode={mode}
-                        callback={(mode) => {
-                            setMode(mode);
-                        }}
-                    />
-                ) : (
-                    ""
-                )}
-                {mode === AlgorithmMode.EQUIVALENCE_TESTING ? (
-                    <WitnessSwitch produceWitness={produceWitness} callback={setProduceWitness} />
-                ) : (
-                    ""
-                )}
                 <h3>Input custom DFA(s)</h3>
                 <div className={"alphabet-input"}>
                     <label htmlFor={"alphabet"}>
@@ -91,13 +66,13 @@ export default function InputContainer({ modes, runCallback, runLink }: InputCon
                     />
                 </div>
                 <div className={"dfa-inputs-container"}>
-                    <DfaInput
+                    <StatesInput
                         convertInputCallback={(dfa) => setInput1(dfa)}
                         alphabet={alphabet}
                         alphabetValid={alphabetValid}
                     />
                     {mode === AlgorithmMode.EQUIVALENCE_TESTING ? (
-                        <DfaInput
+                        <StatesInput
                             alphabet={alphabet}
                             alphabetValid={alphabetValid}
                             convertInputCallback={(dfa) => setInput2!(dfa)}
@@ -107,10 +82,7 @@ export default function InputContainer({ modes, runCallback, runLink }: InputCon
                     )}
                 </div>
                 <Link className={inputValid ? "" : "disabled-link"} to={runLink}>
-                    <button
-                        disabled={!inputValid}
-                        onClick={() => runCallback(input1!, input2, produceWitness)}
-                    >
+                    <button disabled={!inputValid} onClick={() => runCallback(input1!, input2)}>
                         Run
                     </button>
                 </Link>
@@ -122,13 +94,15 @@ export default function InputContainer({ modes, runCallback, runLink }: InputCon
                         onClick={() =>
                             runCallback(
                                 dfaA,
-                                mode === AlgorithmMode.EQUIVALENCE_TESTING ? dfaB : undefined,
-                                produceWitness
+                                mode === AlgorithmMode.EQUIVALENCE_TESTING ? dfaB : undefined
                             )
                         }
                     >
                         Example inputs
                     </button>
+                </Link>
+                <Link to={runLink}>
+                    <button disabled={true}>More to come</button>
                 </Link>
             </div>
         </div>

@@ -6,13 +6,17 @@ import TransitionsInput from "./TransitionsInput";
 
 export type TransitionData = Map<string, Map<string, string>>;
 
-interface DfaInputProps {
+interface StatesInputProps {
     alphabet: string[];
     alphabetValid: boolean;
     convertInputCallback: (dfa: DFA | undefined) => void;
 }
 
-export default function DfaInput({ convertInputCallback, alphabet, alphabetValid }: DfaInputProps) {
+export default function StatesInput({
+    convertInputCallback,
+    alphabet,
+    alphabetValid,
+}: StatesInputProps) {
     const [states, setStates] = useState<string[]>([]);
     const [finalStates, setFinalStates] = useState<string[]>([]);
     const [transitions, setTransitions] = useState<TransitionData>(new Map());
@@ -43,8 +47,8 @@ export default function DfaInput({ convertInputCallback, alphabet, alphabetValid
         finalStates.every((s) => states.includes(s));
 
     return (
-        <div className={"dfa-input"}>
-            <div className={"dfa-fields-container"}>
+        <div className={"states-input-container"}>
+            <div className={"states-input"}>
                 <label htmlFor={"states"}>
                     States
                     <span className={"info-tooltip"} data-tip data-for="states-help">
