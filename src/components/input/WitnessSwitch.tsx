@@ -44,10 +44,10 @@ export default function WitnessSwitch({
             >
                 <span>
                     A witness string is an example string that indicates why two
-                    DFA are not equivalent, one DFA accepts the witness while
-                    the other rejects it.
+                    DFA are not equivalent, meaning one DFA accepts the witness
+                    while the other rejects it.
                     <br />
-                    Computing a witness string takes more memory and time than
+                    Computing a witness string takes more time and memory than
                     just determining the equivalence of DFAs.
                 </span>
             </Tooltip>

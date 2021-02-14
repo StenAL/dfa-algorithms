@@ -24,8 +24,8 @@ it("renders cells for each pair in table", function () {
     expect(wrapper.find(".table-filling-cell").length).toBe(28 + headerCount);
 });
 
-it("marks pairs correctly", function () {
-    const algorithm = new TableFillingAlgorithm(dfaA, dfaB);
+it("marks pairs correctly, displays witness", function () {
+    const algorithm = new TableFillingAlgorithm(dfaA, dfaB, true);
     const wrapper = shallow(
         <TableFillingAlgorithmVisualization algorithm={algorithm} />
     );
@@ -49,4 +49,27 @@ it("marks pairs correctly", function () {
     }
     expect(distinguishedCount).toBe(27);
     expect(notDistinguishedCount).toBe(1);
+    expect(wrapper.text()).toContain("Witness: 011");
+});
+
+it("renders state minimization table correctly", function () {
+    const algorithm = new TableFillingAlgorithm(dfaA);
+    const wrapper = shallow(
+        <TableFillingAlgorithmVisualization algorithm={algorithm} />
+    );
+    algorithm.step();
+    expect(algorithm.state).toBe(TableFillingAlgorithmState.EMPTY_TABLE);
+    expect(algorithm.pairs.entries().length).toBe(6);
+    wrapper.setProps({});
+    const headerCount = (dfaA.states.length - 1) * 2 + 1;
+    expect(wrapper.find(".table-filling-row").length).toBe(
+        dfaA.states.length - 1 + 1
+    );
+    expect(wrapper.find(".table-filling-header").length).toBe(headerCount);
+    expect(wrapper.find(".table-filling-cell").length).toBe(6 + headerCount);
+    while (algorithm.state !== CommonAlgorithmState.FINAL) {
+        algorithm.step();
+    }
+    wrapper.setProps({});
+    expect(wrapper.text()).toContain("All states are distinguishable");
 });

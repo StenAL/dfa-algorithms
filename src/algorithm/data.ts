@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { CommonAlgorithmState } from "../types/Algorithm";
 import { DFA, State } from "../types/DFA";
 import TableFillingAlgorithm, {
     TableFillingAlgorithmState,
@@ -78,8 +79,9 @@ export const dfaB: DFA = {
     states: [q4, q5, q6, q7],
 };
 
-// const algo = new TableFillingAlgorithm(dfaA, dfaB)
-// while (algo.state !== TableFillingAlgorithmState.FINAL) {
+// const algo = new TableFillingAlgorithm(dfaA)
+// algo.log = {log: console.log, clear: () => {}}
+// while (algo.state !== CommonAlgorithmState.FINAL) {
 //     algo.step()
 // }
 // console.log(algo.result)

@@ -83,14 +83,17 @@ export default function TableFillingAlgorithmVisualization({
             stateDescription = "All pairs marked";
             break;
         case TableFillingAlgorithmState.CONSTRUCTING_WITNESS:
-            stateDescription = "bla";
+            stateDescription = "Constructing witness string";
+            break;
+        case TableFillingAlgorithmState.INDISTINGUISHABLE_STATE_GROUPS_IDENTIFIED:
+            stateDescription = "Indistinguishable state groups identified";
             break;
         case CommonAlgorithmState.FINAL:
             stateDescription = "Final state";
             let resultString;
             if (algorithm.mode === AlgorithmMode.EQUIVALENCE_TESTING) {
                 resultString =
-                    "Result: DFAs are " +
+                    "DFAs are " +
                     (algorithm.result === EquivalenceTestingResult.EQUIVALENT
                         ? " equivalent"
                         : "non-equivalent");
@@ -99,10 +102,16 @@ export default function TableFillingAlgorithmVisualization({
                         EquivalenceTestingResult.NON_EQUIVALENT &&
                     algorithm.produceWitness
                 ) {
-                    resultString += `. Witness: ${algorithm.witness}`;
+                    resultString += `. Witness: ${algorithm.witness}.`;
                 }
             } else {
-                resultString = "States **todo** can be combined.";
+                if (algorithm.indistinguishableStateGroups.length > 0) {
+                    resultString = `States ${algorithm.indistinguishableStateGroups
+                        .map((states) => `{${states.map((s) => s.name)}}`)
+                        .join(", ")} can be combined.`;
+                } else {
+                    resultString = `All states are distinguishable, the DFA is already minimal.`;
+                }
             }
             stateDescription += ". " + resultString;
             break;
