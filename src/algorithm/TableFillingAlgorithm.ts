@@ -1,4 +1,5 @@
 import HashMap from "hashmap";
+import UnionFind from "mnemonist/static-disjoint-set";
 import {
     Algorithm,
     AlgorithmMode,
@@ -7,7 +8,7 @@ import {
     Log,
 } from "../types/Algorithm";
 import { DFA, State } from "../types/DFA";
-import UnionFind from "mnemonist/static-disjoint-set";
+import minimizer from "./Minimizer";
 
 export enum TableFillingAlgorithmState {
     EMPTY_TABLE,
@@ -22,7 +23,7 @@ interface TableFillingAlgorithmInterface extends Algorithm {
     input2: DFA;
     pairs: HashMap<[State, State], string>;
     unmarkedPairs: HashMap<[State, State], undefined>;
-    result: EquivalenceTestingResult;
+    result: EquivalenceTestingResult | DFA;
     iteration: number;
     mode: AlgorithmMode;
 }
@@ -30,17 +31,19 @@ interface TableFillingAlgorithmInterface extends Algorithm {
 export default class TableFillingAlgorithm
     implements TableFillingAlgorithmInterface {
     input1: DFA;
-    input2: DFA;
     pairs: HashMap<[State, State], string>;
-    result: EquivalenceTestingResult;
     log?: Log;
     state: TableFillingAlgorithmState | CommonAlgorithmState;
     unmarkedPairs: HashMap<[State, State], undefined>;
     type: "table-filling";
     iteration: number;
+
     mode: AlgorithmMode;
+    result: EquivalenceTestingResult | DFA;
+    input2: DFA;
     produceWitness: boolean;
     witness: string;
+
     indistinguishableStateGroups: State[][];
 
     constructor(input1: DFA, input2?: DFA, produceWitness?: boolean) {
@@ -51,7 +54,7 @@ export default class TableFillingAlgorithm
         this.state = CommonAlgorithmState.INITIAL;
         this.pairs = new HashMap();
         this.unmarkedPairs = new HashMap<[State, State], undefined>();
-        this.result = EquivalenceTestingResult.UNFINISHED;
+        this.result = EquivalenceTestingResult.NOT_AVAILABLE;
         this.iteration = 1;
         this.mode = input2
             ? AlgorithmMode.EQUIVALENCE_TESTING
@@ -65,7 +68,7 @@ export default class TableFillingAlgorithm
         this.state = CommonAlgorithmState.INITIAL;
         this.pairs = new HashMap();
         this.unmarkedPairs = new HashMap<[State, State], never>();
-        this.result = EquivalenceTestingResult.UNFINISHED;
+        this.result = EquivalenceTestingResult.NOT_AVAILABLE;
         this.iteration = 1;
         this.log?.clear();
         this.witness = "";
@@ -231,15 +234,14 @@ export default class TableFillingAlgorithm
         const q1 = this.input1.startingState;
         const q2 = this.input2.startingState;
         const startingPair = this.getPair(q1, q2);
-        this.result =
-            this.pairs.get(startingPair) === ""
-                ? EquivalenceTestingResult.EQUIVALENT
-                : EquivalenceTestingResult.NON_EQUIVALENT;
-        if (this.result === EquivalenceTestingResult.EQUIVALENT) {
+
+        if (this.pairs.get(startingPair) === "") {
+            this.result = EquivalenceTestingResult.EQUIVALENT;
             this.log?.log(
                 `Starting states ${q1.name} and ${q2.name} are indistinguishable, therefore the DFAs are equivalent`
             );
         } else {
+            this.result = EquivalenceTestingResult.NON_EQUIVALENT;
             this.log?.log(
                 `Starting states ${q1.name} and ${q2.name} are distinguishable, therefore the DFAs are non-equivalent`
             );
@@ -330,7 +332,7 @@ export default class TableFillingAlgorithm
                     combinedIndices.map((i) => unmarkedStates[i])
                 );
             this.log?.log(
-                `Can combine equivalent states ${combinedStates
+                `Can combine indistinguishable states ${combinedStates
                     .map((states) => `{${states.map((s) => s.name)}}`)
                     .join(", ")}`
             );
@@ -341,9 +343,10 @@ export default class TableFillingAlgorithm
     }
 
     combineIndistinguishableGroups() {
-        // TODO create new DFA here
-        this.log?.log(
-            "Combining indistinguishable groups into one state **TODO**"
+        this.log?.log("Creating minimized DFA.");
+        this.result = minimizer.combineStates(
+            this.input1,
+            this.indistinguishableStateGroups
         );
         this.state = CommonAlgorithmState.FINAL;
     }

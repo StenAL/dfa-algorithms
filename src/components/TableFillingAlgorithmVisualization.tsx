@@ -112,6 +112,8 @@ export default function TableFillingAlgorithmVisualization({
                 } else {
                     resultString = `All states are distinguishable, the DFA is already minimal.`;
                 }
+                // todo output link to or JSON of minimized DFA somewhere here
+                // const result: DFA = algorithm.result as DFA;
             }
             stateDescription += ". " + resultString;
             break;
