@@ -7,12 +7,14 @@ import {
     Log,
 } from "../types/Algorithm";
 import { DFA, State } from "../types/DFA";
+import UnionFind from "mnemonist/static-disjoint-set";
 
 export enum TableFillingAlgorithmState {
     EMPTY_TABLE,
     MARKING_PAIRS,
     ALL_PAIRS_MARKED,
     CONSTRUCTING_WITNESS,
+    INDISTINGUISHABLE_STATE_GROUPS_IDENTIFIED,
 }
 
 interface TableFillingAlgorithmInterface extends Algorithm {
@@ -39,6 +41,7 @@ export default class TableFillingAlgorithm
     mode: AlgorithmMode;
     produceWitness: boolean;
     witness: string;
+    indistinguishableStateGroups: State[][];
 
     constructor(input1: DFA, input2?: DFA, produceWitness?: boolean) {
         this.type = "table-filling";
@@ -55,6 +58,7 @@ export default class TableFillingAlgorithm
             : AlgorithmMode.STATE_MINIMIZATION;
         this.produceWitness = produceWitness ?? false;
         this.witness = "";
+        this.indistinguishableStateGroups = [];
     }
 
     reset(): void {
@@ -65,6 +69,7 @@ export default class TableFillingAlgorithm
         this.iteration = 1;
         this.log?.clear();
         this.witness = "";
+        this.indistinguishableStateGroups = [];
     }
 
     step() {
@@ -87,6 +92,9 @@ export default class TableFillingAlgorithm
                 break;
             case TableFillingAlgorithmState.CONSTRUCTING_WITNESS:
                 this.constructWitness();
+                break;
+            case TableFillingAlgorithmState.INDISTINGUISHABLE_STATE_GROUPS_IDENTIFIED:
+                this.combineIndistinguishableGroups();
                 break;
             case CommonAlgorithmState.FINAL:
                 break;
@@ -177,7 +185,10 @@ export default class TableFillingAlgorithm
                 const q = unmarkedPair[0].transitions.get(symbol)!;
                 const p = unmarkedPair[1].transitions.get(symbol)!;
                 const successorPair = this.getPair(q, p);
-                if (this.pairs.get(successorPair) !== "") {
+                if (
+                    this.pairs.has(successorPair) &&
+                    this.pairs.get(successorPair) !== ""
+                ) {
                     if (
                         this.mode === AlgorithmMode.EQUIVALENCE_TESTING &&
                         this.produceWitness
@@ -293,8 +304,47 @@ export default class TableFillingAlgorithm
     }
 
     identifyIndistinguishableGroups() {
-        // TODO
-        this.log?.log("Identifying indistinguishable groups: *TODO*");
+        if (this.unmarkedPairs.count() === 0) {
+            this.log?.log(
+                "All pairs have been marked, no states can be combined"
+            );
+            this.state = CommonAlgorithmState.FINAL;
+        } else {
+            const unmarkedStates = Array.from(
+                new Set(this.unmarkedPairs.keys().flat())
+            );
+            const unmarkedStatesNames = unmarkedStates.map((u) => u.name);
+            this.log?.log(
+                `Identified states that are in at least one unmarked pair: {${unmarkedStatesNames}}`
+            );
+            const unionFind = new UnionFind(unmarkedStates.length);
+            for (let [p, q] of this.unmarkedPairs.keys()) {
+                unionFind.union(
+                    unmarkedStates.indexOf(p),
+                    unmarkedStates.indexOf(q)
+                );
+            }
+            const combinedStates = unionFind
+                .compile()
+                .map((combinedIndices) =>
+                    combinedIndices.map((i) => unmarkedStates[i])
+                );
+            this.log?.log(
+                `Can combine equivalent states ${combinedStates
+                    .map((states) => `{${states.map((s) => s.name)}}`)
+                    .join(", ")}`
+            );
+            this.indistinguishableStateGroups = combinedStates;
+            this.state =
+                TableFillingAlgorithmState.INDISTINGUISHABLE_STATE_GROUPS_IDENTIFIED;
+        }
+    }
+
+    combineIndistinguishableGroups() {
+        // TODO create new DFA here
+        this.log?.log(
+            "Combining indistinguishable groups into one state **TODO**"
+        );
         this.state = CommonAlgorithmState.FINAL;
     }
 }
