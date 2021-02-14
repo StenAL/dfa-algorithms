@@ -18,7 +18,7 @@ export interface Log {
 export type AlgorithmType = "table-filling" | "hopcroft" | "other";
 
 export enum EquivalenceTestingResult {
-    UNFINISHED,
+    NOT_AVAILABLE,
     EQUIVALENT,
     NON_EQUIVALENT,
 }
