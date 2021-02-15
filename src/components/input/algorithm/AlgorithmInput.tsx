@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { default as Tooltip } from "react-tooltip";
-import { dfaA, dfaB } from "../../../algorithm/data";
 import { AlgorithmMode } from "../../../types/Algorithm";
 import { DFA } from "../../../types/DFA";
 import StatesInput from "../dfa/StatesInput";
+import PreGeneratedInputs from "./PreGeneratedInputs";
 
 interface AlgorithmInputProps {
     mode: AlgorithmMode;
@@ -87,24 +87,8 @@ export default function AlgorithmInput({ mode, runCallback, runLink }: Algorithm
                     </button>
                 </Link>
             </div>
-            <div className={"pre-generated-inputs-container"}>
-                <h3>...or use a pre-generated input:</h3>
-                <Link to={runLink}>
-                    <button
-                        onClick={() =>
-                            runCallback(
-                                dfaA,
-                                mode === AlgorithmMode.EQUIVALENCE_TESTING ? dfaB : undefined
-                            )
-                        }
-                    >
-                        Example inputs
-                    </button>
-                </Link>
-                <Link to={runLink}>
-                    <button disabled={true}>More to come</button>
-                </Link>
-            </div>
+            <h3>...or use a pre-generated input:</h3>
+            <PreGeneratedInputs mode={mode} runLink={runLink} runCallback={runCallback} />
         </div>
     );
 }

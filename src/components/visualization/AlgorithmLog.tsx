@@ -18,5 +18,5 @@ export default function AlgorithmLog({ algorithm }: AlgorithmLogProps) {
         .map((m) => {
             return <p key={m}>{m}</p>;
         });
-    return <div className={"algorithm-log"}>{messageViews}</div>;
+    return <div className={"log"}>{messageViews}</div>;
 }
