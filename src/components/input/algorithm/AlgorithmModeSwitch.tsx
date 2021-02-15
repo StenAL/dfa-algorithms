@@ -1,5 +1,5 @@
 import { default as Switch } from "react-switch";
-import { AlgorithmMode } from "../../types/Algorithm";
+import { AlgorithmMode } from "../../../types/Algorithm";
 
 interface AlgorithmModeSwitchProps {
     mode: AlgorithmMode;

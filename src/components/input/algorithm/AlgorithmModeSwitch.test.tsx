@@ -1,5 +1,5 @@
 import { render, fireEvent, getByRole } from "@testing-library/react";
-import { AlgorithmMode } from "../../types/Algorithm";
+import { AlgorithmMode } from "../../../types/Algorithm";
 import AlgorithmModeSwitch from "./AlgorithmModeSwitch";
 
 it("switches mode on click", () => {

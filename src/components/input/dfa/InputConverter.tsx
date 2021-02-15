@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { DFA, State, Transitions } from "../../types/DFA";
+import { DFA, State, Transitions } from "../../../types/DFA";
 import { TransitionData } from "./StatesInput";
 
 interface InputConverterProps {

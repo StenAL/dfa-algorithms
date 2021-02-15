@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { default as Tooltip } from "react-tooltip";
-import { DFA } from "../../types/DFA";
+import { DFA } from "../../../types/DFA";
 import InputConverter from "./InputConverter";
 import TransitionsInput from "./TransitionsInput";
 

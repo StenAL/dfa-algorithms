@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { default as Tooltip } from "react-tooltip";
-import { dfaA, dfaB } from "../../algorithm/data";
-import { AlgorithmMode } from "../../types/Algorithm";
-import { DFA } from "../../types/DFA";
-import StatesInput from "./StatesInput";
+import { dfaA, dfaB } from "../../../algorithm/data";
+import { AlgorithmMode } from "../../../types/Algorithm";
+import { DFA } from "../../../types/DFA";
+import StatesInput from "../dfa/StatesInput";
 
 interface AlgorithmInputProps {
     mode: AlgorithmMode;

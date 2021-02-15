@@ -1,5 +1,5 @@
 import { shallow } from "enzyme";
-import { AlgorithmMode } from "../../types/Algorithm";
+import { AlgorithmMode } from "../../../types/Algorithm";
 import AlgorithmPicker from "./AlgorithmPicker";
 
 it("renders checkboxes correctly for selected algorithms", function () {

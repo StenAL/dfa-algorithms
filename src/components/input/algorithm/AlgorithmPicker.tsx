@@ -1,4 +1,4 @@
-import { AlgorithmMode, AlgorithmsSelected } from "../../types/Algorithm";
+import { AlgorithmMode, AlgorithmsSelected } from "../../../types/Algorithm";
 
 interface AlgorithmsPickerProps {
     mode: AlgorithmMode;
