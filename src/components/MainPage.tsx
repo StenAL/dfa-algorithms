@@ -13,7 +13,7 @@ export default function MainPage() {
                 <Route path={"/"} exact={true}>
                     <h2>What do you want to do?</h2>
                     <h3>Visualize algorithms</h3>
-                    <Link to={"/algorithm/tableFilling/input"}>Table-filling algorithm</Link>
+                    <Link to={"/algorithm/table-filling/input"}>Table-filling algorithm</Link>
                     <h3>Compare algorithm runtimes</h3>
                     <Link to={"/headless/input"}>Run headless mode</Link>
                     <h3>Help/Info</h3>

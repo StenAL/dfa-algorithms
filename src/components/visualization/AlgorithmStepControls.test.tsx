@@ -19,6 +19,11 @@ it("buttons call corresponding algorithm functions and invoke callback", functio
         },
         witness: "",
         produceWitness: false,
+        run: function () {
+            while (this.state !== CommonAlgorithmState.FINAL) {
+                this.step();
+            }
+        },
     };
     const stepBackwardCallback = jest.fn();
     const stepForwardCallback = jest.fn();
@@ -42,7 +47,7 @@ it("buttons call corresponding algorithm functions and invoke callback", functio
     expect(algorithm.state).toBe(CommonAlgorithmState.INITIAL);
     let skipButton = wrapper.find("button").at(3);
     skipButton.simulate("click");
-    expect(stepForwardCallback).toHaveBeenCalledTimes(4);
+    expect(stepForwardCallback).toHaveBeenCalledTimes(3);
     expect(algorithm.state).toBe(CommonAlgorithmState.FINAL);
 });
 
@@ -62,6 +67,11 @@ it("disables invalid step buttons", function () {
         },
         witness: "",
         produceWitness: false,
+        run: function () {
+            while (this.state !== CommonAlgorithmState.FINAL) {
+                this.step();
+            }
+        },
     };
     const stepBackwardCallback = jest.fn();
     const stepForwardCallback = jest.fn();

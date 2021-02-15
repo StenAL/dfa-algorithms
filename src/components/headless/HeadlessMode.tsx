@@ -32,8 +32,8 @@ export default function HeadlessMode() {
     }, [mode]);
     return (
         <>
+            <h2>Headless mode</h2>
             <Route path={"/headless/input"}>
-                <h2>Headless mode</h2>
                 <AlgorithmModeSwitch
                     mode={mode}
                     callback={(m) => {
@@ -45,21 +45,25 @@ export default function HeadlessMode() {
                     algorithmsSelected={algorithmsSelected}
                     setAlgorithmsSelected={setAlgorithmsSelected}
                 />
-                <AlgorithmInput
-                    runLink={"/headless/run"}
-                    runCallback={(input1, input2) => {
-                        const algorithms: Algorithm[] = [];
-                        if (algorithmsSelected.tableFilling) {
-                            algorithms.push(new TableFillingAlgorithm(input1, input2));
-                        }
-                        if (algorithmsSelected.tableFillingWitness) {
-                            algorithms.push(new TableFillingAlgorithm(input1, input2, true));
-                        }
-                        // todo: other algorithms
-                        setAlgorithms(algorithms);
-                    }}
-                    mode={AlgorithmMode.EQUIVALENCE_TESTING}
-                />
+                {Object.values(algorithmsSelected).filter((v) => v).length > 0 ? (
+                    <AlgorithmInput
+                        runLink={"/headless/run"}
+                        runCallback={(input1, input2) => {
+                            const algorithms: Algorithm[] = [];
+                            if (algorithmsSelected.tableFilling) {
+                                algorithms.push(new TableFillingAlgorithm(input1, input2));
+                            }
+                            if (algorithmsSelected.tableFillingWitness) {
+                                algorithms.push(new TableFillingAlgorithm(input1, input2, true));
+                            }
+                            // todo: other algorithms
+                            setAlgorithms(algorithms);
+                        }}
+                        mode={AlgorithmMode.EQUIVALENCE_TESTING}
+                    />
+                ) : (
+                    ""
+                )}
             </Route>
             <Route path={"/headless/run"}>
                 <HeadlessModeRunner algorithms={algorithms} />

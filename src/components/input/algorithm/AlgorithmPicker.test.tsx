@@ -47,7 +47,7 @@ it("disables algorithms not available in STATE_MINIMIZATION mode", function () {
     let checkBoxes = wrapper.find("input");
     expect(checkBoxes.find('input[name="table-filling"]').props().disabled).toBe(undefined);
     expect(checkBoxes.find('input[name="table-filling-witness"]').props().disabled).toBe(true);
-    // expect(checkBoxes.find('input[name="hopcroft"]').props().disabled).toBe(undefined) // todo uncomment once implemented
+    // expect(checkBoxes.find('input[name="hopcroft"]').props().disabled).toBe(undefined) // todo: uncomment once implemented
     expect(checkBoxes.find('input[name="hopcroft-witness"]').props().disabled).toBe(true);
     // expect(checkBoxes.find('input[name="nearly-linear"]').props().disabled).toBe(undefined)
     expect(checkBoxes.find('input[name="nearly-linear-witness"]').props().disabled).toBe(true);
