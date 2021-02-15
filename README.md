@@ -1,4 +1,6 @@
-# dfa-tools
+# dfa-algorithms
+
+[https://dfa.laane.xyz/](https://dfa.laane.xyz/)
 
 ```
 Finite State Machine Educational Tools: Implementing Equivalence Testing and State Minimization Algorithms
@@ -29,9 +31,9 @@ To run or develop this software locally, a local installation of [node.js](https
 The software can be run as follows:
 
 1. Navigate to the project directory
-2. Install necessary using `npm install`
+2. Install necessary dependencies using `npm install`
 3. Run the local development server `npm run start`
-4. Access the site at `localhost:3000`
+4. Access the site at `http://localhost:3000`
 
 Tests can be run using `npm run test`
 
