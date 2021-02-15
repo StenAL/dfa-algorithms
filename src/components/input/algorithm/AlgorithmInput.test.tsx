@@ -2,10 +2,10 @@ import { mount } from "enzyme";
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { BrowserRouter } from "react-router-dom";
-import { dfaA } from "../../algorithm/data";
-import { AlgorithmMode } from "../../types/Algorithm";
-import { DFA } from "../../types/DFA";
-import StatesInput from "./StatesInput";
+import { dfaA } from "../../../algorithm/data";
+import { AlgorithmMode } from "../../../types/Algorithm";
+import { DFA } from "../../../types/DFA";
+import StatesInput from "../dfa/StatesInput";
 import AlgorithmInput from "./AlgorithmInput";
 
 it("validates alphabet", function () {

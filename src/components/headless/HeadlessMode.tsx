@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Route } from "react-router-dom";
 import TableFillingAlgorithm from "../../algorithm/TableFillingAlgorithm";
 import { Algorithm, AlgorithmMode, AlgorithmsSelected } from "../../types/Algorithm";
-import AlgorithmInput from "../input/AlgorithmInput";
-import AlgorithmModeSwitch from "../input/AlgorithmModeSwitch";
-import AlgorithmPicker from "../input/AlgorithmPicker";
+import AlgorithmInput from "../input/algorithm/AlgorithmInput";
+import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
+import AlgorithmPicker from "../input/algorithm/AlgorithmPicker";
 import HeadlessModeRun from "./HeadlessModeRun";
 
 export default function HeadlessMode() {

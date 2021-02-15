@@ -1,5 +1,5 @@
 import { mount } from "enzyme";
-import { DFA, State } from "../../types/DFA";
+import { DFA, State } from "../../../types/DFA";
 import InputConverter from "./InputConverter";
 
 it("does not convert invalid input", function () {
