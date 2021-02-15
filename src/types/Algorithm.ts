@@ -3,6 +3,7 @@ import { TableFillingAlgorithmState } from "../algorithm/TableFillingAlgorithm";
 export interface Algorithm {
     type: AlgorithmType;
     state: AlgorithmState;
+    run: () => void;
     step: () => void;
     reset: () => void;
     log?: Log;

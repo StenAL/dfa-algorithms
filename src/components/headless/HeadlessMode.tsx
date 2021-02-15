@@ -5,7 +5,7 @@ import { Algorithm, AlgorithmMode, AlgorithmsSelected } from "../../types/Algori
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
 import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
 import AlgorithmPicker from "../input/algorithm/AlgorithmPicker";
-import HeadlessModeRun from "./HeadlessModeRun";
+import HeadlessModeRunner from "./HeadlessModeRunner";
 
 export default function HeadlessMode() {
     const [mode, setMode] = useState(AlgorithmMode.EQUIVALENCE_TESTING);
@@ -62,7 +62,7 @@ export default function HeadlessMode() {
                 />
             </Route>
             <Route path={"/headless/run"}>
-                <HeadlessModeRun algorithms={algorithms} />
+                <HeadlessModeRunner algorithms={algorithms} />
             </Route>
         </>
     );

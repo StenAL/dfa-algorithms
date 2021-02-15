@@ -77,9 +77,7 @@ export const dfaB: DFA = {
     states: [q4, q5, q6, q7],
 };
 
-// const algo = new TableFillingAlgorithm(dfaA)
-// algo.log = {log: console.log, clear: () => {}}
-// while (algo.state !== CommonAlgorithmState.FINAL) {
-//     algo.step()
-// }
-// console.log(algo.result)
+const algo = new TableFillingAlgorithm(dfaA);
+algo.log = { log: console.log, clear: () => {} };
+algo.run();
+console.log(algo.result);

@@ -43,10 +43,8 @@ export default function AlgorithmStepControls({
             <button
                 disabled={algorithm.state === CommonAlgorithmState.FINAL}
                 onClick={() => {
-                    while (algorithm.state !== CommonAlgorithmState.FINAL) {
-                        algorithm.step();
-                        stepForwardCallback();
-                    }
+                    algorithm.run();
+                    stepForwardCallback();
                 }}
             >
                 {">>"}
