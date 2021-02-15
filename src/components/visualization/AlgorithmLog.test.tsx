@@ -10,6 +10,7 @@ it("renders messages logged by algorithm", function () {
         step: () => {},
         produceWitness: false,
         witness: "",
+        run: jest.fn(),
     };
 
     const wrapper = shallow(<AlgorithmLog algorithm={algorithm} />);
@@ -25,6 +26,7 @@ it("does not render cleared messages", function () {
         step: () => {},
         produceWitness: false,
         witness: "",
+        run: jest.fn(),
     };
 
     const wrapper = shallow(<AlgorithmLog algorithm={algorithm} />);
