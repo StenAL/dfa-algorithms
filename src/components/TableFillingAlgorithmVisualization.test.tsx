@@ -1,9 +1,8 @@
 import { shallow } from "enzyme";
-import { dfaA, dfaB } from "../algorithm/data";
+import { dfaA, dfaB } from "../algorithm/data/exampleData";
 import TableFillingAlgorithm, {
     TableFillingAlgorithmState,
 } from "../algorithm/TableFillingAlgorithm";
-import { CommonAlgorithmState } from "../types/Algorithm";
 import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualization";
 
 it("renders cells for each pair in table", function () {
