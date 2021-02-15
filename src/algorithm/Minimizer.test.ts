@@ -1,5 +1,5 @@
 import { DFA, State } from "../types/DFA";
-import { dfaA } from "./data";
+import { dfaA } from "./data/exampleData";
 import minimizer from "./Minimizer";
 import _ from "lodash";
 

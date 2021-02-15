@@ -1,5 +1,5 @@
 import { shallow } from "enzyme";
-import { dfaA, dfaB } from "../../../algorithm/data";
+import { dfaA, dfaB } from "../../../algorithm/data/exampleData";
 import { AlgorithmMode } from "../../../types/Algorithm";
 import "./PreGeneratedInputs";
 import PreGeneratedInputs from "./PreGeneratedInputs";

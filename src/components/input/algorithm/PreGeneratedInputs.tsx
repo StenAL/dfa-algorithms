@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { dfaA, dfaB } from "../../../algorithm/data";
+import { dfaA, dfaB } from "../../../algorithm/data/exampleData";
 import { AlgorithmMode } from "../../../types/Algorithm";
 import { DFA } from "../../../types/DFA";
 
