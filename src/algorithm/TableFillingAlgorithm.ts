@@ -72,6 +72,12 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
         this.indistinguishableStateGroups = [];
     }
 
+    run() {
+        while (this.state !== CommonAlgorithmState.FINAL) {
+            this.step();
+        }
+    }
+
     step() {
         switch (this.state) {
             case CommonAlgorithmState.INITIAL:

@@ -25,9 +25,7 @@ it("renders cells for each pair in table", function () {
 it("marks pairs correctly, displays witness", function () {
     const algorithm = new TableFillingAlgorithm(dfaA, dfaB, true);
     const wrapper = shallow(<TableFillingAlgorithmVisualization algorithm={algorithm} />);
-    while (algorithm.state !== CommonAlgorithmState.FINAL) {
-        algorithm.step();
-    }
+    algorithm.run();
     wrapper.setProps({});
     const rows = wrapper.find(".table-filling-row");
     let distinguishedCount = 0;
@@ -59,9 +57,7 @@ it("renders state minimization table correctly", function () {
     expect(wrapper.find(".table-filling-row").length).toBe(dfaA.states.length - 1 + 1);
     expect(wrapper.find(".table-filling-header").length).toBe(headerCount);
     expect(wrapper.find(".table-filling-cell").length).toBe(6 + headerCount);
-    while (algorithm.state !== CommonAlgorithmState.FINAL) {
-        algorithm.step();
-    }
+    algorithm.run();
     wrapper.setProps({});
     expect(wrapper.text()).toContain("All states are distinguishable");
 });

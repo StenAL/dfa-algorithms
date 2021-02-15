@@ -11,7 +11,7 @@ import AlgorithmPicker from "../input/algorithm/AlgorithmPicker";
 import WitnessSwitch from "../input/algorithm/WitnessSwitch";
 import AlgorithmVisualization from "../visualization/AlgorithmVisualization";
 import HeadlessMode from "./HeadlessMode";
-import HeadlessModeRun from "./HeadlessModeRun";
+import HeadlessModeRunner from "./HeadlessModeRunner";
 
 const q1: State = {
     name: "q1",
@@ -57,7 +57,7 @@ it("initializes correct algorithms from selections", function () {
     expect(wrapper.find(Link).at(0).text()).toBe("Run");
     wrapper.find(Link).at(0).simulate("click", { button: 0 });
 
-    const headlessModeRun = wrapper.find(HeadlessModeRun);
+    const headlessModeRun = wrapper.find(HeadlessModeRunner);
     expect(headlessModeRun.exists()).toBe(true);
     expect(headlessModeRun.props().algorithms).toEqual([
         new TableFillingAlgorithm(dfa, dfa),
