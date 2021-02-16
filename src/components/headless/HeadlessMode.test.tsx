@@ -1,15 +1,12 @@
-import { fireEvent, getByRole } from "@testing-library/react";
 import { mount } from "enzyme";
 import React from "react";
 import { act } from "react-dom/test-utils";
-import { Link, MemoryRouter, Route } from "react-router-dom";
+import { Link, MemoryRouter } from "react-router-dom";
+import HopcroftAlgorithm from "../../algorithm/HopcroftAlgorithm";
 import TableFillingAlgorithm from "../../algorithm/TableFillingAlgorithm";
 import { DFA, State } from "../../types/DFA";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
-import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
 import AlgorithmPicker from "../input/algorithm/AlgorithmPicker";
-import WitnessSwitch from "../input/algorithm/WitnessSwitch";
-import AlgorithmVisualization from "../visualization/AlgorithmVisualization";
 import HeadlessMode from "./HeadlessMode";
 import HeadlessModeRunner from "./HeadlessModeRunner";
 
@@ -62,6 +59,7 @@ it("initializes correct algorithms from selections", function () {
     expect(headlessModeRun.props().algorithms).toEqual([
         new TableFillingAlgorithm(dfa, dfa),
         new TableFillingAlgorithm(dfa, dfa, true),
+        new HopcroftAlgorithm(dfa, dfa),
     ]);
 });
 

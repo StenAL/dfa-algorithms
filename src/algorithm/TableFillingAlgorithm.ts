@@ -109,15 +109,12 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
     }
 
     createTable() {
-        if (this.log) {
-            this.log.log("Creating initial table from DFA states.");
-        }
-        let allStates: State[];
-        if (this.mode === AlgorithmMode.EQUIVALENCE_TESTING) {
-            allStates = this.input1.states.concat(this.input2.states);
-        } else {
-            allStates = this.input1.states;
-        }
+        this.log?.log("Creating initial table from DFA states.");
+        const allStates: State[] =
+            this.mode === AlgorithmMode.EQUIVALENCE_TESTING
+                ? this.input1.states.concat(this.input2.states)
+                : this.input1.states;
+
         for (let i = 0; i < allStates.length; i++) {
             const state1 = allStates[i];
             for (let j = i + 1; j < allStates.length; j++) {
@@ -133,17 +130,18 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
     }
 
     initializeTable() {
-        let acceptingStates: Set<State> = new Set<State>();
-        let nonAcceptingStates;
-        if (this.mode === AlgorithmMode.EQUIVALENCE_TESTING) {
-            acceptingStates = new Set([...this.input1.finalStates, ...this.input2.finalStates]);
-            nonAcceptingStates = this.input1.states
-                .concat(this.input2.states)
-                .filter((s) => !acceptingStates.has(s));
-        } else {
-            acceptingStates = new Set(this.input1.finalStates);
-            nonAcceptingStates = this.input1.states.filter((s) => !acceptingStates.has(s));
-        }
+        const allStates: State[] =
+            this.mode === AlgorithmMode.EQUIVALENCE_TESTING
+                ? this.input1.states.concat(this.input2.states)
+                : this.input1.states;
+
+        const acceptingStates =
+            this.mode === AlgorithmMode.EQUIVALENCE_TESTING
+                ? new Set([...this.input1.finalStates, ...this.input2.finalStates])
+                : this.input1.finalStates;
+
+        const nonAcceptingStates = new Set(allStates.filter((s) => !acceptingStates.has(s)));
+
         let markedCount = 0;
         for (let acceptingState of acceptingStates) {
             for (let nonAcceptingState of nonAcceptingStates) {

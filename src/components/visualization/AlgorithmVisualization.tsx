@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Route, useParams } from "react-router-dom";
+import HopcroftAlgorithm from "../../algorithm/HopcroftAlgorithm";
 import TableFillingAlgorithm from "../../algorithm/TableFillingAlgorithm";
 import { Algorithm, AlgorithmMode } from "../../types/Algorithm";
 import { useForceUpdate } from "../../util/Hooks";
+import HopcroftAlgorithmVisualization from "../HopcroftAlgorithmVisualization";
 import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
 import WitnessSwitch from "../input/algorithm/WitnessSwitch";
@@ -37,6 +39,9 @@ export default function AlgorithmVisualization() {
         case "hopcroft":
             title = "The n-lg-n Hopcroft Algorithm";
             supportedModes = [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.STATE_MINIMIZATION];
+            visualization = (
+                <HopcroftAlgorithmVisualization algorithm={algorithm as HopcroftAlgorithm} />
+            );
             break;
         case "nearly-linear":
             title = "The (Nearly) Linear Algorithm";
@@ -72,6 +77,7 @@ export default function AlgorithmVisualization() {
                                 );
                                 break;
                             case "hopcroft":
+                                setAlgorithm(new HopcroftAlgorithm(input1, input2, produceWitness));
                                 break;
                             case "nearly-linear":
                                 break;

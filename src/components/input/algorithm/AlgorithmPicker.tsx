@@ -43,12 +43,11 @@ export default function AlgorithmPicker({
                         onChange={() => toggleAlgorithm("tableFillingWitness")}
                     />
                 </label>
-                <label className={"disabled-algorithm"}>
+                <label>
                     n lg n Hopcroft
                     <input
                         name={"hopcroft"}
                         type={"checkbox"}
-                        disabled={true}
                         checked={algorithmsSelected.hopcroft}
                         onChange={() => toggleAlgorithm("hopcroft")}
                     />

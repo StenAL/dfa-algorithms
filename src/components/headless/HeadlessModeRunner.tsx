@@ -22,8 +22,8 @@ export default function HeadlessModeRunner({ algorithms }: HeadlessModeRunProps)
     const messageViews = log
         .slice()
         .reverse()
-        .map((m) => {
-            return <p key={m}>{m}</p>;
+        .map((m, i) => {
+            return <p key={`${m}-${i}`}>{m}</p>;
         });
     return (
         <div>

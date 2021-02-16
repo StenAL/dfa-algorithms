@@ -15,8 +15,8 @@ export default function AlgorithmLog({ algorithm }: AlgorithmLogProps) {
     const messageViews = messages
         .slice()
         .reverse()
-        .map((m) => {
-            return <p key={m}>{m}</p>;
+        .map((m, i) => {
+            return <p key={`${m}-${i}`}>{m}</p>;
         });
     return <div className={"log"}>{messageViews}</div>;
 }
