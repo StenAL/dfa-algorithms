@@ -26,6 +26,7 @@ interface TableFillingAlgorithmInterface extends Algorithm {
     result: EquivalenceTestingResult | DFA;
     iteration: number;
     mode: AlgorithmMode;
+    state: TableFillingAlgorithmState | CommonAlgorithmState;
 }
 
 export default class TableFillingAlgorithm implements TableFillingAlgorithmInterface {
