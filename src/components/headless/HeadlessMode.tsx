@@ -60,7 +60,10 @@ export default function HeadlessMode() {
                             if (algorithmsSelected.hopcroft) {
                                 algorithms.push(new HopcroftAlgorithm(input1, input2));
                             }
-                            // todo: other algorithms
+                            if (algorithmsSelected.hopcroftWitness) {
+                                algorithms.push(new HopcroftAlgorithm(input1, input2, true));
+                            }
+                            // todo: nearly linear algorithm
                             setAlgorithms(algorithms);
                         }}
                         mode={AlgorithmMode.EQUIVALENCE_TESTING}

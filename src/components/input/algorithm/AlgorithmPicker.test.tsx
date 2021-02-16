@@ -21,7 +21,7 @@ it("renders checkboxes correctly for selected algorithms", function () {
     let checkBoxes = wrapper.find("input");
     expect(checkBoxes.length).toBe(6);
     expect(checkBoxes.every((c) => c.props().checked)).toBe(false);
-    expect(checkBoxes.map((c) => c.props().disabled).filter((c) => c).length).toBe(3);
+    expect(checkBoxes.map((c) => c.props().disabled).filter((c) => !c).length).toBe(4);
     algorithmsSelected.tableFilling = true;
     algorithmsSelected.hopcroft = true;
     wrapper.setProps({ algorithmsSelected });

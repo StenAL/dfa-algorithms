@@ -13,18 +13,18 @@ export default function HopcroftAlgorithmVisualization({
                 .map((s) => s.name)
                 .join(", ")}}`;
         })
-        .map((p) => <p>{p}</p>);
+        .map((p) => <p key={p}>{p}</p>);
     const statesWithPredecessors = Array.from(algorithm.statesWithPredecessors.entries())
         .map(([[symbol, blockNumber], states]) => {
             return `(${symbol},${blockNumber}): {${Array.from(states)
                 .map((s) => s.name)
                 .join(", ")}}`;
         })
-        .map((p) => <p>{p}</p>);
+        .map((p) => <p key={p}>{p}</p>);
 
     const toDoLists = Array.from(algorithm.toDoLists.entries())
         .map(([symbol, blockNumbers]) => `${symbol}: {${Array.from(blockNumbers).join(", ")}}`)
-        .map((p) => <p>{p}</p>);
+        .map((p) => <p key={p}>{p}</p>);
     return (
         <div>
             {algorithm.blocks.size > 0 ? (

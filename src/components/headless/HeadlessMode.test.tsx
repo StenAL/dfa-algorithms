@@ -60,6 +60,7 @@ it("initializes correct algorithms from selections", function () {
         new TableFillingAlgorithm(dfa, dfa),
         new TableFillingAlgorithm(dfa, dfa, true),
         new HopcroftAlgorithm(dfa, dfa),
+        new HopcroftAlgorithm(dfa, dfa, true),
     ]);
 });
 

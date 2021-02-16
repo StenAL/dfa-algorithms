@@ -15,6 +15,7 @@ export enum HopcroftAlgorithmState {
     SETS_OF_STATES_WITH_PREDECESSORS_CREATED,
     PARTITIONING_BLOCKS,
     ALL_BLOCKS_PARTITIONED,
+    CONSTRUCTING_WITNESS,
 }
 
 interface HopcroftAlgorithmInterface extends Algorithm {
@@ -42,13 +43,14 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
         this.result = EquivalenceTestingResult.NOT_AVAILABLE;
         this.mode = input2 ? AlgorithmMode.EQUIVALENCE_TESTING : AlgorithmMode.STATE_MINIMIZATION;
         this.produceWitness = produceWitness ?? false;
-        this.witness = "";
         this.inverseTransitionFunction = new HashMap<[State, string], Set<State>>();
         this.blocks = new Map<number, Set<State>>();
         this.statesWithPredecessors = new HashMap<[string, number], Set<State>>();
         this.toDoLists = new Map<string, Set<number>>();
         this.stateToBlockNumber = new Map<State, number>();
         this.k = 3;
+        this.witnessTable = new HashMap<[State, State], string>();
+        this.witness = "";
     }
 
     state: HopcroftAlgorithmState | CommonAlgorithmState;
@@ -59,11 +61,11 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
     mode: AlgorithmMode;
     produceWitness: boolean;
     k: number;
+    witnessTable: HashMap<[State, State], string>;
 
     reset(): void {
         this.state = CommonAlgorithmState.INITIAL;
         this.result = EquivalenceTestingResult.NOT_AVAILABLE;
-        this.witness = "";
         this.inverseTransitionFunction = new HashMap<[State, string], Set<State>>();
         this.blocks = new Map<number, Set<State>>();
         this.statesWithPredecessors = new HashMap<[string, number], Set<State>>();
@@ -71,6 +73,8 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
         this.stateToBlockNumber = new Map<State, number>();
         this.k = 3;
         this.log?.clear();
+        this.witnessTable = new HashMap<[State, State], string>();
+        this.witness = "";
     }
 
     result: EquivalenceTestingResult | DFA;
@@ -84,6 +88,9 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
     step(): void {
         switch (this.state) {
             case CommonAlgorithmState.INITIAL:
+                if (this.produceWitness) {
+                    this.createWitnessTable();
+                }
                 this.createInverseTransitionFunction();
                 break;
             case HopcroftAlgorithmState.INVERSE_TRANSITION_FUNCTION_CREATED:
@@ -105,9 +112,31 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
                     this.combineIndistinguishableGroups();
                 }
                 break;
+            case HopcroftAlgorithmState.CONSTRUCTING_WITNESS:
+                this.constructWitness();
+                break;
             case CommonAlgorithmState.FINAL:
                 break;
         }
+    }
+
+    createWitnessTable() {
+        this.log?.log("Creating table for constructing witness string");
+        for (let state1 of this.input1.states) {
+            for (let state2 of this.input2.states) {
+                this.witnessTable.set([state1, state2], "");
+            }
+        }
+    }
+
+    private getWitnessPair(q1: State, q2: State): [State, State] | undefined {
+        if (this.witnessTable.has([q1, q2])) {
+            return [q1, q2];
+        }
+        if (this.witnessTable.has([q2, q1])) {
+            return [q2, q1];
+        }
+        return undefined;
     }
 
     createInverseTransitionFunction() {
@@ -275,16 +304,16 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
             const splitBlockNumber = newBlockEntry[0];
             const existingBlock = this.blocks.get(splitBlockNumber)!;
             if (newBlock.size < existingBlock.size) {
-                const bk = new Set([...existingBlock].filter((x) => !newBlock.has(x)));
-                this.blocks.set(this.k, bk);
+                const blockK = new Set([...existingBlock].filter((x) => !newBlock.has(x)));
+                this.blocks.set(this.k, blockK);
                 this.blocks.set(splitBlockNumber, newBlock);
-                bk.forEach((state) => this.stateToBlockNumber.set(state, this.k));
+                blockK.forEach((state) => this.stateToBlockNumber.set(state, this.k));
                 this.log?.log(
                     `Split block ${splitBlockNumber} from {${Array.from(existingBlock)
                         .map((s) => s.name)
                         .join(", ")}} into {${Array.from(newBlock)
                         .map((s) => s.name)
-                        .join(", ")}} (new block ${splitBlockNumber}) and {${Array.from(bk)
+                        .join(", ")}} (new block ${splitBlockNumber}) and {${Array.from(blockK)
                         .map((s) => s.name)
                         .join(", ")}} (block ${
                         this.k
@@ -292,6 +321,20 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
                         this.k
                     } do.`
                 );
+
+                if (this.produceWitness) {
+                    for (let state1 of blockK) {
+                        for (let state2 of newBlock) {
+                            const witnessPair = this.getWitnessPair(state1, state2);
+                            if (witnessPair !== undefined) {
+                                this.witnessTable.set(witnessPair, toDoListSymbol);
+                                this.log?.log(
+                                    `Added entry (${witnessPair[0].name},${witnessPair[1].name}) with the value ${toDoListSymbol} to the witness table`
+                                );
+                            }
+                        }
+                    }
+                }
 
                 this.log?.log(
                     `Updating sets of states with predecessors for blocks ${splitBlockNumber} and ${this.k}`
@@ -361,11 +404,50 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
             );
         }
 
-        if (!this.produceWitness) {
-            this.state = CommonAlgorithmState.FINAL;
+        if (this.produceWitness && this.result === EquivalenceTestingResult.NON_EQUIVALENT) {
+            this.state = HopcroftAlgorithmState.CONSTRUCTING_WITNESS;
         } else {
-            // this.state = TableFillingAlgorithmState.CONSTRUCTING_WITNESS;
+            this.state = CommonAlgorithmState.FINAL;
         }
+    }
+
+    constructWitness() {
+        let witness = "";
+        let p = this.input1.startingState;
+        let q = this.input2.startingState;
+        let symbol = this.witnessTable.get(this.getWitnessPair(p, q)!);
+        this.log?.log(`Constructing witness: Comparing starting states ${p.name} and ${q.name}`);
+        while (this.input1.finalStates.has(p) === this.input2.finalStates.has(q)) {
+            this.log?.log(`${p.name} and ${q.name} are distinguished by the symbol ${symbol}`);
+            witness += symbol;
+            this.log?.log(`Appending ${symbol} to the witness string, it is now ${witness}`);
+            let previousP = p.name;
+            let previousQ = q.name;
+            p = p.transitions.get(symbol)!;
+            q = q.transitions.get(symbol)!;
+            this.log?.log(
+                `On input ${symbol}, ${previousP} transitions to ${p.name} and ${previousQ} transitions to ${q.name}`
+            );
+            symbol = this.witnessTable.get(this.getWitnessPair(p, q)!);
+        }
+
+        if (witness.length === 0) {
+            this.log?.log(`Witness: the DFAs can be distinguished by the empty string ''`);
+        }
+
+        if (this.input1.finalStates.has(p)) {
+            this.log?.log(`${p.name} is an accepting state while ${q.name} is not.`);
+            this.log?.log(
+                `Witness: ${witness}. Input 1 accepts the witness string while input 2 rejects it.`
+            );
+        } else {
+            this.log?.log(`${q.name} is an accepting state while ${p.name} is not.`);
+            this.log?.log(
+                `Witness: ${witness}. Input 2 accepts the witness string while input 1 rejects it.`
+            );
+        }
+        this.witness = witness;
+        this.state = CommonAlgorithmState.FINAL;
     }
 
     combineIndistinguishableGroups() {
