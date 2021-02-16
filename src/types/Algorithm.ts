@@ -1,3 +1,4 @@
+import { HopcroftAlgorithmState } from "../algorithm/HopcroftAlgorithm";
 import { TableFillingAlgorithmState } from "../algorithm/TableFillingAlgorithm";
 
 export interface Algorithm {
@@ -39,7 +40,10 @@ export enum CommonAlgorithmState {
     FINAL,
 }
 
-export type AlgorithmState = TableFillingAlgorithmState | CommonAlgorithmState;
+export type AlgorithmState =
+    | TableFillingAlgorithmState
+    | HopcroftAlgorithmState
+    | CommonAlgorithmState;
 
 export enum AlgorithmMode {
     EQUIVALENCE_TESTING,
