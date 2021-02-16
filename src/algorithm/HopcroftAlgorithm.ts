@@ -153,7 +153,7 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
                 if (!this.inverseTransitionFunction.has([transitionTo, symbol])) {
                     this.inverseTransitionFunction.set([transitionTo, symbol], new Set<State>());
                 }
-                this.inverseTransitionFunction.get([transitionTo, symbol]).add(state);
+                this.inverseTransitionFunction.get([transitionTo, symbol])!.add(state);
             }
         }
 
@@ -245,8 +245,8 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
             const toDoList = new Set<number>();
             this.toDoLists.set(symbol, toDoList);
             const blockNumber =
-                this.statesWithPredecessors.get([symbol, 1]).size <=
-                this.statesWithPredecessors.get([symbol, 2]).size
+                this.statesWithPredecessors.get([symbol, 1])!.size <=
+                this.statesWithPredecessors.get([symbol, 2])!.size
                     ? 1
                     : 2;
             toDoList.add(blockNumber);
@@ -278,7 +278,7 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
         const block = this.blocks.get(blockNumber)!;
         const predecessors = Array.from(block)
             .map((s) => this.inverseTransitionFunction.get([s, toDoListSymbol]))
-            .filter((s) => s !== undefined)
+            .filter<Set<State>>((s): s is Set<State> => s !== undefined)
             .reduce((acc, value) => {
                 value.forEach((s) => acc.add(s));
                 return acc;
@@ -343,9 +343,9 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
                 for (let s of this.input1.alphabet) {
                     const numberAddedToToDoList =
                         !this.toDoLists.get(s)!.has(splitBlockNumber) &&
-                        this.statesWithPredecessors.get([s, splitBlockNumber]).size > 0 &&
-                        this.statesWithPredecessors.get([s, splitBlockNumber]).size <=
-                            this.statesWithPredecessors.get([toDoListSymbol, this.k]).size
+                        this.statesWithPredecessors.get([s, splitBlockNumber])!.size > 0 &&
+                        this.statesWithPredecessors.get([s, splitBlockNumber])!.size <=
+                            this.statesWithPredecessors.get([toDoListSymbol, this.k])!.size
                             ? splitBlockNumber
                             : this.k;
                     this.toDoLists.get(s)!.add(numberAddedToToDoList);
@@ -415,7 +415,7 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
         let witness = "";
         let p = this.input1.startingState;
         let q = this.input2.startingState;
-        let symbol = this.witnessTable.get(this.getWitnessPair(p, q)!);
+        let symbol = this.witnessTable.get(this.getWitnessPair(p, q)!)!;
         this.log?.log(`Constructing witness: Comparing starting states ${p.name} and ${q.name}`);
         while (this.input1.finalStates.has(p) === this.input2.finalStates.has(q)) {
             this.log?.log(`${p.name} and ${q.name} are distinguished by the symbol ${symbol}`);
@@ -428,7 +428,7 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
             this.log?.log(
                 `On input ${symbol}, ${previousP} transitions to ${p.name} and ${previousQ} transitions to ${q.name}`
             );
-            symbol = this.witnessTable.get(this.getWitnessPair(p, q)!);
+            symbol = this.witnessTable.get(this.getWitnessPair(p, q)!)!;
         }
 
         if (witness.length === 0) {
