@@ -4,6 +4,7 @@ import { act } from "react-dom/test-utils";
 import { Link, MemoryRouter, Route } from "react-router-dom";
 import { AlgorithmMode } from "../../types/Algorithm";
 import { DFA, State } from "../../types/DFA";
+import HopcroftAlgorithmVisualization from "../HopcroftAlgorithmVisualization";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
 import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
 import WitnessSwitch from "../input/algorithm/WitnessSwitch";
@@ -69,6 +70,30 @@ it("initializes table-filling algorithm correctly", function () {
     expect(wrapper.find(Link).at(0).text()).toBe("Run");
     wrapper.find(Link).at(0).simulate("click", { button: 0 });
     expect(wrapper.find(TableFillingAlgorithmVisualization).exists()).toBe(true);
+    expect(wrapper.find(AlgorithmLog).exists()).toBe(true);
+    expect(wrapper.find(AlgorithmStepControls).exists()).toBe(true);
+});
+
+it("initializes hopcroft algorithm correctly", function () {
+    const wrapper = mount(
+        <MemoryRouter initialEntries={["/algorithm/hopcroft/input"]} initialIndex={0}>
+            <Route path={"/algorithm/:algorithmType/"}>
+                <AlgorithmVisualization />
+            </Route>
+        </MemoryRouter>
+    );
+    expect(wrapper.find("h2").text().includes("Hopcroft Algorithm")).toBe(true);
+    expect(wrapper.find(HopcroftAlgorithmVisualization).exists()).toBe(false);
+    expect(wrapper.find(AlgorithmLog).exists()).toBe(false);
+    expect(wrapper.find(AlgorithmStepControls).exists()).toBe(false);
+    const runInputCallback = wrapper.find(AlgorithmInput).props().runCallback;
+    act(() => {
+        runInputCallback(dfa, dfa);
+    });
+
+    expect(wrapper.find(Link).at(0).text()).toBe("Run");
+    wrapper.find(Link).at(0).simulate("click", { button: 0 });
+    expect(wrapper.find(HopcroftAlgorithmVisualization).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).exists()).toBe(true);
     expect(wrapper.find(AlgorithmStepControls).exists()).toBe(true);
 });
