@@ -47,7 +47,7 @@
     },
     "devDependencies": {
         "@types/enzyme": "^3.10.8",
-        "@types/hashmap": "^2.3.0",
+        "@types/hashmap": "^2.3.1",
         "@types/jest": "^26.0.20",
         "@types/lodash": "^4.14.168",
         "@types/node": "^14.14.28",

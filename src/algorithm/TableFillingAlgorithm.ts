@@ -238,7 +238,7 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
         let witness = "";
         let p = this.input1.startingState;
         let q = this.input2.startingState;
-        let symbol = this.pairs.get(this.getPair(p, q));
+        let symbol = this.pairs.get(this.getPair(p, q))!;
         if (symbol === "ε") {
             this.log?.log(`Witness: the DFAs can be distinguished by the empty string ''`);
         }
@@ -254,7 +254,7 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
             this.log?.log(
                 `On input ${symbol}, ${previousP} transitions to ${p.name} and ${previousQ} transitions to ${q.name}`
             );
-            symbol = this.pairs.get(this.getPair(p, q));
+            symbol = this.pairs.get(this.getPair(p, q))!;
         }
 
         if (this.input1.finalStates.has(p)) {
