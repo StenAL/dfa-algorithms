@@ -227,10 +227,10 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
                 `Starting states ${q1.name} and ${q2.name} are distinguishable, therefore the DFAs are non-equivalent`
             );
         }
-        if (!this.produceWitness) {
-            this.state = CommonAlgorithmState.FINAL;
-        } else {
+        if (this.produceWitness && this.result === EquivalenceTestingResult.NON_EQUIVALENT) {
             this.state = TableFillingAlgorithmState.CONSTRUCTING_WITNESS;
+        } else {
+            this.state = CommonAlgorithmState.FINAL;
         }
     }
 

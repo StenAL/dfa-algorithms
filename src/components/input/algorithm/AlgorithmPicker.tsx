@@ -57,7 +57,7 @@ export default function AlgorithmPicker({
                     <input
                         name={"hopcroft-witness"}
                         type={"checkbox"}
-                        disabled={true}
+                        disabled={mode === AlgorithmMode.STATE_MINIMIZATION}
                         checked={algorithmsSelected.hopcroftWitness}
                         onChange={() => toggleAlgorithm("hopcroftWitness")}
                     />
