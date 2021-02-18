@@ -1,5 +1,6 @@
 import { HopcroftAlgorithmState } from "../algorithm/HopcroftAlgorithm";
 import { TableFillingAlgorithmState } from "../algorithm/TableFillingAlgorithm";
+import { DFA } from "./DFA";
 
 export interface Algorithm {
     type: AlgorithmType;
@@ -8,8 +9,14 @@ export interface Algorithm {
     step: () => void;
     reset: () => void;
     log?: Log;
+
+    input1: DFA;
+    input2?: DFA;
+
+    mode: AlgorithmMode;
     produceWitness: boolean;
     witness: string;
+    result: EquivalenceTestingResult | DFA;
 }
 
 export interface Log {

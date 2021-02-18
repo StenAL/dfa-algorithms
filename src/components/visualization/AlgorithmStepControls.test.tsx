@@ -1,10 +1,19 @@
 import { shallow } from "enzyme";
 import { TableFillingAlgorithmState } from "../../algorithm/TableFillingAlgorithm";
-import { Algorithm, CommonAlgorithmState } from "../../types/Algorithm";
+import {
+    Algorithm,
+    AlgorithmMode,
+    CommonAlgorithmState,
+    EquivalenceTestingResult,
+} from "../../types/Algorithm";
+import { DFA } from "../../types/DFA";
 import AlgorithmStepControls from "./AlgorithmStepControls";
 
 it("buttons call corresponding algorithm functions and invoke callback", function () {
     const algorithm: Algorithm = {
+        input1: {} as DFA,
+        mode: AlgorithmMode.EQUIVALENCE_TESTING,
+        result: EquivalenceTestingResult.NOT_AVAILABLE,
         state: CommonAlgorithmState.INITIAL,
         reset: function () {
             this.state = CommonAlgorithmState.INITIAL;
@@ -53,6 +62,9 @@ it("buttons call corresponding algorithm functions and invoke callback", functio
 
 it("disables invalid step buttons", function () {
     const algorithm: Algorithm = {
+        input1: {} as DFA,
+        mode: AlgorithmMode.EQUIVALENCE_TESTING,
+        result: EquivalenceTestingResult.NOT_AVAILABLE,
         state: CommonAlgorithmState.INITIAL,
         reset: function () {
             this.state = CommonAlgorithmState.INITIAL;

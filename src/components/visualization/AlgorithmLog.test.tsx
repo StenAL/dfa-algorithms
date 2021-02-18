@@ -1,9 +1,18 @@
 import { shallow } from "enzyme";
-import { Algorithm, CommonAlgorithmState } from "../../types/Algorithm";
+import {
+    Algorithm,
+    AlgorithmMode,
+    CommonAlgorithmState,
+    EquivalenceTestingResult,
+} from "../../types/Algorithm";
+import { DFA } from "../../types/DFA";
 import AlgorithmLog from "./AlgorithmLog";
 
 it("renders messages logged by algorithm", function () {
     const algorithm: Algorithm = {
+        input1: {} as DFA,
+        mode: AlgorithmMode.EQUIVALENCE_TESTING,
+        result: EquivalenceTestingResult.NOT_AVAILABLE,
         state: CommonAlgorithmState.INITIAL,
         reset: () => {},
         type: "tableFilling",
@@ -20,6 +29,9 @@ it("renders messages logged by algorithm", function () {
 
 it("does not render cleared messages", function () {
     const algorithm: Algorithm = {
+        input1: {} as DFA,
+        mode: AlgorithmMode.EQUIVALENCE_TESTING,
+        result: EquivalenceTestingResult.NOT_AVAILABLE,
         state: CommonAlgorithmState.INITIAL,
         reset: () => {},
         type: "tableFilling",

@@ -1,4 +1,4 @@
-import { mount, shallow } from "enzyme";
+import { mount } from "enzyme";
 import TransitionsInput from "./TransitionsInput";
 
 it("detects invalid transitions", function () {
@@ -6,7 +6,7 @@ it("detects invalid transitions", function () {
     let valid = true;
     transitions.set("q1", new Map());
     transitions.get("q1").set("0", "q");
-    const wrapper = mount(
+    mount(
         <TransitionsInput
             states={["q1"]}
             alphabet={["0"]}

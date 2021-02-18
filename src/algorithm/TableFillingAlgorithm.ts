@@ -19,31 +19,30 @@ export enum TableFillingAlgorithmState {
 }
 
 interface TableFillingAlgorithmInterface extends Algorithm {
-    input1: DFA;
+    state: TableFillingAlgorithmState | CommonAlgorithmState;
+    mode: AlgorithmMode;
     input2: DFA;
+
     pairs: HashMap<[State, State], string>;
     unmarkedPairs: HashMap<[State, State], undefined>;
-    result: EquivalenceTestingResult | DFA;
     iteration: number;
-    mode: AlgorithmMode;
-    state: TableFillingAlgorithmState | CommonAlgorithmState;
 }
 
 export default class TableFillingAlgorithm implements TableFillingAlgorithmInterface {
-    input1: DFA;
-    pairs: HashMap<[State, State], string>;
-    log?: Log;
-    state: TableFillingAlgorithmState | CommonAlgorithmState;
-    unmarkedPairs: HashMap<[State, State], undefined>;
     type: "tableFilling" | "tableFillingWitness";
-    iteration: number;
-
+    state: TableFillingAlgorithmState | CommonAlgorithmState;
     mode: AlgorithmMode;
     result: EquivalenceTestingResult | DFA;
-    input2: DFA;
-    produceWitness: boolean;
-    witness: string;
 
+    witness: string;
+    produceWitness: boolean;
+    input1: DFA;
+    input2: DFA;
+    log?: Log;
+
+    pairs: HashMap<[State, State], string>;
+    unmarkedPairs: HashMap<[State, State], undefined>;
+    iteration: number;
     indistinguishableStateGroups: State[][];
 
     constructor(input1: DFA, input2?: DFA, produceWitness?: boolean) {
@@ -275,6 +274,7 @@ export default class TableFillingAlgorithm implements TableFillingAlgorithmInter
     identifyIndistinguishableGroups() {
         if (this.unmarkedPairs.count() === 0) {
             this.log?.log("All pairs have been marked, no states can be combined");
+            this.result = this.input1;
             this.state = CommonAlgorithmState.FINAL;
         } else {
             const unmarkedStates = Array.from(new Set(this.unmarkedPairs.keys().flat()));

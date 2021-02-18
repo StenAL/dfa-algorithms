@@ -35,7 +35,7 @@ export default function TransitionsInput({
 
     let transitionsValid = true;
     const elements = rows.map((row, j) => (
-        <div className={"transition-row"} key={`${j}`}>
+        <div className={"table-row"} key={`${j}`}>
             {row.map((el, i) => {
                 const header = i === 0 || j === 0;
                 const symbol = rows[j][0];
