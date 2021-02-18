@@ -1,7 +1,11 @@
 import TableFillingAlgorithm, {
     TableFillingAlgorithmState,
-} from "../algorithm/TableFillingAlgorithm";
-import { AlgorithmMode, CommonAlgorithmState, EquivalenceTestingResult } from "../types/Algorithm";
+} from "../../algorithm/TableFillingAlgorithm";
+import {
+    AlgorithmMode,
+    CommonAlgorithmState,
+    EquivalenceTestingResult,
+} from "../../types/Algorithm";
 
 interface AlgorithmVisualizationProps {
     algorithm: TableFillingAlgorithm;
@@ -47,12 +51,12 @@ export default function TableFillingAlgorithmVisualization({
     rows[0].unshift("");
 
     const pairs = rows.map((row, j) => (
-        <div className={"table-filling-row"} key={`${j}`}>
+        <div className={"table-row"} key={`${j}`}>
             {row.map((el, i) => {
                 const header = i === 0 || j === 0;
                 return (
                     <div
-                        className={"table-filling-cell" + (header ? " table-filling-header" : "")}
+                        className={"table-cell" + (header ? " table-header" : "")}
                         key={`${i}-${j}`}
                     >
                         {el}
@@ -83,7 +87,7 @@ export default function TableFillingAlgorithmVisualization({
             break;
         case CommonAlgorithmState.FINAL:
             stateDescription = "Final state";
-            let resultString;
+            let resultString = "";
             if (algorithm.mode === AlgorithmMode.EQUIVALENCE_TESTING) {
                 resultString =
                     "DFAs are " +
@@ -112,7 +116,7 @@ export default function TableFillingAlgorithmVisualization({
     }
     return (
         <>
-            <p className={"table-filling-state"}>Current state: {stateDescription}</p>
+            <p>Current state: {stateDescription}</p>
             {pairs.length > 1 ? <div className={"table-filling-table"}>{pairs}</div> : ""}
         </>
     );

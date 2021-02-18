@@ -1,17 +1,17 @@
-import { shallow } from "enzyme";
+import { mount, shallow } from "enzyme";
 import { AlgorithmMode } from "../../../types/Algorithm";
 import AlgorithmPicker from "./AlgorithmPicker";
 
-it("renders checkboxes correctly for selected algorithms", function () {
+it("checkboxes rendered correctly and work for selecting algorithms", function () {
     let algorithmsSelected = {
-        nearlyLinear: false,
-        hopcroft: false,
-        hopcroftWitness: false,
-        nearlyLinearWitness: false,
         tableFilling: false,
         tableFillingWitness: false,
+        hopcroft: false,
+        hopcroftWitness: false,
+        nearlyLinear: false,
+        nearlyLinearWitness: false,
     };
-    const wrapper = shallow(
+    let wrapper = mount(
         <AlgorithmPicker
             mode={AlgorithmMode.EQUIVALENCE_TESTING}
             algorithmsSelected={algorithmsSelected}
@@ -27,6 +27,21 @@ it("renders checkboxes correctly for selected algorithms", function () {
     wrapper.setProps({ algorithmsSelected });
     checkBoxes = wrapper.find("input");
     expect(checkBoxes.map((c) => c.props().checked).filter((b) => b).length).toBe(2);
+    checkBoxes.at(0).simulate("change"); // table-filling -> false
+    wrapper.setProps({ algorithmsSelected });
+    checkBoxes.at(1).simulate("change"); // table-filling witness -> true
+    wrapper.setProps({ algorithmsSelected });
+    checkBoxes.at(2).simulate("change"); // hopcroft -> false
+    wrapper.setProps({ algorithmsSelected });
+    checkBoxes.at(3).simulate("change"); // hopcroft witness -> true
+    expect(algorithmsSelected).toEqual({
+        tableFilling: false,
+        tableFillingWitness: true,
+        hopcroft: false,
+        hopcroftWitness: true,
+        nearlyLinear: false,
+        nearlyLinearWitness: false,
+    });
 });
 
 it("disables algorithms not available in STATE_MINIMIZATION mode", function () {

@@ -26,7 +26,7 @@ export default function HeadlessModeRunner({ algorithms }: HeadlessModeRunProps)
             return <p key={`${m}-${i}`}>{m}</p>;
         });
     return (
-        <div>
+        <div className={"headless-runner"}>
             <p>Selected algorithms: {algorithms.map((a) => a.type).join(", ")}</p>
             <button onClick={start}>Start</button>
             <div className={"log"}>{messageViews}</div>

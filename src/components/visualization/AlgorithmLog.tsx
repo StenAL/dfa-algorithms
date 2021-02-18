@@ -18,5 +18,13 @@ export default function AlgorithmLog({ algorithm }: AlgorithmLogProps) {
         .map((m, i) => {
             return <p key={`${m}-${i}`}>{m}</p>;
         });
-    return <div className={"log"}>{messageViews}</div>;
+    return (
+        <div className={"log"}>
+            {messageViews.length > 0 ? (
+                messageViews
+            ) : (
+                <p className={"log-placeholder"}>The algorithm will report progress here...</p>
+            )}
+        </div>
+    );
 }

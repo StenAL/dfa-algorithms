@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+
 :root {
     --pastel-red: #ff6961;
     --pastel-green: #77dd77;
@@ -30,13 +31,14 @@ a:visited {
     }
 }
 
-.table-filling-row,
-.transition-row {
+.table-row,
+.transition-row,
+.hopcroft-row {
     display: flex;
     flex-direction: row;
 }
 
-.table-filling-cell,
+.table-cell,
 .transition-cell {
     width: 3rem;
     height: 3rem;
@@ -48,7 +50,7 @@ a:visited {
 }
 
 .transition-header,
-.table-filling-header {
+.table-header {
     font-weight: bold;
 }
 
@@ -58,6 +60,22 @@ a:visited {
 
 .transition-cell input {
     width: 2rem;
+}
+
+.hopcroft-header,
+.hopcroft-cell {
+    padding-left: 10px;
+    height: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.hopcroft-header {
+    padding: 0 10px;
+    border-right: 1px solid black;
+    width: 45px;
 }
 
 .input-container,
@@ -113,6 +131,7 @@ a:visited {
 .invalid-indicator {
     color: var(--pastel-red);
 }
+
 .valid-indicator {
     color: var(--pastel-green);
 }
@@ -121,18 +140,30 @@ a:visited {
     cursor: default;
 }
 
-.table-filling-table {
+.table-filling-table,
+.hopcroft-table {
     border: 1px solid black;
     border-radius: 4px;
     padding: 10px;
 }
 
 .log {
+    min-height: 200px;
     max-height: 200px;
     width: 400px;
     overflow: auto;
     display: flex;
+    border: 1px solid #a0a0a0;
+    border-radius: 4px;
+    overflow-y: scroll;
     flex-direction: column-reverse;
+    padding: 10px;
+
+    .log-placeholder {
+        flex: 1;
+        color: #a0a0a0;
+        margin: 0;
+    }
 }
 
 .algorithm-container {
@@ -161,6 +192,7 @@ a:visited {
 .right-align {
     text-align: right;
 }
+
 .info-tooltip {
     background: var(--pastel-blue);
     width: 1rem;
@@ -172,6 +204,11 @@ a:visited {
     margin-left: 0.3em;
     border-radius: 0.75em;
     text-align: center;
+
+    &.header-tooltip {
+        height: inherit;
+        width: 1.2rem;
+    }
 }
 
 .__react_component_tooltip.show {
@@ -190,6 +227,7 @@ a:visited {
     text-align: left;
     padding: 10px;
     border-radius: 4px;
+
     label {
         display: flex;
         flex-direction: row;
@@ -208,6 +246,12 @@ a:visited {
             cursor: not-allowed;
         }
     }
+}
+
+.headless-runner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 footer {
