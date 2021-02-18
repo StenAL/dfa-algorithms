@@ -52,7 +52,11 @@ export default function AlgorithmPicker({
                         onChange={() => toggleAlgorithm("hopcroft")}
                     />
                 </label>
-                <label className={"disabled-algorithm"}>
+                <label
+                    className={
+                        mode === AlgorithmMode.STATE_MINIMIZATION ? "disabled-algorithm" : ""
+                    }
+                >
                     n lg n Hopcroft (witness)
                     <input
                         name={"hopcroft-witness"}

@@ -451,7 +451,7 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
     }
 
     combineIndistinguishableGroups() {
-        if (this.blocks.size === this.input1.states.length) {
+        if (Array.from(this.blocks.values()).every((states) => states.size === 1)) {
             this.log?.log(
                 "All states in the DFA are in separate blocks. Every state can be distinguished from all others, therefore the DFA is already minimal."
             );

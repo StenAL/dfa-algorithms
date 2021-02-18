@@ -4,11 +4,11 @@ import HopcroftAlgorithm from "../../algorithm/HopcroftAlgorithm";
 import TableFillingAlgorithm from "../../algorithm/TableFillingAlgorithm";
 import { Algorithm, AlgorithmMode } from "../../types/Algorithm";
 import { useForceUpdate } from "../../util/Hooks";
-import HopcroftAlgorithmVisualization from "../HopcroftAlgorithmVisualization";
+import HopcroftAlgorithmVisualization from "./HopcroftAlgorithmVisualization";
 import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
 import WitnessSwitch from "../input/algorithm/WitnessSwitch";
-import TableFillingAlgorithmVisualization from "../TableFillingAlgorithmVisualization";
+import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualization";
 import AlgorithmLog from "./AlgorithmLog";
 import AlgorithmStepControls from "./AlgorithmStepControls";
 
