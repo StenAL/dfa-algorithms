@@ -19,10 +19,7 @@ export enum HopcroftAlgorithmState {
 }
 
 interface HopcroftAlgorithmInterface extends Algorithm {
-    input1: DFA;
     input2: DFA;
-    result: EquivalenceTestingResult | DFA;
-    mode: AlgorithmMode;
     inverseTransitionFunction: HashMap<[State, string], Set<State>>;
     state: HopcroftAlgorithmState | CommonAlgorithmState;
     blocks: Map<number, Set<State>>;
@@ -33,6 +30,23 @@ interface HopcroftAlgorithmInterface extends Algorithm {
 
 export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
     type: "hopcroft" | "hopcroftWitness";
+    state: HopcroftAlgorithmState | CommonAlgorithmState;
+    mode: AlgorithmMode;
+    result: EquivalenceTestingResult | DFA;
+
+    witness: string;
+    produceWitness: boolean;
+    input1: DFA;
+    input2: DFA;
+    log?: Log;
+
+    witnessTable: HashMap<[State, State], string>;
+    inverseTransitionFunction: HashMap<[State, string], Set<State>>;
+    blocks: Map<number, Set<State>>;
+    statesWithPredecessors: HashMap<[string, number], Set<State>>;
+    toDoLists: Map<string, Set<number>>;
+    stateToBlockNumber: Map<State, number>;
+    k: number;
 
     constructor(input1: DFA, input2?: DFA, produceWitness?: boolean) {
         this.type = produceWitness ? "hopcroftWitness" : "hopcroft";
@@ -53,16 +67,6 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
         this.witness = "";
     }
 
-    state: HopcroftAlgorithmState | CommonAlgorithmState;
-
-    input1: DFA;
-    input2: DFA;
-    log?: Log;
-    mode: AlgorithmMode;
-    produceWitness: boolean;
-    k: number;
-    witnessTable: HashMap<[State, State], string>;
-
     reset(): void {
         this.state = CommonAlgorithmState.INITIAL;
         this.result = EquivalenceTestingResult.NOT_AVAILABLE;
@@ -76,8 +80,6 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
         this.witnessTable = new HashMap<[State, State], string>();
         this.witness = "";
     }
-
-    result: EquivalenceTestingResult | DFA;
 
     run() {
         while (this.state !== CommonAlgorithmState.FINAL) {
@@ -452,6 +454,7 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
 
     combineIndistinguishableGroups() {
         if (Array.from(this.blocks.values()).every((states) => states.size === 1)) {
+            this.result = this.input1;
             this.log?.log(
                 "All states in the DFA are in separate blocks. Every state can be distinguished from all others, therefore the DFA is already minimal."
             );
@@ -470,11 +473,4 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
         }
         this.state = CommonAlgorithmState.FINAL;
     }
-
-    witness: string;
-    inverseTransitionFunction: HashMap<[State, string], Set<State>>;
-    blocks: Map<number, Set<State>>;
-    statesWithPredecessors: HashMap<[string, number], Set<State>>;
-    toDoLists: Map<string, Set<number>>;
-    stateToBlockNumber: Map<State, number>;
 }

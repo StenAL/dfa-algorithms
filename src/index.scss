@@ -31,9 +31,7 @@ a:visited {
     }
 }
 
-.table-row,
-.transition-row,
-.hopcroft-row {
+.table-row {
     display: flex;
     flex-direction: row;
 }
@@ -141,10 +139,15 @@ a:visited {
 }
 
 .table-filling-table,
-.hopcroft-table {
+.hopcroft-table,
+.headless-table {
     border: 1px solid black;
     border-radius: 4px;
     padding: 10px;
+}
+
+.headless-table {
+    min-width: 550px;
 }
 
 .log {
@@ -252,6 +255,27 @@ a:visited {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.headless-header,
+.headless-cell {
+    padding-left: 10px;
+    height: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.headless-cell {
+    flex: 1;
+    line-height: 1;
+}
+
+.headless-header {
+    padding: 0 10px;
+    border-right: 1px solid black;
+    width: 250px;
 }
 
 footer {

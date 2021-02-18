@@ -4,6 +4,7 @@ import HopcroftAlgorithm from "../../algorithm/HopcroftAlgorithm";
 import TableFillingAlgorithm from "../../algorithm/TableFillingAlgorithm";
 import { Algorithm, AlgorithmMode } from "../../types/Algorithm";
 import { useForceUpdate } from "../../util/Hooks";
+import { getAlgorithmModes, getAlgorithmName } from "../../util/util";
 import HopcroftAlgorithmVisualization from "./HopcroftAlgorithmVisualization";
 import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
@@ -12,8 +13,9 @@ import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualiza
 import AlgorithmLog from "./AlgorithmLog";
 import AlgorithmStepControls from "./AlgorithmStepControls";
 
+export type AlgorithmUrlString = "table-filling" | "hopcroft" | "nearly-linear";
 interface AlgorithmVisualizationRouteParams {
-    algorithmType: "table-filling" | "hopcroft" | "nearly-linear";
+    algorithmType: AlgorithmUrlString;
 }
 
 export default function AlgorithmVisualization() {
@@ -24,12 +26,11 @@ export default function AlgorithmVisualization() {
     const [produceWitness, setProduceWitness] = useState(false);
 
     let visualization: JSX.Element | undefined = undefined;
-    let title: string = "";
-    let supportedModes: AlgorithmMode[] = [];
+    const title = "The " + getAlgorithmName(algorithmType);
+    const supportedModes: AlgorithmMode[] = getAlgorithmModes(algorithmType);
+
     switch (algorithmType) {
         case "table-filling":
-            title = "The Table-Filling Algorithm";
-            supportedModes = [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.STATE_MINIMIZATION];
             visualization = (
                 <TableFillingAlgorithmVisualization
                     algorithm={algorithm as TableFillingAlgorithm}
@@ -37,15 +38,12 @@ export default function AlgorithmVisualization() {
             );
             break;
         case "hopcroft":
-            title = "The n-lg-n Hopcroft Algorithm";
-            supportedModes = [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.STATE_MINIMIZATION];
             visualization = (
                 <HopcroftAlgorithmVisualization algorithm={algorithm as HopcroftAlgorithm} />
             );
             break;
         case "nearly-linear":
-            title = "The (Nearly) Linear Algorithm";
-            supportedModes = [];
+            break;
     }
     return (
         <>

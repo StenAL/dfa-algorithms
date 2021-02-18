@@ -61,10 +61,10 @@ it("disables algorithms not available in STATE_MINIMIZATION mode", function () {
         />
     );
     let checkBoxes = wrapper.find("input");
-    expect(checkBoxes.find('input[name="table-filling"]').props().disabled).toBe(undefined);
-    expect(checkBoxes.find('input[name="table-filling-witness"]').props().disabled).toBe(true);
-    expect(checkBoxes.find('input[name="hopcroft"]').props().disabled).toBe(undefined);
-    expect(checkBoxes.find('input[name="hopcroft-witness"]').props().disabled).toBe(true);
-    // expect(checkBoxes.find('input[name="nearly-linear"]').props().disabled).toBe(undefined)
-    expect(checkBoxes.find('input[name="nearly-linear-witness"]').props().disabled).toBe(true);
+    expect(checkBoxes.find('input[name="tableFilling"]').props().disabled).toBe(false);
+    expect(checkBoxes.find('input[name="tableFillingWitness"]').props().disabled).toBe(true);
+    expect(checkBoxes.find('input[name="hopcroft"]').props().disabled).toBe(false);
+    expect(checkBoxes.find('input[name="hopcroftWitness"]').props().disabled).toBe(true);
+    // expect(checkBoxes.find('input[name="nearlyLinear"]').props().disabled).toBe(false)
+    expect(checkBoxes.find('input[name="nearlyLinearWitness"]').props().disabled).toBe(true);
 });

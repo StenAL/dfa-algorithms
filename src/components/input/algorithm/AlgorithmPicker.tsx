@@ -1,4 +1,5 @@
-import { AlgorithmMode, AlgorithmsSelected } from "../../../types/Algorithm";
+import { AlgorithmMode, AlgorithmsSelected, AlgorithmType } from "../../../types/Algorithm";
+import { getAlgorithmModes, getAlgorithmName } from "../../../util/util";
 
 interface AlgorithmsPickerProps {
     mode: AlgorithmMode;
@@ -16,87 +17,33 @@ export default function AlgorithmPicker({
         algorithmsSelectedCopy[algorithm] = !algorithmsSelectedCopy[algorithm];
         setAlgorithmsSelected(algorithmsSelectedCopy);
     };
+
+    const inputs = (Object.keys(algorithmsSelected) as AlgorithmType[]).map((algorithmType) => {
+        let disabledInput =
+            !getAlgorithmModes(algorithmType).includes(AlgorithmMode.STATE_MINIMIZATION) &&
+            mode === AlgorithmMode.STATE_MINIMIZATION;
+        disabledInput =
+            disabledInput ||
+            algorithmType === "nearlyLinear" ||
+            algorithmType === "nearlyLinearWitness";
+        return (
+            <label key={algorithmType} className={disabledInput ? "disabled-algorithm" : ""}>
+                {getAlgorithmName(algorithmType).replace(" Algorithm", "")}
+                <input
+                    name={algorithmType}
+                    type={"checkbox"}
+                    checked={algorithmsSelected[algorithmType]}
+                    onChange={() => toggleAlgorithm(algorithmType)}
+                    disabled={disabledInput}
+                />
+            </label>
+        );
+    });
+
     return (
         <div>
             <h3>Choose algorithms</h3>
-            <div className={"algorithm-picker"}>
-                <label>
-                    Table-Filling
-                    <input
-                        name={"table-filling"}
-                        type={"checkbox"}
-                        checked={algorithmsSelected.tableFilling}
-                        onChange={() => toggleAlgorithm("tableFilling")}
-                    />
-                </label>
-                <label
-                    className={
-                        mode === AlgorithmMode.STATE_MINIMIZATION ? "disabled-algorithm" : ""
-                    }
-                >
-                    Table-Filling (witness)
-                    <input
-                        name={"table-filling-witness"}
-                        type={"checkbox"}
-                        disabled={mode === AlgorithmMode.STATE_MINIMIZATION}
-                        checked={algorithmsSelected.tableFillingWitness}
-                        onChange={() => toggleAlgorithm("tableFillingWitness")}
-                    />
-                </label>
-                <label>
-                    n lg n Hopcroft
-                    <input
-                        name={"hopcroft"}
-                        type={"checkbox"}
-                        checked={algorithmsSelected.hopcroft}
-                        onChange={() => toggleAlgorithm("hopcroft")}
-                    />
-                </label>
-                <label
-                    className={
-                        mode === AlgorithmMode.STATE_MINIMIZATION ? "disabled-algorithm" : ""
-                    }
-                >
-                    n lg n Hopcroft (witness)
-                    <input
-                        name={"hopcroft-witness"}
-                        type={"checkbox"}
-                        disabled={mode === AlgorithmMode.STATE_MINIMIZATION}
-                        checked={algorithmsSelected.hopcroftWitness}
-                        onChange={() => toggleAlgorithm("hopcroftWitness")}
-                    />
-                </label>
-                <label
-                    className={
-                        "disabled-algorithm " +
-                        (mode === AlgorithmMode.STATE_MINIMIZATION ? "disabled-algorithm" : "")
-                    }
-                >
-                    (Nearly) Linear
-                    <input
-                        name={"nearly-linear"}
-                        type={"checkbox"}
-                        disabled={true /*mode === AlgorithmMode.STATE_MINIMIZATION*/}
-                        checked={algorithmsSelected.nearlyLinear}
-                        onChange={() => toggleAlgorithm("nearlyLinear")}
-                    />
-                </label>
-                <label
-                    className={
-                        "disabled-algorithm " +
-                        (mode === AlgorithmMode.STATE_MINIMIZATION ? "disabled-algorithm" : "")
-                    }
-                >
-                    (Nearly) Linear (witness)
-                    <input
-                        name={"nearly-linear-witness"}
-                        type={"checkbox"}
-                        disabled={true /*mode === AlgorithmMode.STATE_MINIMIZATION*/}
-                        checked={algorithmsSelected.nearlyLinearWitness}
-                        onChange={() => toggleAlgorithm("nearlyLinearWitness")}
-                    />
-                </label>
-            </div>
+            <div className={"algorithm-picker"}>{inputs}</div>
         </div>
     );
 }

@@ -9,8 +9,8 @@ it("visualizes inverse transition function, partitions, states with predecessors
     algorithm.step();
     wrapper.setProps({});
     const inverseTransitionTable = wrapper.find(".hopcroft-table").at(0);
-    let firstRow = inverseTransitionTable.find(".hopcroft-row").at(1);
-    expect(inverseTransitionTable.find(".hopcroft-row").length).toBe(
+    let firstRow = inverseTransitionTable.find(".table-row").at(1);
+    expect(inverseTransitionTable.find(".table-row").length).toBe(
         algorithm.inverseTransitionFunction.count() + 1
     );
     expect(firstRow.find(".hopcroft-header").at(0).text()).toBe("q1");
@@ -20,19 +20,19 @@ it("visualizes inverse transition function, partitions, states with predecessors
     algorithm.step();
     wrapper.setProps({});
     const initialPartitions = wrapper.find(".hopcroft-table");
-    firstRow = initialPartitions.find(".hopcroft-row").at(1);
-    expect(initialPartitions.find(".hopcroft-row").length).toBe(algorithm.blocks.size + 1);
+    firstRow = initialPartitions.find(".table-row").at(1);
+    expect(initialPartitions.find(".table-row").length).toBe(algorithm.blocks.size + 1);
     expect(firstRow.find(".hopcroft-header").at(0).text()).toBe("1");
     expect(firstRow.find(".hopcroft-cell").at(0).text()).toBe("{q2, q6}");
 
     algorithm.step();
     wrapper.setProps({});
     const statesWithPredecessors = wrapper.find(".hopcroft-table").at(1);
-    firstRow = statesWithPredecessors.find(".hopcroft-row").at(1);
+    firstRow = statesWithPredecessors.find(".table-row").at(1);
     const nonEmptyStatesWithPredecessorsCount = Array.from(
         algorithm.statesWithPredecessors.values()
     ).filter((s) => s.size > 0).length;
-    expect(statesWithPredecessors.find(".hopcroft-row").length).toBe(
+    expect(statesWithPredecessors.find(".table-row").length).toBe(
         nonEmptyStatesWithPredecessorsCount + 1
     );
     expect(firstRow.find(".hopcroft-header").at(0).text()).toBe("2");
@@ -42,16 +42,16 @@ it("visualizes inverse transition function, partitions, states with predecessors
     algorithm.step();
     wrapper.setProps({});
     const toDoLists = wrapper.find(".hopcroft-table").at(2);
-    firstRow = toDoLists.find(".hopcroft-row").at(1);
-    expect(toDoLists.find(".hopcroft-row").length).toBe(algorithm.toDoLists.size + 1);
+    firstRow = toDoLists.find(".table-row").at(1);
+    expect(toDoLists.find(".table-row").length).toBe(algorithm.toDoLists.size + 1);
     expect(firstRow.find(".hopcroft-header").at(0).text()).toBe("0");
     expect(firstRow.find(".hopcroft-cell").at(0).text()).toBe("{1}");
 
     algorithm.run();
     wrapper.setProps({});
     const partitions = wrapper.find(".hopcroft-table");
-    firstRow = partitions.find(".hopcroft-row").at(1);
-    expect(partitions.find(".hopcroft-row").length).toBe(algorithm.blocks.size + 1);
+    firstRow = partitions.find(".table-row").at(1);
+    expect(partitions.find(".table-row").length).toBe(algorithm.blocks.size + 1);
     expect(firstRow.find(".hopcroft-header").at(0).text()).toBe("1");
     expect(firstRow.find(".hopcroft-cell").at(0).text()).toBe("{q2}");
 });

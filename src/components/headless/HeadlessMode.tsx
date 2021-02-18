@@ -12,12 +12,12 @@ export default function HeadlessMode() {
     const [mode, setMode] = useState(AlgorithmMode.EQUIVALENCE_TESTING);
     const [algorithms, setAlgorithms] = useState<Algorithm[]>([]);
     const [algorithmsSelected, setAlgorithmsSelected] = useState<AlgorithmsSelected>({
-        nearlyLinear: false,
-        hopcroft: false,
-        hopcroftWitness: false,
-        nearlyLinearWitness: false,
         tableFilling: false,
         tableFillingWitness: false,
+        hopcroft: false,
+        hopcroftWitness: false,
+        nearlyLinear: false,
+        nearlyLinearWitness: false,
     });
 
     useEffect(() => {
@@ -31,6 +31,7 @@ export default function HeadlessMode() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [mode]);
+
     return (
         <>
             <h2>Headless mode</h2>
@@ -49,6 +50,7 @@ export default function HeadlessMode() {
                 {Object.values(algorithmsSelected).filter((v) => v).length > 0 ? (
                     <AlgorithmInput
                         runLink={"/headless/run"}
+                        mode={mode}
                         runCallback={(input1, input2) => {
                             const algorithms: Algorithm[] = [];
                             if (algorithmsSelected.tableFilling) {
@@ -66,7 +68,6 @@ export default function HeadlessMode() {
                             // todo: nearly linear algorithm
                             setAlgorithms(algorithms);
                         }}
-                        mode={AlgorithmMode.EQUIVALENCE_TESTING}
                     />
                 ) : (
                     ""
