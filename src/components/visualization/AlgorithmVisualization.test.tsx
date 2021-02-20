@@ -67,8 +67,8 @@ it("initializes table-filling algorithm correctly", function () {
         runInputCallback(dfa, dfa);
     });
 
-    expect(wrapper.find(Link).at(0).text()).toBe("Run");
-    wrapper.find(Link).at(0).simulate("click", { button: 0 });
+    expect(wrapper.find(Link).at(2).text()).toBe("Run");
+    wrapper.find(Link).at(2).simulate("click", { button: 0 });
     expect(wrapper.find(TableFillingAlgorithmVisualization).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).exists()).toBe(true);
     expect(wrapper.find(AlgorithmStepControls).exists()).toBe(true);
@@ -91,8 +91,8 @@ it("initializes hopcroft algorithm correctly", function () {
         runInputCallback(dfa, dfa);
     });
 
-    expect(wrapper.find(Link).at(0).text()).toBe("Run");
-    wrapper.find(Link).at(0).simulate("click", { button: 0 });
+    expect(wrapper.find(Link).at(2).text()).toBe("Run");
+    wrapper.find(Link).at(2).simulate("click", { button: 0 });
     expect(wrapper.find(HopcroftAlgorithmVisualization).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).exists()).toBe(true);
     expect(wrapper.find(AlgorithmStepControls).exists()).toBe(true);

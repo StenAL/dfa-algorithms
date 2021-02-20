@@ -1,8 +1,10 @@
+import md5 from "md5";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { default as Tooltip } from "react-tooltip";
 import { AlgorithmMode } from "../../../types/Algorithm";
 import { DFA } from "../../../types/DFA";
+import { serializeDfa } from "../../../util/util";
 import StatesInput from "../dfa/StatesInput";
 import PreGeneratedInputs from "./PreGeneratedInputs";
 
@@ -28,7 +30,12 @@ export default function AlgorithmInput({ mode, runCallback, runLink }: Algorithm
     return (
         <div className={"input-container"}>
             <div className={"input-fields-container"}>
-                <h3>Input custom DFA(s)</h3>
+                <h3>Use a pre-generated input:</h3>
+                <PreGeneratedInputs mode={mode} runLink={runLink} runCallback={runCallback} />
+                <h3>
+                    ... or input {mode === AlgorithmMode.STATE_MINIMIZATION ? "a" : ""} custom DFA
+                    {mode === AlgorithmMode.EQUIVALENCE_TESTING ? "s" : ""}
+                </h3>
                 <div className={"alphabet-input"}>
                     <label htmlFor={"alphabet"}>
                         Alphabet
@@ -81,14 +88,28 @@ export default function AlgorithmInput({ mode, runCallback, runLink }: Algorithm
                         ""
                     )}
                 </div>
+                <button
+                    disabled={!inputValid}
+                    onClick={() => {
+                        const json1 = JSON.stringify(serializeDfa(input1!));
+                        const json2 = input2 ? JSON.stringify(serializeDfa(input1!)) : "0";
+                        const result = JSON.stringify({ input1: json1, input2: json2 });
+                        const file = new Blob([result], { type: "json" });
+
+                        const fakeLink = document.createElement("a");
+                        fakeLink.href = URL.createObjectURL(file);
+                        fakeLink.download = `dfa-${md5(result)}.json`;
+                        fakeLink.click();
+                    }}
+                >
+                    Save to File
+                </button>
                 <Link className={inputValid ? "" : "disabled-link"} to={runLink}>
                     <button disabled={!inputValid} onClick={() => runCallback(input1!, input2)}>
                         Run
                     </button>
                 </Link>
             </div>
-            <h3>...or use a pre-generated input:</h3>
-            <PreGeneratedInputs mode={mode} runLink={runLink} runCallback={runCallback} />
         </div>
     );
 }

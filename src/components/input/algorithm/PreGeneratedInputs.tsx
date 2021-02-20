@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { dfaA, dfaB } from "../../../algorithm/data/exampleData";
 import { AlgorithmMode } from "../../../types/Algorithm";
 import { DFA } from "../../../types/DFA";
+import { deserializeDfa } from "../../../util/util";
 
 interface PreGeneratedInputsProps {
     mode: AlgorithmMode;
@@ -14,6 +16,8 @@ export default function PreGeneratedInputs({
     runCallback,
     runLink,
 }: PreGeneratedInputsProps) {
+    const history = useHistory();
+    const [fileValid, setFileValid] = useState(true);
     return (
         <div className={"pre-generated-inputs"}>
             <Link to={runLink}>
@@ -31,6 +35,35 @@ export default function PreGeneratedInputs({
             <Link to={runLink} className={"disabled-link"}>
                 <button disabled={true}>More to come</button>
             </Link>
+            <input
+                type="file"
+                id={"files"}
+                className={"file-input"}
+                multiple={true}
+                onChange={async (event) => {
+                    try {
+                        const file = event.target.files!.item(0)!;
+                        const text = await file.text();
+                        const json = JSON.parse(text);
+                        const input1 = JSON.parse(json.input1);
+                        const input2 = JSON.parse(json.input2);
+                        const dfa1 = deserializeDfa(input1);
+                        const dfa2 = input2 === 0 ? undefined : deserializeDfa(input2);
+                        runCallback(
+                            dfa1,
+                            mode === AlgorithmMode.EQUIVALENCE_TESTING ? dfa2 : undefined
+                        );
+                        history.push(runLink);
+                        setFileValid(true);
+                    } catch (e) {
+                        setFileValid(false);
+                    }
+                }}
+            />
+            <label htmlFor="files" className={"file-input-label"}>
+                <button>Select file</button>
+            </label>
+            {fileValid ? "" : <span className={"invalid-indicator"}>Invalid input</span>}
         </div>
     );
 }
