@@ -1,4 +1,6 @@
 // eslint-disable no-unused-vars
+
+import { deserializeDfa, serializeDfa } from "../util/util";
 import { dfaA, dfaB } from "./data/exampleData";
 import HopcroftAlgorithm from "./HopcroftAlgorithm";
 
@@ -8,14 +10,19 @@ import HopcroftAlgorithm from "./HopcroftAlgorithm";
 // console.log(algo.result);
 
 const algo = new HopcroftAlgorithm(dfaA, dfaB);
-algo.log = { log: console.log, clear: () => {} };
+algo.log = {
+    log: console.log,
+    clear: () => {},
+};
 // algo.step();
 // algo.step();
 // algo.step();
 // algo.step();
 // algo.step();
 // algo.step();
-algo.run();
+// algo.run();
 
-// const a = new HashMap<string, string>()
-// console.log(a.get("abc"));
+const serialized = serializeDfa(dfaA);
+
+const dfa = deserializeDfa(serialized);
+console.log(dfa);
