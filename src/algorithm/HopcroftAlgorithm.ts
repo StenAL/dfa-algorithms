@@ -402,7 +402,7 @@ export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
         } else {
             this.result = EquivalenceTestingResult.NON_EQUIVALENT;
             this.log?.log(
-                `Starting states ${q1.name} and ${q2.name} are in different blocks (blocks ${q1Block} and ${q2Block} respectively), therefore they are indistinguishable the DFAs are non-equivalent`
+                `Starting states ${q1.name} and ${q2.name} are in different blocks (blocks ${q1Block} and ${q2Block} respectively), therefore they are distinguishable and the DFAs are non-equivalent`
             );
         }
 

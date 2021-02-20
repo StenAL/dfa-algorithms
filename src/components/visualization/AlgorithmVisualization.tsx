@@ -3,7 +3,7 @@ import { Route, useParams } from "react-router-dom";
 import HopcroftAlgorithm from "../../algorithm/HopcroftAlgorithm";
 import TableFillingAlgorithm from "../../algorithm/TableFillingAlgorithm";
 import { Algorithm, AlgorithmMode } from "../../types/Algorithm";
-import { useForceUpdate } from "../../util/Hooks";
+import { useForceUpdate } from "../../util/hooks";
 import { getAlgorithmModes, getAlgorithmName } from "../../util/util";
 import HopcroftAlgorithmVisualization from "./HopcroftAlgorithmVisualization";
 import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
