@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Route } from "react-router-dom";
-import HopcroftAlgorithm from "../../algorithm/HopcroftAlgorithm";
-import TableFillingAlgorithm from "../../algorithm/TableFillingAlgorithm";
+import { HopcroftAlgorithmImpl } from "../../algorithm/HopcroftAlgorithm";
+import { TableFillingAlgorithmImpl } from "../../algorithm/TableFillingAlgorithm";
 import { Algorithm, AlgorithmMode, AlgorithmsSelected } from "../../types/Algorithm";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
 import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
@@ -54,16 +54,18 @@ export default function HeadlessMode() {
                         runCallback={(input1, input2) => {
                             const algorithms: Algorithm[] = [];
                             if (algorithmsSelected.tableFilling) {
-                                algorithms.push(new TableFillingAlgorithm(input1, input2));
+                                algorithms.push(new TableFillingAlgorithmImpl(input1, input2));
                             }
                             if (algorithmsSelected.tableFillingWitness) {
-                                algorithms.push(new TableFillingAlgorithm(input1, input2, true));
+                                algorithms.push(
+                                    new TableFillingAlgorithmImpl(input1, input2, true)
+                                );
                             }
                             if (algorithmsSelected.hopcroft) {
-                                algorithms.push(new HopcroftAlgorithm(input1, input2));
+                                algorithms.push(new HopcroftAlgorithmImpl(input1, input2));
                             }
                             if (algorithmsSelected.hopcroftWitness) {
-                                algorithms.push(new HopcroftAlgorithm(input1, input2, true));
+                                algorithms.push(new HopcroftAlgorithmImpl(input1, input2, true));
                             }
                             // todo: nearly linear algorithm
                             setAlgorithms(algorithms);

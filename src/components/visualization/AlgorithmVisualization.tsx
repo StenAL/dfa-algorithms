@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Route, useParams } from "react-router-dom";
-import HopcroftAlgorithm from "../../algorithm/HopcroftAlgorithm";
-import TableFillingAlgorithm from "../../algorithm/TableFillingAlgorithm";
+import { HopcroftAlgorithm, HopcroftAlgorithmImpl } from "../../algorithm/HopcroftAlgorithm";
+import {
+    TableFillingAlgorithm,
+    TableFillingAlgorithmImpl,
+} from "../../algorithm/TableFillingAlgorithm";
 import { Algorithm, AlgorithmMode } from "../../types/Algorithm";
 import { useForceUpdate } from "../../util/hooks";
 import { getAlgorithmModes, getAlgorithmName } from "../../util/util";
@@ -71,11 +74,13 @@ export default function AlgorithmVisualization() {
                         switch (algorithmType) {
                             case "table-filling":
                                 setAlgorithm(
-                                    new TableFillingAlgorithm(input1, input2, produceWitness)
+                                    new TableFillingAlgorithmImpl(input1, input2, produceWitness)
                                 );
                                 break;
                             case "hopcroft":
-                                setAlgorithm(new HopcroftAlgorithm(input1, input2, produceWitness));
+                                setAlgorithm(
+                                    new HopcroftAlgorithmImpl(input1, input2, produceWitness)
+                                );
                                 break;
                             case "nearly-linear":
                                 break;

@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { default as Tooltip } from "react-tooltip";
-import HopcroftAlgorithm, { HopcroftAlgorithmState } from "../../algorithm/HopcroftAlgorithm";
+import { HopcroftAlgorithm, HopcroftAlgorithmState } from "../../algorithm/HopcroftAlgorithm";
 import {
     AlgorithmMode,
     CommonAlgorithmState,

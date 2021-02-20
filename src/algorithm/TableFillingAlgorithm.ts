@@ -18,7 +18,7 @@ export enum TableFillingAlgorithmState {
     INDISTINGUISHABLE_STATE_GROUPS_IDENTIFIED,
 }
 
-interface TableFillingAlgorithmInterface extends Algorithm {
+export interface TableFillingAlgorithm extends Algorithm {
     state: TableFillingAlgorithmState | CommonAlgorithmState;
     mode: AlgorithmMode;
     input2: DFA;
@@ -26,9 +26,10 @@ interface TableFillingAlgorithmInterface extends Algorithm {
     pairs: HashMap<[State, State], string>;
     unmarkedPairs: HashMap<[State, State], undefined>;
     iteration: number;
+    indistinguishableStateGroups: State[][];
 }
 
-export default class TableFillingAlgorithm implements TableFillingAlgorithmInterface {
+export class TableFillingAlgorithmImpl implements TableFillingAlgorithm {
     type: "tableFilling" | "tableFillingWitness";
     state: TableFillingAlgorithmState | CommonAlgorithmState;
     mode: AlgorithmMode;

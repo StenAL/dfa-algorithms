@@ -1,10 +1,10 @@
 import { mount } from "enzyme";
 import { dfaA, dfaB } from "../../algorithm/data/exampleData";
-import HopcroftAlgorithm, { HopcroftAlgorithmState } from "../../algorithm/HopcroftAlgorithm";
+import { HopcroftAlgorithmImpl, HopcroftAlgorithmState } from "../../algorithm/HopcroftAlgorithm";
 import HopcroftAlgorithmVisualization from "./HopcroftAlgorithmVisualization";
 
 it("visualizes inverse transition function, partitions, states with predecessors, to-do lists correctly", function () {
-    const algorithm = new HopcroftAlgorithm(dfaA, dfaB);
+    const algorithm = new HopcroftAlgorithmImpl(dfaA, dfaB);
     const wrapper = mount(<HopcroftAlgorithmVisualization algorithm={algorithm} />);
     algorithm.step();
     wrapper.setProps({});
@@ -57,7 +57,7 @@ it("visualizes inverse transition function, partitions, states with predecessors
 });
 
 it("renders witness table correctly", function () {
-    const algorithm = new HopcroftAlgorithm(dfaA, dfaB, true);
+    const algorithm = new HopcroftAlgorithmImpl(dfaA, dfaB, true);
     const wrapper = mount(<HopcroftAlgorithmVisualization algorithm={algorithm} />);
     while (algorithm.state !== HopcroftAlgorithmState.CONSTRUCTING_WITNESS) {
         algorithm.step();

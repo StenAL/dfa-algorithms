@@ -2,8 +2,8 @@ import { mount } from "enzyme";
 import React from "react";
 import { act } from "react-dom/test-utils";
 import { Link, MemoryRouter } from "react-router-dom";
-import HopcroftAlgorithm from "../../algorithm/HopcroftAlgorithm";
-import TableFillingAlgorithm from "../../algorithm/TableFillingAlgorithm";
+import { HopcroftAlgorithmImpl } from "../../algorithm/HopcroftAlgorithm";
+import { TableFillingAlgorithmImpl } from "../../algorithm/TableFillingAlgorithm";
 import { DFA, State } from "../../types/DFA";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
 import AlgorithmPicker from "../input/algorithm/AlgorithmPicker";
@@ -57,10 +57,10 @@ it("initializes correct algorithms from selections", function () {
     const headlessModeRun = wrapper.find(HeadlessModeRunner);
     expect(headlessModeRun.exists()).toBe(true);
     expect(headlessModeRun.props().algorithms).toEqual([
-        new TableFillingAlgorithm(dfa, dfa),
-        new TableFillingAlgorithm(dfa, dfa, true),
-        new HopcroftAlgorithm(dfa, dfa),
-        new HopcroftAlgorithm(dfa, dfa, true),
+        new TableFillingAlgorithmImpl(dfa, dfa),
+        new TableFillingAlgorithmImpl(dfa, dfa, true),
+        new HopcroftAlgorithmImpl(dfa, dfa),
+        new HopcroftAlgorithmImpl(dfa, dfa, true),
     ]);
 });
 
