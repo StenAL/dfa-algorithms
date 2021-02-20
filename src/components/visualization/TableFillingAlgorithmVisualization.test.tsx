@@ -1,12 +1,13 @@
 import { shallow } from "enzyme";
 import { dfaA, dfaB } from "../../algorithm/data/exampleData";
-import TableFillingAlgorithm, {
+import {
+    TableFillingAlgorithmImpl,
     TableFillingAlgorithmState,
 } from "../../algorithm/TableFillingAlgorithm";
 import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualization";
 
 it("renders cells for each pair in table", function () {
-    const algorithm = new TableFillingAlgorithm(dfaA, dfaB);
+    const algorithm = new TableFillingAlgorithmImpl(dfaA, dfaB);
     const wrapper = shallow(<TableFillingAlgorithmVisualization algorithm={algorithm} />);
     expect(wrapper.find(".table-cell").exists()).toBe(false); // no pairs yet
     algorithm.step();
@@ -20,7 +21,7 @@ it("renders cells for each pair in table", function () {
 });
 
 it("marks pairs correctly, displays witness", function () {
-    const algorithm = new TableFillingAlgorithm(dfaA, dfaB, true);
+    const algorithm = new TableFillingAlgorithmImpl(dfaA, dfaB, true);
     const wrapper = shallow(<TableFillingAlgorithmVisualization algorithm={algorithm} />);
     algorithm.run();
     wrapper.setProps({});
@@ -44,7 +45,7 @@ it("marks pairs correctly, displays witness", function () {
 });
 
 it("renders state minimization table correctly", function () {
-    const algorithm = new TableFillingAlgorithm(dfaA);
+    const algorithm = new TableFillingAlgorithmImpl(dfaA);
     const wrapper = shallow(<TableFillingAlgorithmVisualization algorithm={algorithm} />);
     algorithm.step();
     expect(algorithm.state).toBe(TableFillingAlgorithmState.EMPTY_TABLE);

@@ -1,4 +1,5 @@
-import TableFillingAlgorithm, {
+import {
+    TableFillingAlgorithm,
     TableFillingAlgorithmState,
 } from "../../algorithm/TableFillingAlgorithm";
 import {

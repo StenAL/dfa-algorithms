@@ -18,7 +18,7 @@ export enum HopcroftAlgorithmState {
     CONSTRUCTING_WITNESS,
 }
 
-interface HopcroftAlgorithmInterface extends Algorithm {
+export interface HopcroftAlgorithm extends Algorithm {
     input2: DFA;
     inverseTransitionFunction: HashMap<[State, string], Set<State>>;
     state: HopcroftAlgorithmState | CommonAlgorithmState;
@@ -26,9 +26,10 @@ interface HopcroftAlgorithmInterface extends Algorithm {
     statesWithPredecessors: HashMap<[string, number], Set<State>>; // (block number i, alphabet symbol a) -> set of states in block i that have predecessors on input a
     toDoLists: Map<string, Set<number>>;
     stateToBlockNumber: Map<State, number>;
+    witnessTable: HashMap<[State, State], string>;
 }
 
-export default class HopcroftAlgorithm implements HopcroftAlgorithmInterface {
+export class HopcroftAlgorithmImpl implements HopcroftAlgorithm {
     type: "hopcroft" | "hopcroftWitness";
     state: HopcroftAlgorithmState | CommonAlgorithmState;
     mode: AlgorithmMode;

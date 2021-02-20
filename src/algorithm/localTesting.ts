@@ -2,14 +2,14 @@
 
 import { deserializeDfa, serializeDfa } from "../util/util";
 import { dfaA, dfaB } from "./data/exampleData";
-import HopcroftAlgorithm from "./HopcroftAlgorithm";
+import { HopcroftAlgorithmImpl } from "./HopcroftAlgorithm";
 
 // const algo = new TableFillingAlgorithm(dfaA);
 // algo.log = { log: console.log, clear: () => {} };
 // algo.run();
 // console.log(algo.result);
 
-const algo = new HopcroftAlgorithm(dfaA, dfaB);
+const algo = new HopcroftAlgorithmImpl(dfaA, dfaB);
 algo.log = {
     log: console.log,
     clear: () => {},
