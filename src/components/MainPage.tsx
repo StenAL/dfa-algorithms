@@ -15,7 +15,7 @@ export default function MainPage() {
                     <h2>What do you want to do?</h2>
                     <h3>Visualize algorithms</h3>
                     <p>
-                        <Link to={"/algorithm/table-filling/input"}>Table-filling Algorithm</Link>
+                        <Link to={"/algorithm/table-filling/input"}>Table-Filling Algorithm</Link>
                     </p>
                     <p>
                         <Link to={"/algorithm/hopcroft/input"}>n-lg-n Hopcroft Algorithm</Link>

@@ -1,7 +1,7 @@
 import { mount } from "enzyme";
 import React from "react";
 import { act } from "react-dom/test-utils";
-import { useForceUpdate } from "./Hooks";
+import { useForceUpdate } from "./hooks";
 
 let data = 0;
 beforeEach(() => {

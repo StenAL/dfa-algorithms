@@ -26,7 +26,7 @@ Further detail on these algorithms can be found in the report accompanying the p
 
 ## Development
 
-To run or develop this software locally, a local installation of [node.js](https://nodejs.org/en/) is required.
+To run or develop this software locally, a local installation of [node.js 14.x](https://nodejs.org/en/) is required.
 
 The software can be run as follows:
 

@@ -2,7 +2,6 @@
     "compilerOptions": {
         "target": "es2015",
         "lib": ["dom", "dom.iterable", "esnext"],
-        "allowJs": true,
         "skipLibCheck": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
@@ -14,8 +13,7 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
-        "jsx": "react-jsx",
-        "outDir": "lib"
+        "jsx": "react-jsx"
     },
     "include": ["src"]
 }
