@@ -1,11 +1,10 @@
-import md5 from "md5";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AlgorithmMode } from "../../../types/Algorithm";
 import { DFA } from "../../../types/DFA";
-import { serializeDfa } from "../../../util/util";
 import AlphabetInput from "../dfa/AlphabetInput";
 import StatesInput from "../dfa/StatesInput";
+import DownloadButton from "./DownloadButton";
 import PreGeneratedInputs from "./PreGeneratedInputs";
 
 interface AlgorithmInputProps {
@@ -28,53 +27,41 @@ export default function AlgorithmInput({ mode, runCallback, runLink }: Algorithm
     }
 
     return (
-        <div className={"input-container"}>
-            <div className={"input-fields-container"}>
-                <h3>Use a pre-generated input:</h3>
-                <PreGeneratedInputs mode={mode} runLink={runLink} runCallback={runCallback} />
-                <h3>
-                    ... or input {mode === AlgorithmMode.STATE_MINIMIZATION ? "a" : ""} custom DFA
-                    {mode === AlgorithmMode.EQUIVALENCE_TESTING ? "s" : ""}
-                </h3>
-                <AlphabetInput alphabet={alphabet} callback={setAlphabet} />
-                <div className={"dfa-inputs-container"}>
+        <div className={"page-container"}>
+            <h3>Use a pre-generated input:</h3>
+            <PreGeneratedInputs mode={mode} runLink={runLink} runCallback={runCallback} />
+            <h3>
+                ... or input {mode === AlgorithmMode.STATE_MINIMIZATION ? "a" : ""} custom DFA
+                {mode === AlgorithmMode.EQUIVALENCE_TESTING ? "s" : ""}
+            </h3>
+            <AlphabetInput alphabet={alphabet} callback={setAlphabet} />
+            <div className={"dfa-inputs-container"}>
+                <StatesInput
+                    convertInputCallback={(dfa) => setInput1(dfa)}
+                    alphabet={alphabet}
+                    alphabetValid={alphabetValid}
+                />
+                {mode === AlgorithmMode.EQUIVALENCE_TESTING ? (
                     <StatesInput
-                        convertInputCallback={(dfa) => setInput1(dfa)}
                         alphabet={alphabet}
                         alphabetValid={alphabetValid}
+                        convertInputCallback={(dfa) => setInput2(dfa)}
                     />
-                    {mode === AlgorithmMode.EQUIVALENCE_TESTING ? (
-                        <StatesInput
-                            alphabet={alphabet}
-                            alphabetValid={alphabetValid}
-                            convertInputCallback={(dfa) => setInput2(dfa)}
-                        />
-                    ) : (
-                        ""
-                    )}
-                </div>
-                <button
-                    disabled={!inputValid}
-                    onClick={() => {
-                        const json1 = JSON.stringify(serializeDfa(input1!));
-                        const json2 = input2 ? JSON.stringify(serializeDfa(input1!)) : "0";
-                        const result = JSON.stringify({ input1: json1, input2: json2 });
-                        const file = new Blob([result], { type: "json" });
-
-                        const fakeLink = document.createElement("a");
-                        fakeLink.href = URL.createObjectURL(file);
-                        fakeLink.download = `dfa-${md5(result)}.json`;
-                        fakeLink.click();
-                    }}
-                >
-                    Save to File
-                </button>
-                <Link className={inputValid ? "" : "disabled-link"} to={runLink}>
-                    <button disabled={!inputValid} onClick={() => runCallback(input1!, input2)}>
-                        Run
-                    </button>
-                </Link>
+                ) : (
+                    ""
+                )}
             </div>
+            <DownloadButton
+                disabled={!inputValid}
+                text={"Save to File"}
+                dfa1={input1!}
+                dfa2={input2}
+            />
+            <Link className={inputValid ? "" : "disabled-link"} to={runLink}>
+                <button disabled={!inputValid} onClick={() => runCallback(input1!, input2)}>
+                    Run
+                </button>
+            </Link>
         </div>
     );
 }

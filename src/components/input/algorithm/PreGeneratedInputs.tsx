@@ -17,7 +17,7 @@ export default function PreGeneratedInputs({
     runLink,
 }: PreGeneratedInputsProps) {
     const history = useHistory();
-    const [fileValid, setFileValid] = useState(true);
+    const [fileError, setFileError] = useState("");
     return (
         <div className={"pre-generated-inputs"}>
             <Link to={runLink}>
@@ -47,23 +47,34 @@ export default function PreGeneratedInputs({
                         const json = JSON.parse(text);
                         const input1 = JSON.parse(json.input1);
                         const input2 = JSON.parse(json.input2);
+                        if (mode === AlgorithmMode.EQUIVALENCE_TESTING && input2 === 0) {
+                            setFileError(
+                                "Need 2 DFAs for equivalence testing but input only has one"
+                            );
+                            return;
+                        }
+
                         const dfa1 = deserializeDfa(input1);
                         const dfa2 = input2 === 0 ? undefined : deserializeDfa(input2);
+                        setFileError("");
                         runCallback(
                             dfa1,
                             mode === AlgorithmMode.EQUIVALENCE_TESTING ? dfa2 : undefined
                         );
                         history.push(runLink);
-                        setFileValid(true);
                     } catch (e) {
-                        setFileValid(false);
+                        setFileError(e.message);
                     }
                 }}
             />
             <label htmlFor="files" className={"file-input-label"}>
                 <button>Select file</button>
             </label>
-            {fileValid ? "" : <span className={"invalid-indicator"}>Invalid input</span>}
+            {fileError === "" ? (
+                ""
+            ) : (
+                <span className={"invalid-indicator"}>Invalid input: {fileError}</span>
+            )}
         </div>
     );
 }

@@ -31,6 +31,7 @@ export default function AlphabetInput({ alphabet, callback }: AlphabetInputProps
                 name={"alphabet"}
                 type={"text"}
                 placeholder={"0,1,..."}
+                defaultValue={alphabet.length > 0 ? alphabet.join(",") : undefined}
                 onChange={(event) => {
                     const newAlphabet = event.target.value.split(",");
                     if (newAlphabet.length > 0 && newAlphabet[newAlphabet.length - 1] === "") {
