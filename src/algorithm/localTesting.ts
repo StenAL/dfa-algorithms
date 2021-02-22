@@ -1,28 +1,14 @@
 // eslint-disable no-unused-vars
 
-import { deserializeDfa, serializeDfa } from "../util/util";
-import { dfaA, dfaB } from "./data/exampleData";
-import { HopcroftAlgorithmImpl } from "./HopcroftAlgorithm";
+import { DatasetType } from "../types/Dataset";
+import { getPrettyDfaString } from "../util/util";
+import { randomDatasetGenerator } from "./data/datasetGenerator";
 
-// const algo = new TableFillingAlgorithm(dfaA);
-// algo.log = { log: console.log, clear: () => {} };
-// algo.run();
-// console.log(algo.result);
+const dfa = randomDatasetGenerator(5, ["0", "1"], 1);
+getPrettyDfaString(dfa);
 
-const algo = new HopcroftAlgorithmImpl(dfaA, dfaB);
-algo.log = {
-    log: console.log,
-    clear: () => {},
-};
-// algo.step();
-// algo.step();
-// algo.step();
-// algo.step();
-// algo.step();
-// algo.step();
-// algo.run();
+Object.keys(DatasetType)
+    .filter((k) => !isNaN(parseInt(k)))
+    .map((k) => console.log(k));
 
-const serialized = serializeDfa(dfaA);
-
-const dfa = deserializeDfa(serialized);
-console.log(dfa);
+console.log(Object.values(DatasetType));
