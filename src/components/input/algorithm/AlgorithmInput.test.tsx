@@ -35,29 +35,6 @@ it("passes DFA input to callback", function () {
     expect(runCallback).toHaveBeenCalledWith(dfaA, dfaB);
 });
 
-it("validates alphabet", function () {
-    const wrapper = mount(
-        React.createElement(
-            (props) => (
-                <BrowserRouter>
-                    <AlgorithmInput {...props} />
-                </BrowserRouter>
-            ),
-            {
-                mode: AlgorithmMode.EQUIVALENCE_TESTING,
-                runCallback: jest.fn(),
-                runLink: "/test",
-            }
-        )
-    );
-    let alphabetInput = wrapper.find('input[name="alphabet"]');
-    expect(alphabetInput.hasClass("invalid-input")).toBe(true);
-    alphabetInput.simulate("change", { target: { value: "0,1" } });
-
-    alphabetInput = wrapper.find('input[name="alphabet"]');
-    expect(alphabetInput.hasClass("invalid-input")).toBe(false);
-});
-
 it("prevents invalid input from being run", function () {
     const wrapper = mount(
         React.createElement(
