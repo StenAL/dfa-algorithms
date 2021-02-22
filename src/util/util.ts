@@ -1,5 +1,6 @@
 import { AlgorithmUrlString } from "../components/visualization/AlgorithmVisualization";
 import { AlgorithmMode, AlgorithmType } from "../types/Algorithm";
+import { DatasetType } from "../types/Dataset";
 import { DFA, SerializedDfa, State } from "../types/DFA";
 
 export function getAlgorithmName(type: AlgorithmType | AlgorithmUrlString) {
@@ -18,6 +19,15 @@ export function getAlgorithmName(type: AlgorithmType | AlgorithmUrlString) {
             return "(Nearly) Linear Algorithm";
         case "nearlyLinearWitness":
             return "(Nearly) Linear Algorithm (Witness)";
+    }
+}
+
+export function getDatasetTypeName(type: DatasetType) {
+    switch (type) {
+        case DatasetType.RANDOM:
+            return "Random";
+        case DatasetType.PLACEHOLDER:
+            return "Placeholder";
     }
 }
 
@@ -70,4 +80,20 @@ export const deserializeDfa = (data: SerializedDfa): DFA => {
     const finalStates = new Set<State>(data.finalStates.map((name) => nameToState.get(name)!));
     const startingState = nameToState.get(data.startingState)!;
     return { states, startingState, finalStates, alphabet: data.alphabet };
+};
+
+export const getPrettyDfaString = (dfa: DFA): string[] => {
+    const messages: string[] = [];
+    messages.push(
+        `States: ${dfa.states.length}, final states: ${
+            dfa.finalStates.size
+        }. Alphabet: {${dfa.alphabet.join(", ")}}`
+    );
+    messages.push("Transitions");
+    for (let from of dfa.states) {
+        for (let symbol of dfa.alphabet) {
+            messages.push(`(${from.name}, ${symbol}): ${from.transitions.get(symbol)!.name}`);
+        }
+    }
+    return messages;
 };
