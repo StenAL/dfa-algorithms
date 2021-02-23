@@ -67,8 +67,8 @@ a:visited {
     width: 2rem;
 }
 
-.hopcroft-header,
-.hopcroft-cell {
+.visualization-header,
+.visualization-cell {
     padding-left: 10px;
     height: 3rem;
     display: flex;
@@ -77,10 +77,25 @@ a:visited {
     justify-content: center;
 }
 
-.hopcroft-header {
+.visualization-header {
     padding: 0 10px;
     border-right: 1px solid black;
     width: 45px;
+}
+
+.nearly-linear-sets .table-row .visualization-header {
+    width: 100px;
+}
+
+.nearly-linear-stack {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    border-radius: 4px;
+    div {
+        padding: 10px;
+        border: 1px solid black;
+    }
 }
 
 .input-fields-container h3.input-header {
@@ -138,7 +153,7 @@ a:visited {
 }
 
 .table-filling-table,
-.hopcroft-table,
+.visualization-table,
 .headless-table {
     border: 1px solid black;
     border-radius: 4px;

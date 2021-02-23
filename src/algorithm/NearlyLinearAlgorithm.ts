@@ -23,6 +23,7 @@ export interface NearlyLinearAlgorithm extends Algorithm {
 
     sets: UnionFind;
     processingStack: Stack<[State, State]>;
+    indexToState: Map<number, State>;
 }
 
 export class NearlyLinearAlgorithmImpl implements NearlyLinearAlgorithm {
@@ -106,7 +107,7 @@ export class NearlyLinearAlgorithmImpl implements NearlyLinearAlgorithm {
         }
 
         this.sets = new UnionFind(allStates.length);
-        this.log?.log(`Initialized ${allStates.length} sets, one for each state in the inputs`);
+        this.log?.log(`Initialized ${allStates.length} sets, one for each state in the input DFAs`);
         this.state = NearlyLinearAlgorithmState.SETS_INITIALIZED;
     }
 
@@ -115,6 +116,7 @@ export class NearlyLinearAlgorithmImpl implements NearlyLinearAlgorithm {
         const q0 = this.input2.startingState;
         this.sets.union(this.stateToIndex.get(p0)!, this.stateToIndex.get(q0)!);
         this.processingStack.push([p0, q0]);
+        this.log?.log(`Combined starting states ${p0.name} and ${q0.name} into a single set`);
         this.log?.log(
             `Initialized processing stack with the pair of starting states: [(${p0.name},${q0.name})]`
         );

@@ -8,26 +8,26 @@ it("visualizes inverse transition function, partitions, states with predecessors
     const wrapper = mount(<HopcroftAlgorithmVisualization algorithm={algorithm} />);
     algorithm.step();
     wrapper.setProps({});
-    const inverseTransitionTable = wrapper.find(".hopcroft-table").at(0);
+    const inverseTransitionTable = wrapper.find(".visualization-table").at(0);
     let firstRow = inverseTransitionTable.find(".table-row").at(1);
     expect(inverseTransitionTable.find(".table-row").length).toBe(
         algorithm.inverseTransitionFunction.count() + 1
     );
-    expect(firstRow.find(".hopcroft-header").at(0).text()).toBe("q1");
-    expect(firstRow.find(".hopcroft-header").at(1).text()).toBe("0");
-    expect(firstRow.find(".hopcroft-cell").at(0).text()).toBe("{q0}");
+    expect(firstRow.find(".visualization-header").at(0).text()).toBe("q1");
+    expect(firstRow.find(".visualization-header").at(1).text()).toBe("0");
+    expect(firstRow.find(".visualization-cell").at(0).text()).toBe("{q0}");
 
     algorithm.step();
     wrapper.setProps({});
-    const initialPartitions = wrapper.find(".hopcroft-table");
+    const initialPartitions = wrapper.find(".visualization-table");
     firstRow = initialPartitions.find(".table-row").at(1);
     expect(initialPartitions.find(".table-row").length).toBe(algorithm.blocks.size + 1);
-    expect(firstRow.find(".hopcroft-header").at(0).text()).toBe("1");
-    expect(firstRow.find(".hopcroft-cell").at(0).text()).toBe("{q2, q6}");
+    expect(firstRow.find(".visualization-header").at(0).text()).toBe("1");
+    expect(firstRow.find(".visualization-cell").at(0).text()).toBe("{q2, q6}");
 
     algorithm.step();
     wrapper.setProps({});
-    const statesWithPredecessors = wrapper.find(".hopcroft-table").at(1);
+    const statesWithPredecessors = wrapper.find(".visualization-table").at(1);
     firstRow = statesWithPredecessors.find(".table-row").at(1);
     const nonEmptyStatesWithPredecessorsCount = Array.from(
         algorithm.statesWithPredecessors.values()
@@ -35,25 +35,25 @@ it("visualizes inverse transition function, partitions, states with predecessors
     expect(statesWithPredecessors.find(".table-row").length).toBe(
         nonEmptyStatesWithPredecessorsCount + 1
     );
-    expect(firstRow.find(".hopcroft-header").at(0).text()).toBe("2");
-    expect(firstRow.find(".hopcroft-header").at(1).text()).toBe("0");
-    expect(firstRow.find(".hopcroft-cell").at(0).text()).toBe("{q1, q3, q5, q7}");
+    expect(firstRow.find(".visualization-header").at(0).text()).toBe("2");
+    expect(firstRow.find(".visualization-header").at(1).text()).toBe("0");
+    expect(firstRow.find(".visualization-cell").at(0).text()).toBe("{q1, q3, q5, q7}");
 
     algorithm.step();
     wrapper.setProps({});
-    const toDoLists = wrapper.find(".hopcroft-table").at(2);
+    const toDoLists = wrapper.find(".visualization-table").at(2);
     firstRow = toDoLists.find(".table-row").at(1);
     expect(toDoLists.find(".table-row").length).toBe(algorithm.toDoLists.size + 1);
-    expect(firstRow.find(".hopcroft-header").at(0).text()).toBe("0");
-    expect(firstRow.find(".hopcroft-cell").at(0).text()).toBe("{1}");
+    expect(firstRow.find(".visualization-header").at(0).text()).toBe("0");
+    expect(firstRow.find(".visualization-cell").at(0).text()).toBe("{1}");
 
     algorithm.run();
     wrapper.setProps({});
-    const partitions = wrapper.find(".hopcroft-table");
+    const partitions = wrapper.find(".visualization-table");
     firstRow = partitions.find(".table-row").at(1);
     expect(partitions.find(".table-row").length).toBe(algorithm.blocks.size + 1);
-    expect(firstRow.find(".hopcroft-header").at(0).text()).toBe("1");
-    expect(firstRow.find(".hopcroft-cell").at(0).text()).toBe("{q2}");
+    expect(firstRow.find(".visualization-header").at(0).text()).toBe("1");
+    expect(firstRow.find(".visualization-cell").at(0).text()).toBe("{q2}");
 });
 
 it("renders witness table correctly", function () {
@@ -64,7 +64,7 @@ it("renders witness table correctly", function () {
     }
     wrapper.setProps({});
 
-    const witnessTable = wrapper.find(".hopcroft-table");
+    const witnessTable = wrapper.find(".visualization-table");
     const firstRow = witnessTable.find(".table-row").at(1);
     expect(witnessTable.find(".table-row").length).toBe(algorithm.input2.states.length + 1);
     expect(firstRow.find(".table-cell").length).toBe(algorithm.input1.states.length + 1);

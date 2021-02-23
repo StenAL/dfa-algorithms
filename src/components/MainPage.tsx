@@ -24,6 +24,11 @@ export default function MainPage() {
                         <p>
                             <Link to={"/algorithm/hopcroft/input"}>n-lg-n Hopcroft Algorithm</Link>
                         </p>
+                        <p>
+                            <Link to={"/algorithm/nearly-linear/input"}>
+                                (Nearly) Linear Algorithm
+                            </Link>
+                        </p>
                         <h3>Compare algorithm runtimes</h3>
                         <p>
                             <Link to={"/headless/input"}>Run headless mode</Link>
