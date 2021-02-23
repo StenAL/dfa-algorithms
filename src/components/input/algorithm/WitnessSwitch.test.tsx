@@ -1,9 +1,9 @@
-import { render, fireEvent, getByRole } from "@testing-library/react";
+import { mount } from "enzyme";
 import WitnessSwitch from "./WitnessSwitch";
 
 it("calls callback with correct value", () => {
     let produceWitness = false;
-    let modeSwitch = render(
+    let modeSwitch = mount(
         <WitnessSwitch
             produceWitness={produceWitness}
             callback={(p) => {
@@ -11,6 +11,7 @@ it("calls callback with correct value", () => {
             }}
         />
     );
-    fireEvent.click(getByRole(modeSwitch.container, "switch"));
+    const switchInput = modeSwitch.find('input[role="switch"]');
+    switchInput.simulate("change");
     expect(produceWitness).toBe(true);
 });
