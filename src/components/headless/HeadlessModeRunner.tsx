@@ -35,6 +35,7 @@ export default function HeadlessModeRunner({ algorithms }: HeadlessModeRunProps)
 
     const runAlgorithms = () => {
         for (let algorithm of algorithms) {
+            algorithm.reset();
             const start = Date.now();
             algorithm.run();
             const end = Date.now();

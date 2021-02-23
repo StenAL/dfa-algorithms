@@ -21,7 +21,7 @@ it("checkboxes rendered correctly and work for selecting algorithms", function (
     let checkBoxes = wrapper.find("input");
     expect(checkBoxes.length).toBe(6);
     expect(checkBoxes.every((c) => c.props().checked)).toBe(false);
-    expect(checkBoxes.map((c) => c.props().disabled).filter((c) => !c).length).toBe(5);
+    expect(checkBoxes.map((c) => c.props().disabled).filter((c) => !c).length).toBe(6);
     algorithmsSelected.tableFilling = true;
     algorithmsSelected.hopcroft = true;
     wrapper.setProps({ algorithmsSelected });
@@ -36,13 +36,15 @@ it("checkboxes rendered correctly and work for selecting algorithms", function (
     checkBoxes.at(3).simulate("change"); // hopcroft witness -> true
     wrapper.setProps({ algorithmsSelected });
     checkBoxes.at(4).simulate("change"); // nearly linear -> true
+    wrapper.setProps({ algorithmsSelected });
+    checkBoxes.at(5).simulate("change"); // nearly linear witness -> true
     expect(algorithmsSelected).toEqual({
         tableFilling: false,
         tableFillingWitness: true,
         hopcroft: false,
         hopcroftWitness: true,
         nearlyLinear: true,
-        nearlyLinearWitness: false,
+        nearlyLinearWitness: true,
     });
 });
 
@@ -67,6 +69,6 @@ it("disables algorithms not available in STATE_MINIMIZATION mode", function () {
     expect(checkBoxes.find('input[name="tableFillingWitness"]').props().disabled).toBe(true);
     expect(checkBoxes.find('input[name="hopcroft"]').props().disabled).toBe(false);
     expect(checkBoxes.find('input[name="hopcroftWitness"]').props().disabled).toBe(true);
-    expect(checkBoxes.find('input[name="nearlyLinear"]').props().disabled).toBe(false);
+    expect(checkBoxes.find('input[name="nearlyLinear"]').props().disabled).toBe(true);
     expect(checkBoxes.find('input[name="nearlyLinearWitness"]').props().disabled).toBe(true);
 });

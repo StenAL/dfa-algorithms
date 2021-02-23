@@ -9,16 +9,15 @@ import {
 import { DFA } from "../../types/DFA";
 import HeadlessModeRunner from "./HeadlessModeRunner";
 
-it("runs all algorithms passed as parameters", function () {
+it("resets and runs all algorithms passed as parameters", function () {
+    const resetMock = jest.fn();
     const runMock = jest.fn();
     const algorithm: Algorithm = {
         input1: {} as DFA,
         mode: AlgorithmMode.EQUIVALENCE_TESTING,
         result: EquivalenceTestingResult.NOT_AVAILABLE,
         state: CommonAlgorithmState.INITIAL,
-        reset: function () {
-            this.state = CommonAlgorithmState.INITIAL;
-        },
+        reset: resetMock,
         type: "tableFilling",
         step: function () {
             if (this.state === CommonAlgorithmState.INITIAL) {
@@ -34,6 +33,7 @@ it("runs all algorithms passed as parameters", function () {
     const wrapper = shallow(<HeadlessModeRunner algorithms={[algorithm, algorithm]} />);
     const runButton = wrapper.find("button");
     runButton.simulate("click");
+    expect(resetMock).toHaveBeenCalledTimes(2);
     expect(runMock).toHaveBeenCalledTimes(2);
 });
 

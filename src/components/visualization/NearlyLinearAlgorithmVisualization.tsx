@@ -11,7 +11,9 @@ interface NearlyLinearAlgorithmVisualizationProps {
 export default function NearlyLinearAlgorithmVisualization({
     algorithm,
 }: NearlyLinearAlgorithmVisualizationProps) {
-    const renderSets = algorithm.state !== CommonAlgorithmState.INITIAL;
+    const renderSets =
+        algorithm.state !== CommonAlgorithmState.INITIAL &&
+        algorithm.state !== NearlyLinearAlgorithmState.CONSTRUCTING_WITNESS;
     const sets = renderSets ? (
         <div className={"visualization-table nearly-linear-sets"}>
             <div className={"table-row"} key={`sets-header`}>
@@ -40,13 +42,54 @@ export default function NearlyLinearAlgorithmVisualization({
     );
 
     const renderProcessingStack =
-        algorithm.state === NearlyLinearAlgorithmState.COMBINING_SETS ||
-        algorithm.state === NearlyLinearAlgorithmState.ALL_SETS_COMBINED;
+        !algorithm.produceWitness &&
+        (algorithm.state === NearlyLinearAlgorithmState.COMBINING_SETS ||
+            algorithm.state === NearlyLinearAlgorithmState.ALL_SETS_COMBINED);
     const processingStack = renderProcessingStack ? (
         <div className={"nearly-linear-stack"}>
             {Array.from(algorithm.processingStack).map(([p, q]) => (
                 <div key={`stack-${p.name}-${q.name}`}>
                     ({p.name},{q.name})
+                </div>
+            ))}
+        </div>
+    ) : (
+        ""
+    );
+
+    const renderProcessingQueue =
+        algorithm.produceWitness && algorithm.state === NearlyLinearAlgorithmState.COMBINING_SETS;
+    const processingQueue = renderProcessingQueue ? (
+        <div className={"nearly-linear-queue"}>
+            {Array.from(algorithm.processingQueue).map(([p, q]) => (
+                <div key={`queue-${p.name}-${q.name}`}>
+                    ({p.name},{q.name})
+                </div>
+            ))}
+        </div>
+    ) : (
+        ""
+    );
+
+    const renderWitnessMap =
+        algorithm.produceWitness &&
+        (algorithm.state === NearlyLinearAlgorithmState.CONSTRUCTING_WITNESS ||
+            algorithm.state === CommonAlgorithmState.FINAL);
+    const witnessMap = renderWitnessMap ? (
+        <div className={"visualization-table"}>
+            <div className={"table-row"} key={`witness-map-header-row`}>
+                <div className={"visualization-header"}>Key</div>
+                <div className={"visualization-cell"}>Value</div>
+            </div>
+            {Array.from(algorithm.witnessMap.entries()).map(([[p, q], [q1, q2, symbol]]) => (
+                <div
+                    className={"table-row"}
+                    key={`witness-map-${p.name}-${q.name}-${q1.name}-${q2.name}`}
+                >
+                    <div className={"visualization-header"}>{`(${p.name},${q.name})`}</div>
+                    <div className={"visualization-cell"}>
+                        {`(${q1.name},${q2.name},${symbol})`}
+                    </div>
                 </div>
             ))}
         </div>
@@ -68,7 +111,9 @@ export default function NearlyLinearAlgorithmVisualization({
         case NearlyLinearAlgorithmState.ALL_SETS_COMBINED:
             stateDescription = "All eligible sets combined";
             break;
-
+        case NearlyLinearAlgorithmState.CONSTRUCTING_WITNESS:
+            stateDescription = "Constructing witness";
+            break;
         case CommonAlgorithmState.FINAL:
             stateDescription = "Final state";
             let resultString =
@@ -103,6 +148,22 @@ export default function NearlyLinearAlgorithmVisualization({
                 <>
                     <h3>Processing Stack</h3>
                     {processingStack}
+                </>
+            ) : (
+                ""
+            )}
+            {renderProcessingQueue ? (
+                <>
+                    <h3>Processing Queue</h3>
+                    {processingQueue}
+                </>
+            ) : (
+                ""
+            )}
+            {renderWitnessMap ? (
+                <>
+                    <h3>Witness Map</h3>
+                    {witnessMap}
                 </>
             ) : (
                 ""
