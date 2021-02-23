@@ -22,10 +22,7 @@ export default function AlgorithmPicker({
         let disabledInput =
             !getAlgorithmModes(algorithmType).includes(AlgorithmMode.STATE_MINIMIZATION) &&
             mode === AlgorithmMode.STATE_MINIMIZATION;
-        disabledInput =
-            disabledInput ||
-            algorithmType === "nearlyLinear" ||
-            algorithmType === "nearlyLinearWitness";
+        disabledInput = disabledInput || algorithmType === "nearlyLinearWitness";
         return (
             <label key={algorithmType} className={disabledInput ? "disabled-algorithm" : ""}>
                 {getAlgorithmName(algorithmType).replace(" Algorithm", "")}

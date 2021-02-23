@@ -17,11 +17,11 @@ export default function HopcroftAlgorithmVisualization({
     const renderInverseTransitionFunction =
         algorithm.state === HopcroftAlgorithmState.INVERSE_TRANSITION_FUNCTION_CREATED;
     const inverseTransitionFunction = renderInverseTransitionFunction ? (
-        <div className={"hopcroft-table"}>
+        <div className={"visualization-table"}>
             <div className={"table-row"} key={`inverse-transition-header`}>
-                <div className={"hopcroft-header"}>State</div>
-                <div className={"hopcroft-header"}>Symbol</div>
-                <div className={"hopcroft-cell"}>Predecessors</div>
+                <div className={"visualization-header"}>State</div>
+                <div className={"visualization-header"}>Symbol</div>
+                <div className={"visualization-cell"}>Predecessors</div>
             </div>
             {Array.from(algorithm.inverseTransitionFunction.entries())
                 .sort(([[state1]], [[state2]]) => state1.name.localeCompare(state2.name))
@@ -31,9 +31,9 @@ export default function HopcroftAlgorithmVisualization({
                             className={"table-row"}
                             key={`inverse-transition-${state.name}-${symbol}`}
                         >
-                            <div className={"hopcroft-header"}>{state.name}</div>
-                            <div className={"hopcroft-header"}>{symbol}</div>
-                            <div className={"hopcroft-cell"}>
+                            <div className={"visualization-header"}>{state.name}</div>
+                            <div className={"visualization-header"}>{symbol}</div>
+                            <div className={"visualization-cell"}>
                                 {`{${Array.from(states)
                                     .map((s) => s.name)
                                     .join(", ")}}`}
@@ -51,16 +51,16 @@ export default function HopcroftAlgorithmVisualization({
         HopcroftAlgorithmState.CONSTRUCTING_WITNESS === algorithm.state
     );
     const partitions = renderPartitions ? (
-        <div className={"hopcroft-table"}>
+        <div className={"visualization-table"}>
             <div className={"table-row"} key={`partitions-header`}>
-                <div className={"hopcroft-header"}>Block</div>
-                <div className={"hopcroft-cell"}>States</div>
+                <div className={"visualization-header"}>Block</div>
+                <div className={"visualization-cell"}>States</div>
             </div>
             {Array.from(algorithm.blocks.entries()).map(([number, states]) => {
                 return (
                     <div className={"table-row"} key={`partition-${number}`}>
-                        <div className={"hopcroft-header"}>{number}</div>
-                        <div className={"hopcroft-cell"}>
+                        <div className={"visualization-header"}>{number}</div>
+                        <div className={"visualization-cell"}>
                             {`{${Array.from(states)
                                 .map((s) => s.name)
                                 .join(", ")}}`}
@@ -77,11 +77,11 @@ export default function HopcroftAlgorithmVisualization({
         HopcroftAlgorithmState.SETS_OF_STATES_WITH_PREDECESSORS_CREATED === algorithm.state ||
         HopcroftAlgorithmState.PARTITIONING_BLOCKS === algorithm.state;
     const statesWithPredecessors = renderStatesWithPredecessors ? (
-        <div className={"hopcroft-table"}>
+        <div className={"visualization-table"}>
             <div className={"table-row"} key={`predecessor-set-header`}>
-                <div className={"hopcroft-header"}>Block</div>
-                <div className={"hopcroft-header"}>Symbol</div>
-                <div className={"hopcroft-cell"}>States</div>
+                <div className={"visualization-header"}>Block</div>
+                <div className={"visualization-header"}>Symbol</div>
+                <div className={"visualization-cell"}>States</div>
             </div>
             {Array.from(algorithm.statesWithPredecessors.entries())
                 .filter(([_, states]) => states.size > 0)
@@ -91,9 +91,9 @@ export default function HopcroftAlgorithmVisualization({
                             className={"table-row"}
                             key={`predecessor-set-${symbol}-${blockNumber}`}
                         >
-                            <div className={"hopcroft-header"}>{blockNumber}</div>
-                            <div className={"hopcroft-header"}>{symbol}</div>
-                            <div className={"hopcroft-cell"}>
+                            <div className={"visualization-header"}>{blockNumber}</div>
+                            <div className={"visualization-header"}>{symbol}</div>
+                            <div className={"visualization-cell"}>
                                 {`{${Array.from(states)
                                     .map((s) => s.name)
                                     .join(", ")}}`}
@@ -110,16 +110,16 @@ export default function HopcroftAlgorithmVisualization({
         HopcroftAlgorithmState.SETS_OF_STATES_WITH_PREDECESSORS_CREATED === algorithm.state ||
         HopcroftAlgorithmState.PARTITIONING_BLOCKS === algorithm.state;
     const toDoLists = renderToDoLists ? (
-        <div className={"hopcroft-table"}>
+        <div className={"visualization-table"}>
             <div className={"table-row"} key={`to-do-list-header`}>
-                <div className={"hopcroft-header"}>Symbol</div>
-                <div className={"hopcroft-cell"}>Blocks</div>
+                <div className={"visualization-header"}>Symbol</div>
+                <div className={"visualization-cell"}>Blocks</div>
             </div>
             {Array.from(algorithm.toDoLists.entries()).map(([symbol, blockNumbers]) => {
                 return (
                     <div className={"table-row"} key={`to-do-list-${symbol}`}>
-                        <div className={"hopcroft-header"}>{symbol}</div>
-                        <div className={"hopcroft-cell"}>
+                        <div className={"visualization-header"}>{symbol}</div>
+                        <div className={"visualization-cell"}>
                             {`{${Array.from(blockNumbers).join(", ")}}`}
                         </div>
                     </div>
@@ -136,7 +136,7 @@ export default function HopcroftAlgorithmVisualization({
             algorithm.state === CommonAlgorithmState.FINAL &&
             algorithm.mode === AlgorithmMode.EQUIVALENCE_TESTING);
     const witnessTable = renderWitnessTable ? (
-        <div className={"hopcroft-table"}>
+        <div className={"visualization-table"}>
             <div className={"table-row"} key={`witness-table-header-row`}>
                 <div className={"table-header table-cell"} />
                 {algorithm.input1.states.map((s) => (

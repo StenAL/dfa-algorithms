@@ -2,6 +2,10 @@ import { useState } from "react";
 import { Route, useParams } from "react-router-dom";
 import { HopcroftAlgorithm, HopcroftAlgorithmImpl } from "../../algorithm/HopcroftAlgorithm";
 import {
+    NearlyLinearAlgorithm,
+    NearlyLinearAlgorithmImpl,
+} from "../../algorithm/NearlyLinearAlgorithm";
+import {
     TableFillingAlgorithm,
     TableFillingAlgorithmImpl,
 } from "../../algorithm/TableFillingAlgorithm";
@@ -12,6 +16,7 @@ import HopcroftAlgorithmVisualization from "./HopcroftAlgorithmVisualization";
 import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
 import WitnessSwitch from "../input/algorithm/WitnessSwitch";
+import NearlyLinearAlgorithmVisualization from "./NearlyLinearAlgorithmVisualization";
 import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualization";
 import AlgorithmLog from "./AlgorithmLog";
 import AlgorithmStepControls from "./AlgorithmStepControls";
@@ -46,6 +51,11 @@ export default function AlgorithmVisualization() {
             );
             break;
         case "nearly-linear":
+            visualization = (
+                <NearlyLinearAlgorithmVisualization
+                    algorithm={algorithm as NearlyLinearAlgorithm}
+                />
+            );
             break;
     }
     return (
@@ -83,6 +93,9 @@ export default function AlgorithmVisualization() {
                                 );
                                 break;
                             case "nearly-linear":
+                                setAlgorithm(
+                                    new NearlyLinearAlgorithmImpl(input1, input2!, produceWitness)
+                                );
                                 break;
                         }
                     }}

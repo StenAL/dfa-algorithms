@@ -3,6 +3,7 @@ import React from "react";
 import { act } from "react-dom/test-utils";
 import { Link, MemoryRouter } from "react-router-dom";
 import { HopcroftAlgorithmImpl } from "../../algorithm/HopcroftAlgorithm";
+import { NearlyLinearAlgorithmImpl } from "../../algorithm/NearlyLinearAlgorithm";
 import { TableFillingAlgorithmImpl } from "../../algorithm/TableFillingAlgorithm";
 import { DFA, State } from "../../types/DFA";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
@@ -61,6 +62,8 @@ it("initializes correct algorithms from selections", function () {
         new TableFillingAlgorithmImpl(dfa, dfa, true),
         new HopcroftAlgorithmImpl(dfa, dfa),
         new HopcroftAlgorithmImpl(dfa, dfa, true),
+        new NearlyLinearAlgorithmImpl(dfa, dfa!),
+        new NearlyLinearAlgorithmImpl(dfa, dfa!, true),
     ]);
 });
 

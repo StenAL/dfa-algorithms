@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Route } from "react-router-dom";
 import { HopcroftAlgorithmImpl } from "../../algorithm/HopcroftAlgorithm";
+import { NearlyLinearAlgorithmImpl } from "../../algorithm/NearlyLinearAlgorithm";
 import { TableFillingAlgorithmImpl } from "../../algorithm/TableFillingAlgorithm";
 import { Algorithm, AlgorithmMode, AlgorithmsSelected } from "../../types/Algorithm";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
@@ -67,7 +68,14 @@ export default function HeadlessMode() {
                             if (algorithmsSelected.hopcroftWitness) {
                                 algorithms.push(new HopcroftAlgorithmImpl(input1, input2, true));
                             }
-                            // todo: nearly linear algorithm
+                            if (algorithmsSelected.nearlyLinear) {
+                                algorithms.push(new NearlyLinearAlgorithmImpl(input1, input2!));
+                            }
+                            if (algorithmsSelected.nearlyLinearWitness) {
+                                algorithms.push(
+                                    new NearlyLinearAlgorithmImpl(input1, input2!, true)
+                                );
+                            }
                             setAlgorithms(algorithms);
                         }}
                     />
