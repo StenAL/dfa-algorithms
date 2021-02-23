@@ -1,10 +1,10 @@
-import { render, fireEvent, getByRole } from "@testing-library/react";
+import { mount } from "enzyme";
 import { AlgorithmMode } from "../../../types/Algorithm";
 import AlgorithmModeSwitch from "./AlgorithmModeSwitch";
 
 it("switches mode on click", () => {
     let mode = AlgorithmMode.EQUIVALENCE_TESTING;
-    let modeSwitch = render(
+    let modeSwitch = mount(
         <AlgorithmModeSwitch
             mode={AlgorithmMode.EQUIVALENCE_TESTING}
             callback={(m) => {
@@ -12,17 +12,11 @@ it("switches mode on click", () => {
             }}
         />
     );
-    fireEvent.click(getByRole(modeSwitch.container, "switch"));
+    let switchInput = modeSwitch.find('input[role="switch"]');
+    switchInput.simulate("change");
     expect(mode).toBe(AlgorithmMode.STATE_MINIMIZATION);
-
-    modeSwitch = render(
-        <AlgorithmModeSwitch
-            mode={AlgorithmMode.STATE_MINIMIZATION}
-            callback={(m) => {
-                mode = m;
-            }}
-        />
-    );
-    fireEvent.click(getByRole(modeSwitch.container, "switch"));
+    modeSwitch.setProps({ mode: AlgorithmMode.STATE_MINIMIZATION });
+    switchInput = modeSwitch.find('input[role="switch"]');
+    switchInput.simulate("change");
     expect(mode).toBe(AlgorithmMode.EQUIVALENCE_TESTING);
 });
