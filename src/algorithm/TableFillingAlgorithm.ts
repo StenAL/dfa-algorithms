@@ -19,8 +19,8 @@ export enum TableFillingAlgorithmState {
 }
 
 export interface TableFillingAlgorithm extends Algorithm {
+    type: "tableFilling" | "tableFillingWitness";
     state: TableFillingAlgorithmState | CommonAlgorithmState;
-    mode: AlgorithmMode;
     input2: DFA;
 
     pairs: HashMap<[State, State], string>;
@@ -41,35 +41,38 @@ export class TableFillingAlgorithmImpl implements TableFillingAlgorithm {
     input2: DFA;
     log?: Log;
 
-    pairs: HashMap<[State, State], string>;
     unmarkedPairs: HashMap<[State, State], undefined>;
+    pairs: HashMap<[State, State], string>;
     iteration: number;
     indistinguishableStateGroups: State[][];
 
     constructor(input1: DFA, input2?: DFA, produceWitness?: boolean) {
         this.type = produceWitness ? "tableFillingWitness" : "tableFilling";
+        this.state = CommonAlgorithmState.INITIAL;
+        this.mode = input2 ? AlgorithmMode.EQUIVALENCE_TESTING : AlgorithmMode.STATE_MINIMIZATION;
+
         this.input1 = input1;
         this.input2 = input2 ?? input1;
         this.log = undefined;
-        this.state = CommonAlgorithmState.INITIAL;
-        this.pairs = new HashMap();
-        this.unmarkedPairs = new HashMap<[State, State], undefined>();
         this.result = EquivalenceTestingResult.NOT_AVAILABLE;
-        this.iteration = 1;
-        this.mode = input2 ? AlgorithmMode.EQUIVALENCE_TESTING : AlgorithmMode.STATE_MINIMIZATION;
         this.produceWitness = produceWitness ?? false;
         this.witness = "";
+
+        this.unmarkedPairs = new HashMap<[State, State], undefined>();
+        this.pairs = new HashMap();
+        this.iteration = 1;
         this.indistinguishableStateGroups = [];
     }
 
     reset(): void {
         this.state = CommonAlgorithmState.INITIAL;
-        this.pairs = new HashMap();
-        this.unmarkedPairs = new HashMap<[State, State], never>();
         this.result = EquivalenceTestingResult.NOT_AVAILABLE;
-        this.iteration = 1;
-        this.log?.clear();
         this.witness = "";
+        this.log?.clear();
+
+        this.unmarkedPairs = new HashMap<[State, State], never>();
+        this.pairs = new HashMap();
+        this.iteration = 1;
         this.indistinguishableStateGroups = [];
     }
 
