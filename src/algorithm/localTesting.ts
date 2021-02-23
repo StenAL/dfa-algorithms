@@ -3,7 +3,7 @@
 import { dfaA, dfaB } from "./data/exampleData";
 import { NearlyLinearAlgorithmImpl } from "./NearlyLinearAlgorithm";
 
-const algo = new NearlyLinearAlgorithmImpl(dfaA, dfaB);
+const algo = new NearlyLinearAlgorithmImpl(dfaA, dfaB, true);
 algo.log = { log: console.log, clear: () => {} };
 
 algo.step();

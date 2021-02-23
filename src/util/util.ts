@@ -38,7 +38,6 @@ export function getAlgorithmModes(type: AlgorithmType | AlgorithmUrlString) {
             return [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.STATE_MINIMIZATION];
         case "tableFillingWitness":
             return [AlgorithmMode.EQUIVALENCE_TESTING];
-
         case "hopcroft":
             return [AlgorithmMode.EQUIVALENCE_TESTING, AlgorithmMode.STATE_MINIMIZATION];
         case "hopcroftWitness":
@@ -46,7 +45,7 @@ export function getAlgorithmModes(type: AlgorithmType | AlgorithmUrlString) {
         case "nearly-linear":
         case "nearlyLinear":
         case "nearlyLinearWitness":
-            return [AlgorithmMode.STATE_MINIMIZATION];
+            return [AlgorithmMode.EQUIVALENCE_TESTING];
     }
 }
 
