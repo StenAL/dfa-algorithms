@@ -281,12 +281,16 @@ a:visited {
     display: none;
 }
 
+.file-input-button {
+    padding: 0;
+}
+
 .file-input-label {
-    button {
-        pointer-events: none;
-        width: 100%;
-        height: 100%;
-    }
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: -3px;
+    padding: 3px;
 }
 
 .dataset-generators-container {
