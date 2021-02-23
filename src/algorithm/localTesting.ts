@@ -1,14 +1,16 @@
 // eslint-disable no-unused-vars
 
-import { DatasetType } from "../types/Dataset";
-import { getPrettyDfaString } from "../util/util";
-import { randomDatasetGenerator } from "./data/datasetGenerator";
+import { dfaA, dfaB } from "./data/exampleData";
+import { NearlyLinearAlgorithmImpl } from "./NearlyLinearAlgorithm";
 
-const dfa = randomDatasetGenerator(5, ["0", "1"], 1);
-getPrettyDfaString(dfa);
+const algo = new NearlyLinearAlgorithmImpl(dfaA, dfaB);
+algo.log = { log: console.log, clear: () => {} };
 
-Object.keys(DatasetType)
-    .filter((k) => !isNaN(parseInt(k)))
-    .map((k) => console.log(k));
-
-console.log(Object.values(DatasetType));
+algo.step();
+algo.step();
+algo.step();
+algo.step();
+algo.step();
+algo.step();
+algo.step();
+algo.step();

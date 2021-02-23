@@ -19,14 +19,16 @@ export enum HopcroftAlgorithmState {
 }
 
 export interface HopcroftAlgorithm extends Algorithm {
-    input2: DFA;
-    inverseTransitionFunction: HashMap<[State, string], Set<State>>;
+    type: "hopcroft" | "hopcroftWitness";
     state: HopcroftAlgorithmState | CommonAlgorithmState;
+    input2: DFA;
+
+    witnessTable: HashMap<[State, State], string>;
+    inverseTransitionFunction: HashMap<[State, string], Set<State>>;
     blocks: Map<number, Set<State>>;
     statesWithPredecessors: HashMap<[string, number], Set<State>>; // (block number i, alphabet symbol a) -> set of states in block i that have predecessors on input a
     toDoLists: Map<string, Set<number>>;
     stateToBlockNumber: Map<State, number>;
-    witnessTable: HashMap<[State, State], string>;
 }
 
 export class HopcroftAlgorithmImpl implements HopcroftAlgorithm {
@@ -51,35 +53,38 @@ export class HopcroftAlgorithmImpl implements HopcroftAlgorithm {
 
     constructor(input1: DFA, input2?: DFA, produceWitness?: boolean) {
         this.type = produceWitness ? "hopcroftWitness" : "hopcroft";
+        this.state = CommonAlgorithmState.INITIAL;
+        this.mode = input2 ? AlgorithmMode.EQUIVALENCE_TESTING : AlgorithmMode.STATE_MINIMIZATION;
+
         this.input1 = input1;
         this.input2 = input2 ?? input1;
         this.log = undefined;
-        this.state = CommonAlgorithmState.INITIAL;
         this.result = EquivalenceTestingResult.NOT_AVAILABLE;
-        this.mode = input2 ? AlgorithmMode.EQUIVALENCE_TESTING : AlgorithmMode.STATE_MINIMIZATION;
         this.produceWitness = produceWitness ?? false;
+        this.witness = "";
+
+        this.witnessTable = new HashMap<[State, State], string>();
         this.inverseTransitionFunction = new HashMap<[State, string], Set<State>>();
         this.blocks = new Map<number, Set<State>>();
         this.statesWithPredecessors = new HashMap<[string, number], Set<State>>();
         this.toDoLists = new Map<string, Set<number>>();
         this.stateToBlockNumber = new Map<State, number>();
         this.k = 3;
-        this.witnessTable = new HashMap<[State, State], string>();
-        this.witness = "";
     }
 
     reset(): void {
         this.state = CommonAlgorithmState.INITIAL;
         this.result = EquivalenceTestingResult.NOT_AVAILABLE;
+        this.witness = "";
+        this.log?.clear();
+
+        this.witnessTable = new HashMap<[State, State], string>();
         this.inverseTransitionFunction = new HashMap<[State, string], Set<State>>();
         this.blocks = new Map<number, Set<State>>();
         this.statesWithPredecessors = new HashMap<[string, number], Set<State>>();
         this.toDoLists = new Map<string, Set<number>>();
         this.stateToBlockNumber = new Map<State, number>();
         this.k = 3;
-        this.log?.clear();
-        this.witnessTable = new HashMap<[State, State], string>();
-        this.witness = "";
     }
 
     run() {

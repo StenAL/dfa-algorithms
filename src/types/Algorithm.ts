@@ -1,4 +1,5 @@
 import { HopcroftAlgorithmState } from "../algorithm/HopcroftAlgorithm";
+import { NearlyLinearAlgorithmState } from "../algorithm/NearlyLinearAlgorithm";
 import { TableFillingAlgorithmState } from "../algorithm/TableFillingAlgorithm";
 import { DFA } from "./DFA";
 
@@ -50,6 +51,7 @@ export enum CommonAlgorithmState {
 export type AlgorithmState =
     | TableFillingAlgorithmState
     | HopcroftAlgorithmState
+    | NearlyLinearAlgorithmState
     | CommonAlgorithmState;
 
 export enum AlgorithmMode {
