@@ -26,8 +26,8 @@ export function getDatasetTypeName(type: DatasetType) {
     switch (type) {
         case DatasetType.RANDOM:
             return "Random";
-        case DatasetType.PLACEHOLDER:
-            return "Placeholder";
+        case DatasetType.SPRAWLING:
+            return "Sprawling";
     }
 }
 
@@ -84,9 +84,9 @@ export const deserializeDfa = (data: SerializedDfa): DFA => {
 export const getPrettyDfaString = (dfa: DFA): string[] => {
     const messages: string[] = [];
     messages.push(
-        `States: ${dfa.states.length}, final states: ${
-            dfa.finalStates.size
-        }. Alphabet: {${dfa.alphabet.join(", ")}}`
+        `States: ${dfa.states.length}, final states: {${Array.from(dfa.finalStates)
+            .map((s) => s.name)
+            .join(", ")}}. Alphabet: {${dfa.alphabet.join(", ")}}`
     );
     messages.push("Transitions");
     for (let from of dfa.states) {

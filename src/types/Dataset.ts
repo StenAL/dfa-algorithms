@@ -2,7 +2,7 @@ import { DFA } from "./DFA";
 
 export enum DatasetType {
     RANDOM,
-    PLACEHOLDER,
+    SPRAWLING,
 }
 
 export type DatasetGenerator = (
