@@ -1,16 +1,5 @@
-// eslint-disable no-unused-vars
+// eslint-disable
 
-import { dfaA, dfaB } from "./data/exampleData";
-import { NearlyLinearAlgorithmImpl } from "./NearlyLinearAlgorithm";
+import { sprawlingDatasetGenerator } from "./data/datasetGenerator";
 
-const algo = new NearlyLinearAlgorithmImpl(dfaA, dfaB, true);
-algo.log = { log: console.log, clear: () => {} };
-
-algo.step();
-algo.step();
-algo.step();
-algo.step();
-algo.step();
-algo.step();
-algo.step();
-algo.step();
+sprawlingDatasetGenerator(20, ["a", "b", "c"], 5);

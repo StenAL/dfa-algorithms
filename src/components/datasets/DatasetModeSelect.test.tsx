@@ -14,7 +14,9 @@ it("generates option for every possible DatasetType", function () {
     const inputs = wrapper.find("input");
     expect(inputs.length).toBe(Object.keys(DatasetType).length / 2);
     expect(inputs.at(0).props().checked).toBe(true);
+    inputs.at(0).simulate("change");
+    expect(callback).toHaveBeenLastCalledWith(DatasetType.RANDOM);
     inputs.at(1).simulate("change");
-    expect(callback).toHaveBeenCalledTimes(1);
-    expect(callback).toHaveBeenCalledWith(DatasetType.PLACEHOLDER);
+    expect(callback).toHaveBeenCalledTimes(2);
+    expect(callback).toHaveBeenCalledWith(DatasetType.SPRAWLING);
 });

@@ -1,5 +1,8 @@
 import { useState } from "react";
-import { randomDatasetGenerator } from "../../algorithm/data/datasetGenerator";
+import {
+    randomDatasetGenerator,
+    sprawlingDatasetGenerator,
+} from "../../algorithm/data/datasetGenerator";
 import { DatasetType } from "../../types/Dataset";
 import { DFA } from "../../types/DFA";
 import { getPrettyDfaString } from "../../util/util";
@@ -61,8 +64,8 @@ export default function DatasetGenerator({
                         case DatasetType.RANDOM:
                             generator = randomDatasetGenerator;
                             break;
-                        case DatasetType.PLACEHOLDER:
-                            generator = randomDatasetGenerator;
+                        case DatasetType.SPRAWLING:
+                            generator = sprawlingDatasetGenerator;
                             break;
                     }
                     const dfa = generator(statesCount, alphabet, finalStatesCount, statePrefix);
