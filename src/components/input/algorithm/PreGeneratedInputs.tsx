@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { dfaA, dfaB } from "../../../algorithm/data/exampleData";
+import { preGeneratedDatasets } from "../../../algorithm/data/datasets";
 import { AlgorithmMode } from "../../../types/Algorithm";
+import { PreGeneratedDataset, PreGeneratedDatasetName } from "../../../types/Dataset";
 import { DFA } from "../../../types/DFA";
-import { deserializeDfa } from "../../../util/util";
+import { deserializeDfa, getPreGeneratedDatasetPrintName } from "../../../util/util";
 
 interface PreGeneratedInputsProps {
     mode: AlgorithmMode;
@@ -18,23 +19,28 @@ export default function PreGeneratedInputs({
 }: PreGeneratedInputsProps) {
     const history = useHistory();
     const [fileError, setFileError] = useState("");
+
+    const links = (Object.entries(preGeneratedDatasets) as [
+        PreGeneratedDatasetName,
+        PreGeneratedDataset
+    ][]).map(([name, dataset]) => (
+        <Link to={runLink} key={`dataset-${name}`}>
+            <button
+                onClick={() =>
+                    runCallback(
+                        dataset[0],
+                        mode === AlgorithmMode.EQUIVALENCE_TESTING ? dataset[1] : undefined
+                    )
+                }
+            >
+                {getPreGeneratedDatasetPrintName(name)}
+            </button>
+        </Link>
+    ));
+
     return (
         <div className={"pre-generated-inputs"}>
-            <Link to={runLink}>
-                <button
-                    onClick={() =>
-                        runCallback(
-                            dfaA,
-                            mode === AlgorithmMode.EQUIVALENCE_TESTING ? dfaB : undefined
-                        )
-                    }
-                >
-                    Example inputs
-                </button>
-            </Link>
-            <Link to={runLink} className={"disabled-link"}>
-                <button disabled={true}>More to come</button>
-            </Link>
+            {links}
             <input
                 type="file"
                 id={"files"}

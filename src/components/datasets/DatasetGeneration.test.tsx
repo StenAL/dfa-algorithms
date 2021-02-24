@@ -1,6 +1,6 @@
 import { mount } from "enzyme";
 import { act } from "react-dom/test-utils";
-import { dfaA } from "../../algorithm/data/exampleData";
+import { exampleDfa1 } from "../../algorithm/data/exampleData";
 import DatasetGeneration from "./DatasetGeneration";
 import DatasetGenerator from "./DatasetGenerator";
 
@@ -13,11 +13,11 @@ it("validates input", function () {
 
     const dfaGenerator1 = wrapper.find(DatasetGenerator).at(0);
     act(() => {
-        dfaGenerator1.props().callback(dfaA);
+        dfaGenerator1.props().callback(exampleDfa1);
     });
     const dfaGenerator2 = wrapper.find(DatasetGenerator).at(1);
     act(() => {
-        dfaGenerator2.props().callback(dfaA);
+        dfaGenerator2.props().callback(exampleDfa1);
     });
 
     wrapper.setProps({});
@@ -35,7 +35,7 @@ it("renders and validates only 1 dfa in STATE_MINIMIZATION mode", function () {
     expect(wrapper.find(DatasetGenerator).length).toBe(1);
     const dfaGenerator = wrapper.find(DatasetGenerator).at(0);
     act(() => {
-        dfaGenerator.props().callback(dfaA);
+        dfaGenerator.props().callback(exampleDfa1);
     });
 
     wrapper.setProps({});

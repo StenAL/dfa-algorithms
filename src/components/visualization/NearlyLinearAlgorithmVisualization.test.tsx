@@ -1,10 +1,10 @@
 import { shallow } from "enzyme";
-import { dfaA, dfaB } from "../../algorithm/data/exampleData";
+import { exampleDfa1, exampleDfa2 } from "../../algorithm/data/exampleData";
 import { NearlyLinearAlgorithmImpl } from "../../algorithm/NearlyLinearAlgorithm";
 import NearlyLinearAlgorithmVisualization from "./NearlyLinearAlgorithmVisualization";
 
 it("renders sets with representatives and stack", function () {
-    const algorithm = new NearlyLinearAlgorithmImpl(dfaA, dfaB);
+    const algorithm = new NearlyLinearAlgorithmImpl(exampleDfa1, exampleDfa2);
     const wrapper = shallow(<NearlyLinearAlgorithmVisualization algorithm={algorithm} />);
     algorithm.step();
     algorithm.step();
@@ -24,7 +24,7 @@ it("renders sets with representatives and stack", function () {
 });
 
 it("renders queue and witness map in witness mode", function () {
-    const algorithm = new NearlyLinearAlgorithmImpl(dfaA, dfaB, true);
+    const algorithm = new NearlyLinearAlgorithmImpl(exampleDfa1, exampleDfa2, true);
     const wrapper = shallow(<NearlyLinearAlgorithmVisualization algorithm={algorithm} />);
     algorithm.step();
     algorithm.step();

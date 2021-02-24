@@ -1,6 +1,6 @@
 import { AlgorithmUrlString } from "../components/visualization/AlgorithmVisualization";
 import { AlgorithmMode, AlgorithmType } from "../types/Algorithm";
-import { DatasetType } from "../types/Dataset";
+import { DatasetType, PreGeneratedDatasetName } from "../types/Dataset";
 import { DFA, SerializedDfa, State } from "../types/DFA";
 
 export function getAlgorithmName(type: AlgorithmType | AlgorithmUrlString) {
@@ -28,6 +28,17 @@ export function getDatasetTypeName(type: DatasetType) {
             return "Random";
         case DatasetType.SPRAWLING:
             return "Sprawling";
+    }
+}
+
+export function getPreGeneratedDatasetPrintName(type: PreGeneratedDatasetName) {
+    switch (type) {
+        case "example":
+            return "Example inputs";
+        case "random":
+            return "Randomly-connected";
+        case "sprawling":
+            return "Sprawling tree";
     }
 }
 

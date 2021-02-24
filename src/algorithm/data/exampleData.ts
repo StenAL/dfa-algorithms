@@ -31,7 +31,7 @@ q2.transitions.set("1", q2);
 q3.transitions.set("0", q3);
 q3.transitions.set("1", q3);
 
-export const dfaA: DFA = {
+export const exampleDfa1: DFA = {
     alphabet: alphabet,
     finalStates: new Set([q2]),
     startingState: q0,
@@ -67,7 +67,7 @@ q6.transitions.set("1", q7);
 q7.transitions.set("0", q7);
 q7.transitions.set("1", q7);
 
-export const dfaB: DFA = {
+export const exampleDfa2: DFA = {
     alphabet: alphabet,
     finalStates: new Set([q6]),
     startingState: q4,
