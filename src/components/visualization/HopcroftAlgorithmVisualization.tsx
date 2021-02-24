@@ -213,6 +213,7 @@ export default function HopcroftAlgorithmVisualization({
                     resultString = `All states are distinguishable, the DFA is already minimal.`;
                 } else {
                     resultString = `States ${Array.from(algorithm.blocks.values())
+                        .filter((states) => states.size > 1)
                         .filter((states) => states.size > 0)
                         .map((states) => `{${Array.from(states).map((s) => s.name)}}`)
                         .join(", ")} can be combined.`;

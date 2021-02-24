@@ -74,7 +74,8 @@ export default function NearlyLinearAlgorithmVisualization({
     const renderWitnessMap =
         algorithm.produceWitness &&
         (algorithm.state === NearlyLinearAlgorithmState.CONSTRUCTING_WITNESS ||
-            algorithm.state === CommonAlgorithmState.FINAL);
+            (algorithm.result === EquivalenceTestingResult.NON_EQUIVALENT &&
+                algorithm.state === CommonAlgorithmState.FINAL));
     const witnessMap = renderWitnessMap ? (
         <div className={"visualization-table"}>
             <div className={"table-row"} key={`witness-map-header-row`}>

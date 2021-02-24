@@ -8,7 +8,7 @@ import AlgorithmVisualization from "./visualization/AlgorithmVisualization";
 export default function MainPage() {
     return (
         <Router>
-            <div>
+            <div className={"content"}>
                 <Link to={"/"}>
                     <h1>DFA algorithms</h1>
                 </Link>
