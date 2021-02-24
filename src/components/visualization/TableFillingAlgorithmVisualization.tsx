@@ -104,6 +104,7 @@ export default function TableFillingAlgorithmVisualization({
             } else {
                 if (algorithm.indistinguishableStateGroups.length > 0) {
                     resultString = `States ${algorithm.indistinguishableStateGroups
+                        .filter((states) => states.length > 1)
                         .map((states) => `{${states.map((s) => s.name)}}`)
                         .join(", ")} can be combined.`;
                 } else {
