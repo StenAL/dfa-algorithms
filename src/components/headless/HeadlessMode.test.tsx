@@ -52,8 +52,8 @@ it("initializes correct algorithms from selections", function () {
         runInputCallback(dfa, dfa);
     });
 
-    expect(wrapper.find(Link).at(2).text()).toBe("Run");
-    wrapper.find(Link).at(2).simulate("click", { button: 0 });
+    expect(wrapper.find(Link).at(3).text()).toBe("Run");
+    wrapper.find(Link).at(3).simulate("click", { button: 0 });
 
     const headlessModeRun = wrapper.find(HeadlessModeRunner);
     expect(headlessModeRun.exists()).toBe(true);

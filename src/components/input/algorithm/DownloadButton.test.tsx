@@ -1,6 +1,6 @@
 import { shallow } from "enzyme";
 import React from "react";
-import { dfaA } from "../../../algorithm/data/exampleData";
+import { exampleDfa1 } from "../../../algorithm/data/exampleData";
 import { serializeDfa } from "../../../util/util";
 import DownloadButton from "./DownloadButton";
 
@@ -10,7 +10,7 @@ it("saving input to file works", function (done) {
     const createUrlMock = jest.fn((_) => "fake-url");
     global.URL.createObjectURL = createUrlMock;
     const wrapper = shallow(
-        <DownloadButton disabled={false} text={"download"} dfa1={dfaA} dfa2={undefined} />
+        <DownloadButton disabled={false} text={"download"} dfa1={exampleDfa1} dfa2={undefined} />
     );
 
     let button = wrapper.find("button").at(0);
@@ -22,7 +22,7 @@ it("saving input to file works", function (done) {
     const reader = new FileReader();
     reader.addEventListener("loadend", function (_) {
         expect(reader.result).toEqual(
-            JSON.stringify({ input1: JSON.stringify(serializeDfa(dfaA)), input2: "0" })
+            JSON.stringify({ input1: JSON.stringify(serializeDfa(exampleDfa1)), input2: "0" })
         );
         console.error = consoleError;
         done();

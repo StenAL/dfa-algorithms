@@ -1,5 +1,5 @@
 import { shallow } from "enzyme";
-import { dfaA, dfaB } from "../../algorithm/data/exampleData";
+import { exampleDfa1, exampleDfa2 } from "../../algorithm/data/exampleData";
 import {
     TableFillingAlgorithmImpl,
     TableFillingAlgorithmState,
@@ -7,21 +7,23 @@ import {
 import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualization";
 
 it("renders cells for each pair in table", function () {
-    const algorithm = new TableFillingAlgorithmImpl(dfaA, dfaB);
+    const algorithm = new TableFillingAlgorithmImpl(exampleDfa1, exampleDfa2);
     const wrapper = shallow(<TableFillingAlgorithmVisualization algorithm={algorithm} />);
     expect(wrapper.find(".table-cell").exists()).toBe(false); // no pairs yet
     algorithm.step();
     expect(algorithm.state).toBe(TableFillingAlgorithmState.EMPTY_TABLE);
     expect(algorithm.pairs.entries().length).toBe(28);
     wrapper.setProps({});
-    const headerCount = (dfaA.states.length + dfaB.states.length - 1) * 2 + 1;
-    expect(wrapper.find(".table-row").length).toBe(dfaA.states.length + dfaB.states.length - 1 + 1);
+    const headerCount = (exampleDfa1.states.length + exampleDfa2.states.length - 1) * 2 + 1;
+    expect(wrapper.find(".table-row").length).toBe(
+        exampleDfa1.states.length + exampleDfa2.states.length - 1 + 1
+    );
     expect(wrapper.find(".table-header").length).toBe(headerCount);
     expect(wrapper.find(".table-cell").length).toBe(28 + headerCount);
 });
 
 it("marks pairs correctly, displays witness", function () {
-    const algorithm = new TableFillingAlgorithmImpl(dfaA, dfaB, true);
+    const algorithm = new TableFillingAlgorithmImpl(exampleDfa1, exampleDfa2, true);
     const wrapper = shallow(<TableFillingAlgorithmVisualization algorithm={algorithm} />);
     algorithm.run();
     wrapper.setProps({});
@@ -45,14 +47,14 @@ it("marks pairs correctly, displays witness", function () {
 });
 
 it("renders state minimization table correctly", function () {
-    const algorithm = new TableFillingAlgorithmImpl(dfaA);
+    const algorithm = new TableFillingAlgorithmImpl(exampleDfa1);
     const wrapper = shallow(<TableFillingAlgorithmVisualization algorithm={algorithm} />);
     algorithm.step();
     expect(algorithm.state).toBe(TableFillingAlgorithmState.EMPTY_TABLE);
     expect(algorithm.pairs.entries().length).toBe(6);
     wrapper.setProps({});
-    const headerCount = (dfaA.states.length - 1) * 2 + 1;
-    expect(wrapper.find(".table-row").length).toBe(dfaA.states.length - 1 + 1);
+    const headerCount = (exampleDfa1.states.length - 1) * 2 + 1;
+    expect(wrapper.find(".table-row").length).toBe(exampleDfa1.states.length - 1 + 1);
     expect(wrapper.find(".table-header").length).toBe(headerCount);
     expect(wrapper.find(".table-cell").length).toBe(6 + headerCount);
     algorithm.run();
