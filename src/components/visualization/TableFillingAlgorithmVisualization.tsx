@@ -7,6 +7,8 @@ import {
     CommonAlgorithmState,
     EquivalenceTestingResult,
 } from "../../types/Algorithm";
+import { DFA } from "../../types/DFA";
+import DownloadButton from "../input/algorithm/DownloadButton";
 
 interface AlgorithmVisualizationProps {
     algorithm: TableFillingAlgorithm;
@@ -110,8 +112,6 @@ export default function TableFillingAlgorithmVisualization({
                 } else {
                     resultString = `All states are distinguishable, the DFA is already minimal.`;
                 }
-                // todo output link to or JSON of minimized DFA somewhere here
-                // const result: DFA = algorithm.result as DFA;
             }
             stateDescription += ". " + resultString;
             break;
@@ -119,6 +119,17 @@ export default function TableFillingAlgorithmVisualization({
     return (
         <>
             <p>Current state: {stateDescription}</p>
+            {algorithm.mode === AlgorithmMode.STATE_MINIMIZATION &&
+            algorithm.indistinguishableStateGroups.length > 0 ? (
+                <DownloadButton
+                    disabled={false}
+                    text={"Download minimized DFA"}
+                    dfa1={algorithm.result as DFA}
+                    dfa2={undefined}
+                />
+            ) : (
+                ""
+            )}
             {pairs.length > 1 ? <div className={"table-filling-table"}>{pairs}</div> : ""}
         </>
     );

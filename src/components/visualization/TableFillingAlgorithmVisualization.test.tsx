@@ -1,4 +1,5 @@
-import { shallow } from "enzyme";
+import { mount, shallow } from "enzyme";
+import { preGeneratedDatasets } from "../../algorithm/data/datasets";
 import { exampleDfa1, exampleDfa2 } from "../../algorithm/data/exampleData";
 import {
     TableFillingAlgorithmImpl,
@@ -60,4 +61,15 @@ it("renders state minimization table correctly", function () {
     algorithm.run();
     wrapper.setProps({});
     expect(wrapper.text()).toContain("All states are distinguishable");
+});
+
+it("creates download link for minimized DFA", function () {
+    const algorithm = new TableFillingAlgorithmImpl(preGeneratedDatasets.sprawling[0]);
+    algorithm.run();
+    const wrapper = mount(<TableFillingAlgorithmVisualization algorithm={algorithm} />);
+    const downloadButton = wrapper.find("button").at(0);
+    expect(downloadButton.text()).toContain("Download minimized");
+    const resultDescription = wrapper.find("p");
+    expect(resultDescription.text()).toContain("Final state");
+    expect(resultDescription.text()).toContain("can be combined");
 });

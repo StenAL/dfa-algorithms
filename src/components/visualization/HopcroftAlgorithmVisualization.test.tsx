@@ -1,4 +1,5 @@
 import { mount } from "enzyme";
+import { preGeneratedDatasets } from "../../algorithm/data/datasets";
 import { exampleDfa1, exampleDfa2 } from "../../algorithm/data/exampleData";
 import { HopcroftAlgorithmImpl, HopcroftAlgorithmState } from "../../algorithm/HopcroftAlgorithm";
 import HopcroftAlgorithmVisualization from "./HopcroftAlgorithmVisualization";
@@ -73,4 +74,15 @@ it("renders witness table correctly", function () {
     expect(firstRow.find(".table-cell").at(2).text()).toBe("1");
     expect(firstRow.find(".table-cell").at(3).text()).toBe("");
     expect(firstRow.find(".table-cell").at(4).text()).toBe("0");
+});
+
+it("creates download link for minimized DFA", function () {
+    const algorithm = new HopcroftAlgorithmImpl(preGeneratedDatasets.sprawling[0]);
+    algorithm.run();
+    const wrapper = mount(<HopcroftAlgorithmVisualization algorithm={algorithm} />);
+    const downloadButton = wrapper.find("button").at(0);
+    expect(downloadButton.text()).toContain("Download minimized");
+    const resultDescription = wrapper.find("p");
+    expect(resultDescription.text()).toContain("Final state");
+    expect(resultDescription.text()).toContain("can be combined");
 });

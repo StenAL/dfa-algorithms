@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Algorithm, AlgorithmType, EquivalenceTestingResult } from "../../types/Algorithm";
 import { DFA } from "../../types/DFA";
 import { getAlgorithmName } from "../../util/util";
+import DownloadButton from "../input/algorithm/DownloadButton";
 
 interface HeadlessModeRunProps {
     algorithms: Algorithm[];
@@ -80,7 +81,14 @@ export default function HeadlessModeRunner({ algorithms }: HeadlessModeRunProps)
                     ) {
                         result = "Equivalent";
                     } else {
-                        result = "minimized.json";
+                        result = (
+                            <DownloadButton
+                                text={"Download minimized"}
+                                disabled={false}
+                                dfa1={algorithm.result as DFA}
+                                dfa2={undefined}
+                            />
+                        );
                     }
                     return (
                         <div className={"table-row"} key={`headless-${algorithm.type}`}>
