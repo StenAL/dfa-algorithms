@@ -1,4 +1,5 @@
-import { shallow } from "enzyme";
+import { mount, shallow } from "enzyme";
+import { exampleDfa1 } from "../../algorithm/data/exampleData";
 import { TableFillingAlgorithmState } from "../../algorithm/TableFillingAlgorithm";
 import {
     Algorithm,
@@ -37,7 +38,7 @@ it("resets and runs all algorithms passed as parameters", function () {
     expect(runMock).toHaveBeenCalledTimes(2);
 });
 
-it("reports back results", function () {
+it("reports back equivalence testing results", function () {
     const algorithm: Algorithm = {
         input1: {} as DFA,
         mode: AlgorithmMode.EQUIVALENCE_TESTING,
@@ -67,4 +68,34 @@ it("reports back results", function () {
     wrapper.setProps({});
     expect(wrapper.text()).toContain("Not Equivalent");
     expect(wrapper.text()).toContain("1001");
+});
+
+it("reports back state minimization results", function () {
+    const algorithm: Algorithm = {
+        input1: {} as DFA,
+        mode: AlgorithmMode.STATE_MINIMIZATION,
+        result: EquivalenceTestingResult.NOT_AVAILABLE,
+        state: CommonAlgorithmState.INITIAL,
+        reset: function () {
+            this.state = CommonAlgorithmState.INITIAL;
+        },
+        type: "tableFilling",
+        step: function () {
+            if (this.state === CommonAlgorithmState.INITIAL) {
+                this.state = TableFillingAlgorithmState.ALL_PAIRS_MARKED;
+            } else if (this.state === TableFillingAlgorithmState.ALL_PAIRS_MARKED) {
+                this.state = CommonAlgorithmState.FINAL;
+            }
+        },
+        witness: "",
+        produceWitness: true,
+        run: function () {
+            this.result = exampleDfa1;
+        },
+    };
+    const wrapper = mount(<HeadlessModeRunner algorithms={[algorithm]} />);
+    const runButton = wrapper.find("button");
+    runButton.simulate("click");
+    wrapper.setProps({});
+    expect(wrapper.text()).toContain("Download minimized");
 });

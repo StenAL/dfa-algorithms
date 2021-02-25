@@ -6,6 +6,8 @@ import {
     CommonAlgorithmState,
     EquivalenceTestingResult,
 } from "../../types/Algorithm";
+import { DFA } from "../../types/DFA";
+import DownloadButton from "../input/algorithm/DownloadButton";
 
 interface HopcroftAlgorithmVisualizationProps {
     algorithm: HopcroftAlgorithm;
@@ -218,8 +220,6 @@ export default function HopcroftAlgorithmVisualization({
                         .map((states) => `{${Array.from(states).map((s) => s.name)}}`)
                         .join(", ")} can be combined.`;
                 }
-                // todo output link to or JSON of minimized DFA somewhere here
-                // const result: DFA = algorithm.result as DFA;
             }
             stateDescription += ". " + resultString;
             break;
@@ -228,6 +228,18 @@ export default function HopcroftAlgorithmVisualization({
     return (
         <>
             <p>Current state: {stateDescription}</p>
+            {algorithm.mode === AlgorithmMode.STATE_MINIMIZATION &&
+            algorithm.state === CommonAlgorithmState.FINAL &&
+            Array.from(algorithm.blocks.values()).some((states) => states.size > 1) ? (
+                <DownloadButton
+                    disabled={false}
+                    text={"Download minimized DFA"}
+                    dfa1={algorithm.result as DFA}
+                    dfa2={undefined}
+                />
+            ) : (
+                ""
+            )}
             {renderInverseTransitionFunction ? (
                 <>
                     <h3>Inverse transition function</h3>
