@@ -73,11 +73,13 @@ export default function PreGeneratedInputs({
                     }
                 }}
             />
-            <button className={"file-input-button"}>
-                <label htmlFor="files" className={"file-input-label"}>
-                    Select file
-                </label>
-            </button>
+            <div>
+                <button className={"file-input-button"}>
+                    <label htmlFor="files" className={"file-input-label"}>
+                        Select file...
+                    </label>
+                </button>
+            </div>
             {fileError === "" ? (
                 ""
             ) : (

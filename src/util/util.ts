@@ -31,6 +31,15 @@ export function getDatasetTypeName(type: DatasetType) {
     }
 }
 
+export function getDatasetTypeDescription(type: DatasetType) {
+    switch (type) {
+        case DatasetType.RANDOM:
+            return "Random datasets consist of DFAs where transitions and final states are allocated randomly. The DFA might or might not contain cycles, the only thing that is guaranteed is that all states in the DFA are connected.";
+        case DatasetType.SPRAWLING:
+            return "Sprawling datasets create transitions that form a full n-ary tree, where n is the length of the DFA's alphabet. Accepting states are assigned to be at the furthest points from the starting state using BFS. Sprawling datasets induce worst-case performance in The (Nearly) Linear Algorithm.";
+    }
+}
+
 export function getPreGeneratedDatasetPrintName(type: PreGeneratedDatasetName) {
     switch (type) {
         case "example":
