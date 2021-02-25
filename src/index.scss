@@ -51,8 +51,8 @@ a:visited {
     margin: 1px;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    overflow-x: auto;
 }
 
 .transition-header,
@@ -74,14 +74,14 @@ a:visited {
     height: 3rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    overflow-x: auto;
 }
 
 .visualization-header {
     padding: 0 10px;
     border-right: 1px solid black;
-    width: 45px;
+    width: 50px;
 }
 
 .nearly-linear-sets .table-row .visualization-header {
@@ -245,6 +245,17 @@ a:visited {
 .pre-generated-inputs {
     display: flex;
     flex-direction: column;
+    align-items: center;
+
+    a {
+        width: 100%;
+    }
+
+    button {
+        width: 75%;
+        height: 40px;
+        padding: 5px;
+    }
 }
 
 .algorithm-picker {
@@ -311,11 +322,13 @@ a:visited {
 }
 
 .file-input-label {
-    display: block;
     width: 100%;
     height: 100%;
-    margin: -3px;
-    padding: 3px;
+    margin: -1px;
+    padding: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .dataset-generators-container {
@@ -366,4 +379,44 @@ footer {
     font-size: 14px;
     color: #a0a0a0;
     float: bottom;
+}
+
+button {
+    $color: #eee;
+    background-color: $color;
+    background-image: linear-gradient(-45deg, $color, saturate(adjust-hue($color, -15%), 10%));
+    border-top-color: lighten($color, 20%);
+    border-left-color: lighten($color, 6%);
+    border-right-color: lighten($color, 6%);
+    border-bottom-color: darken($color, 20%);
+
+    margin: 6px;
+    padding: 0.6em 1.6em;
+    border-width: 1px;
+    border-radius: 0.25em;
+    cursor: pointer;
+    user-select: none;
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    &:hover {
+        background-image: linear-gradient(
+            -45deg,
+            lighten($color, 2%),
+            lighten(saturate(adjust-hue($color, -15%), 10%), 2%)
+        );
+    }
+
+    &:active {
+        color: darken($color, 20%);
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+        background-color: darken($color, 2%);
+        border-top-color: darken($color, 20%);
+        border-left-color: darken($color, 6%);
+        border-right-color: darken($color, 6%);
+        border-bottom-color: darken($color, 6%);
+    }
 }
