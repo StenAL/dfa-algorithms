@@ -26,6 +26,11 @@ a:visited {
     text-decoration: none;
 }
 
+input[type="text"] {
+    padding-left: 3px;
+    border-radius: 2px;
+}
+
 .page-container {
     display: flex;
     flex-direction: column;

@@ -1,6 +1,10 @@
 import { State } from "../../types/DFA";
 import Queue from "mnemonist/queue";
-import { randomDatasetGenerator, sprawlingDatasetGenerator } from "./datasetGenerator";
+import {
+    linearDatasetGenerator,
+    randomDatasetGenerator,
+    sprawlingDatasetGenerator,
+} from "./datasetGenerator";
 
 it("random dataset forms connected graph", function () {
     const dfa = randomDatasetGenerator(10, ["0", "1"], 5, "test");
@@ -53,8 +57,40 @@ it("sprawling dataset is connected, assigns final states correctly", function ()
             .filter((v) => v !== s)
             .forEach((s) => queue.enqueue(s));
     }
+    expect(traversal.length).toBe(statesCount);
     const expectedFinalStates = traversal.slice(statesCount - finalStatesCount);
     for (let expectedFinalState of expectedFinalStates) {
         expect(dfa.finalStates.has(expectedFinalState)).toBe(true);
     }
+});
+
+it("linear dataset is connected, assigns final states correctly", function () {
+    const alphabet = ["a", "b", "c"];
+    const statesCount = 50;
+    const finalStatesCount = 10;
+    const dfa = linearDatasetGenerator(statesCount, alphabet, finalStatesCount);
+    for (let i = 0; i < statesCount - 1; i++) {
+        const from = dfa.states[i];
+        for (let symbol of alphabet) {
+            expect(from.transitions.get(symbol)!).toBe(dfa.states[i + 1]);
+        }
+    }
+
+    const visited = new Set<State>();
+    const queue = [dfa.startingState];
+    while (queue.length > 0) {
+        const currentState = queue.pop()!;
+        if (visited.has(currentState)) {
+            continue;
+        }
+
+        const transitionTo = Array.from(currentState.transitions.values()).flat();
+        visited.add(currentState);
+        queue.push(...transitionTo);
+    }
+
+    expect(new Set(Array.from(visited).slice(visited.size - finalStatesCount))).toEqual(
+        dfa.finalStates
+    );
+    expect(visited.size).toBe(dfa.states.length);
 });

@@ -1,6 +1,8 @@
 import { EquivalenceTestingResult } from "../types/Algorithm";
+import { DFA } from "../types/DFA";
+import { getPrettyDfaString } from "../util/util";
 import { preGeneratedDatasets } from "./data/datasets";
-import { minimizedSprawling } from "./Minimizer.test";
+import { minimizedLinear, minimizedSprawling } from "./Minimizer.test";
 import { TableFillingAlgorithmImpl } from "./TableFillingAlgorithm";
 
 it("equivalence testing works on pre-generated data", function () {
@@ -15,6 +17,11 @@ it("equivalence testing works on pre-generated data", function () {
     expect(algorithm.result).toBe(EquivalenceTestingResult.NON_EQUIVALENT);
 
     data = preGeneratedDatasets.sprawling;
+    algorithm = new TableFillingAlgorithmImpl(data[0], data[1]);
+    algorithm.run();
+    expect(algorithm.result).toBe(EquivalenceTestingResult.EQUIVALENT);
+
+    data = preGeneratedDatasets.linear;
     algorithm = new TableFillingAlgorithmImpl(data[0], data[1]);
     algorithm.run();
     expect(algorithm.result).toBe(EquivalenceTestingResult.EQUIVALENT);
@@ -37,6 +44,11 @@ it("witness mode works on pre-generated data", function () {
     algorithm = new TableFillingAlgorithmImpl(data[0], data[1], true);
     algorithm.run();
     expect(algorithm.result).toBe(EquivalenceTestingResult.EQUIVALENT);
+
+    data = preGeneratedDatasets.linear;
+    algorithm = new TableFillingAlgorithmImpl(data[0], data[1], true);
+    algorithm.run();
+    expect(algorithm.result).toBe(EquivalenceTestingResult.EQUIVALENT);
 });
 
 it("state minimization works on pre-generated data", function () {
@@ -54,4 +66,11 @@ it("state minimization works on pre-generated data", function () {
     algorithm = new TableFillingAlgorithmImpl(data[0]);
     algorithm.run();
     expect(algorithm.result).toEqual(minimizedSprawling);
+
+    data = preGeneratedDatasets.linear;
+    algorithm = new TableFillingAlgorithmImpl(data[0]);
+    algorithm.run();
+    expect(getPrettyDfaString(algorithm.result as DFA)).toEqual(
+        getPrettyDfaString(minimizedLinear)
+    );
 });

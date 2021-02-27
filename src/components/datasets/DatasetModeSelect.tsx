@@ -1,3 +1,4 @@
+import React from "react";
 import { default as Tooltip } from "react-tooltip";
 import { DatasetType } from "../../types/Dataset";
 import { getDatasetTypeDescription, getDatasetTypeName } from "../../util/util";
@@ -17,7 +18,7 @@ export default function DatasetModeSelect({
         .map((el) => parseInt(el))
         .filter((k) => !isNaN(k))
         .map((datasetType) => (
-            <>
+            <React.Fragment key={datasetType}>
                 <label key={`dataset-select-${datasetType}`}>
                     <input
                         type={"radio"}
@@ -41,13 +42,13 @@ export default function DatasetModeSelect({
                         {getDatasetTypeDescription(datasetType)
                             .split(". ")
                             .map((s) => (
-                                <>
+                                <React.Fragment key={s}>
                                     {s.replace(".", "")}.<br />
-                                </>
+                                </React.Fragment>
                             ))}
                     </span>
                 </Tooltip>
-            </>
+            </React.Fragment>
         ));
     return <div className={"dataset-mode-select"}>{options}</div>;
 }

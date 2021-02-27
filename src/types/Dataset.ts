@@ -3,9 +3,10 @@ import { DFA } from "./DFA";
 export enum DatasetType {
     RANDOM,
     SPRAWLING,
+    LINEAR,
 }
 
-export type PreGeneratedDatasetName = "example" | "random" | "sprawling";
+export type PreGeneratedDatasetName = "example" | "random" | "sprawling" | "linear";
 
 export type DatasetGenerator = (
     statesCount: number,

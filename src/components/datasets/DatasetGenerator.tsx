@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+    linearDatasetGenerator,
     randomDatasetGenerator,
     sprawlingDatasetGenerator,
 } from "../../algorithm/data/datasetGenerator";
@@ -66,6 +67,9 @@ export default function DatasetGenerator({
                             break;
                         case DatasetType.SPRAWLING:
                             generator = sprawlingDatasetGenerator;
+                            break;
+                        case DatasetType.LINEAR:
+                            generator = linearDatasetGenerator;
                             break;
                     }
                     const dfa = generator(statesCount, alphabet, finalStatesCount, statePrefix);

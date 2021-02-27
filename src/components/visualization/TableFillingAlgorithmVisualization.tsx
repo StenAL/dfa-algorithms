@@ -120,6 +120,7 @@ export default function TableFillingAlgorithmVisualization({
         <>
             <p>Current state: {stateDescription}</p>
             {algorithm.mode === AlgorithmMode.STATE_MINIMIZATION &&
+            algorithm.state === CommonAlgorithmState.FINAL &&
             algorithm.indistinguishableStateGroups.length > 0 ? (
                 <DownloadButton
                     disabled={false}

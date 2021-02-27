@@ -24,7 +24,7 @@ export interface TableFillingAlgorithm extends Algorithm {
     input2: DFA;
 
     pairs: HashMap<[State, State], string>;
-    unmarkedPairs: HashMap<[State, State], undefined>;
+    unmarkedPairs: HashMap<[State, State], undefined>; // actually just a set. The built-in Set class is unsuitable since we need the hash of [State, State] to check inclusion
     iteration: number;
     indistinguishableStateGroups: State[][];
 }
