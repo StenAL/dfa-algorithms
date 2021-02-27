@@ -22,25 +22,40 @@ export function getAlgorithmName(type: AlgorithmType | AlgorithmUrlString) {
     }
 }
 
-export function getDatasetTypeName(type: DatasetType) {
+export function getDatasetTypeName(type: DatasetType): string {
     switch (type) {
         case DatasetType.RANDOM:
             return "Random";
         case DatasetType.SPRAWLING:
             return "Sprawling";
+        case DatasetType.LINEAR:
+            return "Linear";
     }
 }
 
 export function getDatasetTypeDescription(type: DatasetType) {
     switch (type) {
         case DatasetType.RANDOM:
-            return "Random datasets consist of DFAs where transitions and final states are allocated randomly. The DFA might or might not contain cycles, the only thing that is guaranteed is that all states in the DFA are connected.";
+            return (
+                "Random datasets consist of DFAs where transitions and final states are allocated randomly. The DFA " +
+                "might or might not contain cycles, the only thing that is guaranteed is that all states in the DFA are connected."
+            );
         case DatasetType.SPRAWLING:
-            return "Sprawling datasets create transitions that form a full n-ary tree, where n is the length of the DFA's alphabet. Accepting states are assigned to be at the furthest points from the starting state using BFS. Sprawling datasets induce worst-case performance in The (Nearly) Linear Algorithm.";
+            return (
+                "Sprawling datasets create transitions that form a full n-ary tree, where n is the length of the " +
+                "DFA's alphabet. Accepting states are assigned to be at the furthest points from the starting state " +
+                "using BFS. Sprawling datasets induce worst-case performance in The (Nearly) Linear Algorithm."
+            );
+        case DatasetType.LINEAR:
+            return (
+                "Linear datasets are DFAs in which the transition graph forms a straight line. Each state will only have " +
+                "transitions going to it from the previous state and will only transition to the next state. Final " +
+                "states are assigned to be at the end of the chain. Linear datasets induce worst-case performance in The Table-Filling Algorithm"
+            );
     }
 }
 
-export function getPreGeneratedDatasetPrintName(type: PreGeneratedDatasetName) {
+export function getPreGeneratedDatasetPrintName(type: PreGeneratedDatasetName): string {
     switch (type) {
         case "example":
             return "Example inputs";
@@ -48,6 +63,8 @@ export function getPreGeneratedDatasetPrintName(type: PreGeneratedDatasetName) {
             return "Randomly-connected";
         case "sprawling":
             return "Sprawling tree";
+        case "linear":
+            return "Linear";
     }
 }
 

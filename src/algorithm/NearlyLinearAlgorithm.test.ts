@@ -17,6 +17,11 @@ it("equivalence testing works on pre-generated data", function () {
     algorithm = new NearlyLinearAlgorithmImpl(data[0], data[1]!);
     algorithm.run();
     expect(algorithm.result).toBe(EquivalenceTestingResult.EQUIVALENT);
+
+    data = preGeneratedDatasets.linear;
+    algorithm = new NearlyLinearAlgorithmImpl(data[0], data[1]!);
+    algorithm.run();
+    expect(algorithm.result).toBe(EquivalenceTestingResult.EQUIVALENT);
 });
 
 it("witness mode works on pre-generated data", function () {
@@ -33,6 +38,11 @@ it("witness mode works on pre-generated data", function () {
     expect(algorithm.witness).toBe("01");
 
     data = preGeneratedDatasets.sprawling;
+    algorithm = new NearlyLinearAlgorithmImpl(data[0], data[1]!, true);
+    algorithm.run();
+    expect(algorithm.result).toBe(EquivalenceTestingResult.EQUIVALENT);
+
+    data = preGeneratedDatasets.linear;
     algorithm = new NearlyLinearAlgorithmImpl(data[0], data[1]!, true);
     algorithm.run();
     expect(algorithm.result).toBe(EquivalenceTestingResult.EQUIVALENT);

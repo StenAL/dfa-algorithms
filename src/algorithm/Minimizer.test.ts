@@ -1,4 +1,5 @@
 import { DFA, State } from "../types/DFA";
+import { getPrettyDfaString } from "../util/util";
 import { preGeneratedDatasets } from "./data/datasets";
 import { exampleDfa1 } from "./data/exampleData";
 import minimizer from "./Minimizer";
@@ -77,7 +78,7 @@ it("combines states correctly", function () {
     expect(dfa).toEqual(inputClone);
 });
 
-const states: State[] = [
+const sprawlingStates: State[] = [
     { name: "q0", transitions: new Map() },
     {
         name: "{q1,q3,q4,q5,q7,q8,q9,q10,q11,q12,q15,q16,q17,q18,q19,q20,q21,q22,q23,q24,q25,q26}",
@@ -90,29 +91,29 @@ const states: State[] = [
     { name: "{q27,q28,q29}", transitions: new Map() },
 ];
 
-states[0].transitions.set("0", states[1]);
-states[0].transitions.set("1", states[2]);
-states[1].transitions.set("0", states[1]);
-states[1].transitions.set("1", states[1]);
-states[2].transitions.set("0", states[1]);
-states[2].transitions.set("1", states[3]);
-states[3].transitions.set("0", states[4]);
-states[3].transitions.set("1", states[5]);
-states[4].transitions.set("0", states[6]);
-states[4].transitions.set("1", states[6]);
-states[5].transitions.set("0", states[6]);
-states[5].transitions.set("1", states[5]);
-states[6].transitions.set("0", states[6]);
-states[6].transitions.set("1", states[6]);
+sprawlingStates[0].transitions.set("0", sprawlingStates[1]);
+sprawlingStates[0].transitions.set("1", sprawlingStates[2]);
+sprawlingStates[1].transitions.set("0", sprawlingStates[1]);
+sprawlingStates[1].transitions.set("1", sprawlingStates[1]);
+sprawlingStates[2].transitions.set("0", sprawlingStates[1]);
+sprawlingStates[2].transitions.set("1", sprawlingStates[3]);
+sprawlingStates[3].transitions.set("0", sprawlingStates[4]);
+sprawlingStates[3].transitions.set("1", sprawlingStates[5]);
+sprawlingStates[4].transitions.set("0", sprawlingStates[6]);
+sprawlingStates[4].transitions.set("1", sprawlingStates[6]);
+sprawlingStates[5].transitions.set("0", sprawlingStates[6]);
+sprawlingStates[5].transitions.set("1", sprawlingStates[5]);
+sprawlingStates[6].transitions.set("0", sprawlingStates[6]);
+sprawlingStates[6].transitions.set("1", sprawlingStates[6]);
 
 export const minimizedSprawling: DFA = {
-    finalStates: new Set<State>([states[6]]),
-    startingState: states[0],
-    states: states,
+    finalStates: new Set<State>([sprawlingStates[6]]),
+    startingState: sprawlingStates[0],
+    states: sprawlingStates,
     alphabet: ["0", "1"],
 };
 
-it("combines sprawling dataset correctly", function () {
+it("combines pre-generated sprawling dataset correctly", function () {
     const input = preGeneratedDatasets.sprawling[0];
     const stateNamesToBeCombined = [
         "q0",
@@ -126,5 +127,36 @@ it("combines sprawling dataset correctly", function () {
     const statesToBeCombined = stateNamesToBeCombined.map((stateNames) =>
         stateNames.split(",").map((s) => input.states.find((inputState) => inputState.name === s)!)
     );
-    minimizer.combineStates(input, statesToBeCombined);
+    const result = minimizer.combineStates(input, statesToBeCombined);
+    expect(result).toEqual(minimizedSprawling);
+});
+
+const linearStates = _.cloneDeep(preGeneratedDatasets.linear[0].states).filter(
+    (s) => !["q27", "q28", "q29"].includes(s.name)
+);
+const linearCombinedFinalState = { name: "{q27,q28,q29}", transitions: new Map<string, State>() };
+linearStates.push(linearCombinedFinalState);
+
+const linearQ26 = linearStates[linearStates.length - 2];
+// console.log(linearQ26.name);
+linearQ26.transitions.set("0", linearCombinedFinalState);
+linearQ26.transitions.set("1", linearCombinedFinalState);
+linearCombinedFinalState.transitions.set("0", linearCombinedFinalState);
+linearCombinedFinalState.transitions.set("1", linearCombinedFinalState);
+
+export const minimizedLinear: DFA = {
+    finalStates: new Set<State>([linearCombinedFinalState]),
+    startingState: linearStates[0],
+    states: linearStates,
+    alphabet: ["0", "1"],
+};
+
+it("combines pre-generated linear dataset correctly", function () {
+    const input = preGeneratedDatasets.linear[0];
+    const stateNamesToBeCombined = ["q27,q28,q29"];
+    const statesToBeCombined = stateNamesToBeCombined.map((stateNames) =>
+        stateNames.split(",").map((s) => input.states.find((inputState) => inputState.name === s)!)
+    );
+    const result = minimizer.combineStates(input, statesToBeCombined);
+    expect(getPrettyDfaString(result)).toEqual(getPrettyDfaString(minimizedLinear));
 });

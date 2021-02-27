@@ -68,8 +68,12 @@ it("initializes table-filling algorithm correctly", function () {
         runInputCallback(dfa, dfa);
     });
 
-    expect(wrapper.find(Link).at(3).text()).toBe("Run");
-    wrapper.find(Link).at(3).simulate("click", { button: 0 });
+    let link = wrapper
+        .find(Link)
+        .findWhere((l) => l.text() === "Run")
+        .at(0);
+    expect(link.exists()).toBe(true);
+    link.simulate("click", { button: 0 });
     expect(wrapper.find(TableFillingAlgorithmVisualization).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).props().algorithm.type).toBe("tableFilling");
@@ -93,8 +97,12 @@ it("initializes hopcroft algorithm correctly", function () {
         runInputCallback(dfa, dfa);
     });
 
-    expect(wrapper.find(Link).at(3).text()).toBe("Run");
-    wrapper.find(Link).at(3).simulate("click", { button: 0 });
+    let link = wrapper
+        .find(Link)
+        .findWhere((l) => l.text() === "Run")
+        .at(0);
+    expect(link.exists()).toBe(true);
+    link.simulate("click", { button: 0 });
     expect(wrapper.find(HopcroftAlgorithmVisualization).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).props().algorithm.type).toBe("hopcroft");
@@ -118,8 +126,12 @@ it("initializes nearly linear algorithm correctly", function () {
         runInputCallback(dfa, dfa);
     });
 
-    expect(wrapper.find(Link).at(3).text()).toBe("Run");
-    wrapper.find(Link).at(3).simulate("click", { button: 0 });
+    let link = wrapper
+        .find(Link)
+        .findWhere((l) => l.text() === "Run")
+        .at(0);
+    expect(link.exists()).toBe(true);
+    link.simulate("click", { button: 0 });
     expect(wrapper.find(NearlyLinearAlgorithmVisualization).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).props().algorithm.type).toBe("nearlyLinear");
