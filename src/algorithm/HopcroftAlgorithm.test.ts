@@ -69,6 +69,7 @@ it("state minimization works on pre-generated data", function () {
 
     data = preGeneratedDatasets.sprawling;
     algorithm = new HopcroftAlgorithmImpl(data[0]);
+    algorithm.log = { log: jest.fn(), clear: jest.fn() };
     algorithm.run();
 
     const minimizedSprawlingCopy = _.clone(minimizedSprawling);

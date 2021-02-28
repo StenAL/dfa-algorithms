@@ -244,6 +244,7 @@ export class TableFillingAlgorithmImpl implements TableFillingAlgorithm {
         let symbol = this.pairs.get(this.getPair(p, q))!;
         if (symbol === "ε") {
             this.log?.log(`Witness: the DFAs can be distinguished by the empty string ''`);
+            this.state = CommonAlgorithmState.FINAL;
             return;
         }
         this.log?.log(`Constructing witness: Comparing starting states ${p.name} and ${q.name}`);
