@@ -165,16 +165,18 @@ export class HopcroftAlgorithmImpl implements HopcroftAlgorithm {
             }
         }
 
-        for (let e of this.inverseTransitionFunction.entries()) {
-            const stateName = e[0][0].name;
-            const symbol = e[0][1];
-            const statesTransitioningTo = Array.from(e[1]).map((el) => el.name);
-            const singleState = statesTransitioningTo.length === 1;
-            this.log?.log(
-                `State${singleState ? "" : "s"} {${statesTransitioningTo.join(", ")}} transition${
-                    singleState ? "s" : ""
-                } to ${stateName} on input ${symbol}`
-            );
+        if (this.log) {
+            for (let e of this.inverseTransitionFunction.entries()) {
+                const stateName = e[0][0].name;
+                const symbol = e[0][1];
+                const statesTransitioningTo = Array.from(e[1]).map((el) => el.name);
+                const singleState = statesTransitioningTo.length === 1;
+                this.log?.log(
+                    `State${singleState ? "" : "s"} {${statesTransitioningTo.join(
+                        ", "
+                    )}} transition${singleState ? "s" : ""} to ${stateName} on input ${symbol}`
+                );
+            }
         }
         this.state = HopcroftAlgorithmState.INVERSE_TRANSITION_FUNCTION_CREATED;
     }
@@ -465,16 +467,16 @@ export class HopcroftAlgorithmImpl implements HopcroftAlgorithm {
                 "All states in the DFA are in separate blocks. Every state can be distinguished from all others, therefore the DFA is already minimal."
             );
         } else {
-            const blocksToBeComined = Array.from(this.blocks.values()).filter((b) => b.size > 1);
+            const blocksToBeCombined = Array.from(this.blocks.values()).filter((b) => b.size > 1);
             this.log?.log(
-                `All states that are in the same block can be combined into a single state in a minimal DFA. The states that can be combined are ${blocksToBeComined
+                `All states that are in the same block can be combined into a single state in a minimal DFA. The states that can be combined are ${blocksToBeCombined
                     .map((states) => `{${Array.from(states).map((s) => s.name)}}`)
                     .join(", ")}`
             );
             this.log?.log("Creating minimized DFA.");
             this.result = minimizer.combineStates(
                 this.input1,
-                blocksToBeComined.map((s) => Array.from(s))
+                blocksToBeCombined.map((s) => Array.from(s))
             );
         }
         this.state = CommonAlgorithmState.FINAL;
