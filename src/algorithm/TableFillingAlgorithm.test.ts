@@ -1,7 +1,8 @@
 import { CommonAlgorithmState, EquivalenceTestingResult } from "../types/Algorithm";
-import { DFA } from "../types/DFA";
+import { DFA, State } from "../types/DFA";
 import { getPrettyDfaString } from "../util/util";
 import { preGeneratedDatasets } from "./data/datasets";
+import { exampleDfa1 } from "./data/exampleData";
 import { minimizedLinear, minimizedSprawling } from "./Minimizer.test";
 import { TableFillingAlgorithmImpl, TableFillingAlgorithmState } from "./TableFillingAlgorithm";
 
@@ -58,6 +59,7 @@ it("witness mode works on pre-generated data", function () {
 it("state minimization works on pre-generated data", function () {
     let data = preGeneratedDatasets.example;
     let algorithm = new TableFillingAlgorithmImpl(data[0]);
+    algorithm.log = { log: jest.fn(), clear: jest.fn() };
     algorithm.run();
     expect(algorithm.result).toEqual(data[0]);
 
@@ -68,6 +70,7 @@ it("state minimization works on pre-generated data", function () {
 
     data = preGeneratedDatasets.sprawling;
     algorithm = new TableFillingAlgorithmImpl(data[0]);
+    algorithm.log = { log: jest.fn(), clear: jest.fn() };
     algorithm.run();
     expect(algorithm.result).toEqual(minimizedSprawling);
 
@@ -139,4 +142,21 @@ it("steps change state as expected", function () {
     expect(algorithm.state).toBe(CommonAlgorithmState.INITIAL);
     expect(algorithm.pairs.count()).toBe(0);
     expect(algorithm.unmarkedPairs.count()).toBe(0);
+});
+
+it("exits witness construction early when witness is empty string", function () {
+    const p0: State = { name: "p0", transitions: new Map<string, State>() };
+    const logMock = jest.fn();
+    const alwaysAccept: DFA = {
+        startingState: p0,
+        alphabet: ["0", "1"],
+        states: [p0],
+        finalStates: new Set<State>([p0]),
+    };
+    let algorithm = new TableFillingAlgorithmImpl(exampleDfa1, alwaysAccept, true);
+    algorithm.log = { log: logMock, clear: jest.fn() };
+    algorithm.run();
+    expect(algorithm.result).toBe(EquivalenceTestingResult.NON_EQUIVALENT);
+    expect(algorithm.witness).toBe("");
+    expect(logMock.mock.calls.some((s) => (s[0] as string).includes("empty string"))).toBe(true);
 });
