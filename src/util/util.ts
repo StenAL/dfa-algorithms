@@ -1,3 +1,4 @@
+import noam from "noam";
 import { AlgorithmUrlString } from "../components/visualization/AlgorithmVisualization";
 import { AlgorithmMode, AlgorithmType } from "../types/Algorithm";
 import { DatasetType, PreGeneratedDatasetName } from "../types/Dataset";
@@ -133,3 +134,25 @@ export const getPrettyDfaString = (dfa: DFA): string[] => {
     }
     return messages;
 };
+
+export function dfaToNoamInput(dfa: DFA) {
+    const output: string[] = [];
+    output.push("#states");
+    dfa.states.forEach((s) => output.push(s.name));
+    output.push("#initial");
+    output.push(dfa.startingState.name);
+    output.push("#accepting");
+    dfa.finalStates.forEach((s) => output.push(s.name));
+    output.push("#alphabet");
+    dfa.alphabet.forEach((s) => output.push(s));
+    output.push("#transitions");
+    for (let state of dfa.states) {
+        for (let symbol of dfa.alphabet) {
+            output.push(`${state.name}:${symbol}>${state.transitions.get(symbol)!.name}`);
+        }
+    }
+    const automatonString = output.join("\n");
+    const automaton = noam.fsm.parseFsmFromString(automatonString);
+    const dotString = noam.fsm.printDotFormat(automaton) as string;
+    return dotString;
+}
