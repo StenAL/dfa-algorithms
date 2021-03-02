@@ -1,14 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.scss";
-import X from "./components/visualization/dfa/X";
-// import MainPage from "./components/MainPage";
-import VisualizationInput from "./VisualizationInput";
+import MainPage from "./components/MainPage";
 
 ReactDOM.render(
     <React.StrictMode>
-        {/*<MainPage />*/}
-        <X />
+        <MainPage />
     </React.StrictMode>,
     document.getElementById("root")
 );

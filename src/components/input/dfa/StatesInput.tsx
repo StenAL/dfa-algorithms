@@ -1,39 +1,54 @@
+import HashMap from "hashmap";
 import { useEffect, useState } from "react";
 import { default as Tooltip } from "react-tooltip";
 import { DFA } from "../../../types/DFA";
 import InputConverter from "./InputConverter";
 import TransitionsInput from "./TransitionsInput";
 
-export type TransitionData = Map<string, Map<string, string>>;
+export type TransitionData = HashMap<[string, string], string>; // (from, symbol) -> to
 
 interface StatesInputProps {
     alphabet: string[];
+    existingStates: string[];
+    existingFinalStates: string[];
+    existingTransitions: [string, string, string][];
     alphabetValid: boolean;
     convertInputCallback: (dfa: DFA | undefined) => void;
 }
 
 export default function StatesInput({
     convertInputCallback,
+    existingStates,
+    existingFinalStates,
+    existingTransitions,
     alphabet,
     alphabetValid,
 }: StatesInputProps) {
     const [states, setStates] = useState<string[]>([]);
     const [finalStates, setFinalStates] = useState<string[]>([]);
-    const [transitions, setTransitions] = useState<TransitionData>(new Map());
+    const [transitions, setTransitions] = useState<TransitionData>(new HashMap());
     const [transitionsValid, setTransitionsValid] = useState<boolean>(false);
+    console.log(existingTransitions);
     useEffect(() => {
-        const transitionsCopy: TransitionData = new Map(transitions);
+        setStates(existingStates);
+    }, [existingStates]);
 
-        for (let state of states) {
-            const t = transitionsCopy.get(state)!;
-            for (let symbol of t.keys()) {
-                if (!alphabet.includes(symbol)) {
-                    t.delete(symbol);
-                }
+    useEffect(() => {
+        setFinalStates(existingFinalStates);
+    }, [existingFinalStates]);
+
+    useEffect(() => {
+        const transitionsCopy: TransitionData = new HashMap<[string, string], string>(transitions);
+        for (let [[from, symbol]] of transitionsCopy.entries()) {
+            if (!alphabet.includes(symbol)) {
+                transitionsCopy.delete([from, symbol]);
             }
-            for (let symbol of alphabet) {
-                if (!t.has(symbol)) {
-                    t.set(symbol, "");
+        }
+        for (let symbol of alphabet) {
+            for (let state of states) {
+                const pair: [string, string] = [state, symbol];
+                if (!transitionsCopy.has(pair)) {
+                    transitionsCopy.set(pair, "");
                 }
             }
         }
@@ -41,6 +56,15 @@ export default function StatesInput({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alphabet]);
 
+    useEffect(() => {
+        const newTransitions = new HashMap<[string, string], string>();
+        for (let [from, symbol, to] of existingTransitions) {
+            newTransitions.set([from, symbol], to);
+        }
+        setTransitions(newTransitions);
+    }, [existingTransitions]);
+
+    // transitions.entries().forEach(([[from, symbol], to]) => console.log(`${from}:${symbol} > ${to}`));
     const statesValid = states.length > 0 && new Set(states).size === states.length;
     const finalStatesValid =
         new Set(finalStates).size === finalStates.length &&
@@ -74,20 +98,23 @@ export default function StatesInput({
                     name={"states"}
                     type={"text"}
                     placeholder={"q1,q2..."}
+                    value={states.join(",")}
                     onChange={(event) => {
                         const newStates = event.target.value.split(",");
                         if (newStates.length > 0 && newStates[newStates.length - 1] === "") {
                             newStates.pop();
                         }
-                        const transitionsCopy: TransitionData = new Map();
+                        const transitionsCopy: TransitionData = new HashMap<
+                            [string, string],
+                            string
+                        >();
                         for (let state of newStates) {
-                            if (transitions.has(state)) {
-                                transitionsCopy.set(state, transitions.get(state)!);
-                            } else {
-                                const newStateTransitions = new Map();
-                                transitionsCopy.set(state, newStateTransitions);
-                                for (let symbol of alphabet) {
-                                    newStateTransitions.set(symbol, "");
+                            for (let symbol of alphabet) {
+                                const pair: [string, string] = [state, symbol];
+                                if (transitions.has(pair)) {
+                                    transitionsCopy.set(pair, transitions.get(pair)!);
+                                } else {
+                                    transitionsCopy.set(pair, "");
                                 }
                             }
                         }
@@ -116,6 +143,7 @@ export default function StatesInput({
                     </span>
                 </Tooltip>
                 <input
+                    defaultValue={existingFinalStates.join(",")}
                     name={"finalStates"}
                     type={"text"}
                     placeholder={"q1,..."}
@@ -138,8 +166,11 @@ export default function StatesInput({
                     alphabet={alphabet}
                     transitions={transitions}
                     setTransition={(from, symbol, to) => {
-                        const transitionsCopy: TransitionData = new Map(transitions);
-                        transitionsCopy.get(from)!.set(symbol, to);
+                        const transitionsCopy: TransitionData = new HashMap<
+                            [string, string],
+                            string
+                        >(transitions);
+                        transitionsCopy.set([from, symbol], to);
                         setTransitions(transitionsCopy);
                     }}
                     setTransitionsValid={setTransitionsValid}

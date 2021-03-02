@@ -28,14 +28,11 @@ export default function InputConverter({
                 partialState.transitions = new Map<string, State>();
                 stateMap.set(state, partialState as State);
             }
-            for (let state of states) {
-                const transitionData = transitions.get(state)!;
-                const dfaTransitions: Transitions = new Map<string, State>();
-                for (let entry of transitionData.entries()) {
-                    dfaTransitions.set(entry[0], stateMap.get(entry[1])!);
-                }
-                stateMap.get(state)!.transitions = dfaTransitions;
+
+            for (let [[from, symbol], to] of transitions.entries()) {
+                stateMap.get(from)!.transitions.set(symbol, stateMap.get(to)!);
             }
+
             const dfaFinalStates = new Set<State>();
             for (let finalState of finalStates) {
                 dfaFinalStates.add(stateMap.get(finalState)!);
@@ -47,8 +44,6 @@ export default function InputConverter({
                 finalStates: dfaFinalStates,
             };
             convertInputCallback(dfa);
-        } else {
-            convertInputCallback(undefined);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [validInput]);

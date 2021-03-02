@@ -5,9 +5,7 @@
     "type": "module",
     "dependencies": {
         "@testing-library/jest-dom": "^5.11.9",
-        "graphviz": "^0.0.9",
         "hashmap": "^2.4.0",
-        "jquery": "^3.5.1",
         "lodash": "^4.17.20",
         "md5": "^2.3.0",
         "mnemonist": "^0.38.1",

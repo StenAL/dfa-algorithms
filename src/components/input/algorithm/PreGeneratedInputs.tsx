@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
 import { preGeneratedDatasets } from "../../../algorithm/data/datasets";
 import { AlgorithmMode } from "../../../types/Algorithm";
 import { PreGeneratedDataset, PreGeneratedDatasetName } from "../../../types/Dataset";
@@ -8,34 +7,26 @@ import { deserializeDfa, getPreGeneratedDatasetPrintName } from "../../../util/u
 
 interface PreGeneratedInputsProps {
     mode: AlgorithmMode;
-    runLink: string;
     runCallback: (input1: DFA, input2: DFA | undefined) => void;
 }
 
-export default function PreGeneratedInputs({
-    mode,
-    runCallback,
-    runLink,
-}: PreGeneratedInputsProps) {
-    const history = useHistory();
+export default function PreGeneratedInputs({ mode, runCallback }: PreGeneratedInputsProps) {
     const [fileError, setFileError] = useState("");
 
     const links = (Object.entries(preGeneratedDatasets) as [
         PreGeneratedDatasetName,
         PreGeneratedDataset
     ][]).map(([name, dataset]) => (
-        <Link to={runLink} key={`dataset-${name}`}>
-            <button
-                onClick={() =>
-                    runCallback(
-                        dataset[0],
-                        mode === AlgorithmMode.EQUIVALENCE_TESTING ? dataset[1] : undefined
-                    )
-                }
-            >
-                {getPreGeneratedDatasetPrintName(name)}
-            </button>
-        </Link>
+        <button
+            onClick={() =>
+                runCallback(
+                    dataset[0],
+                    mode === AlgorithmMode.EQUIVALENCE_TESTING ? dataset[1] : undefined
+                )
+            }
+        >
+            {getPreGeneratedDatasetPrintName(name)}
+        </button>
     ));
 
     return (
@@ -67,7 +58,6 @@ export default function PreGeneratedInputs({
                             dfa1,
                             mode === AlgorithmMode.EQUIVALENCE_TESTING ? dfa2 : undefined
                         );
-                        history.push(runLink);
                     } catch (e) {
                         setFileError(e.message);
                     }

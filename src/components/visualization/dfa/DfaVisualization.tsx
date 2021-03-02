@@ -14,7 +14,10 @@ export default function DfaVisualization({ dfaString, initialState }: DfaVisuali
     const inputHash = "a" + md5(dfaString);
 
     async function renderGraph() {
-        const svgGraph = await viz.renderString(dfaString, { format: "svg" });
+        let svgGraph = await viz.renderString(dfaString, { format: "svg" });
+        svgGraph = svgGraph
+            .replaceAll('fill="#ffffff"', 'fill="transparent"')
+            .replaceAll("finite_state_machine", "");
         setVisualization(svgGraph);
     }
 
@@ -22,7 +25,7 @@ export default function DfaVisualization({ dfaString, initialState }: DfaVisuali
         const element = Array.from(
             document.querySelector(`#${inputHash}`)!.querySelectorAll("title")
         ).filter((title) => title.textContent === initialState)[0].parentNode!;
-        element.querySelector("ellipse")!.classList.add("currentState");
+        element.querySelector("ellipse")!.classList.add("starting-state");
     }
 
     useEffect(() => {
@@ -30,5 +33,11 @@ export default function DfaVisualization({ dfaString, initialState }: DfaVisuali
         renderGraph().then(colorStartingState).catch(console.log);
     }, [dfaString]);
 
-    return <div id={inputHash} dangerouslySetInnerHTML={{ __html: visualization }} />;
+    return (
+        <div
+            id={inputHash}
+            className={"dfa-visualization"}
+            dangerouslySetInnerHTML={{ __html: visualization }}
+        />
+    );
 }

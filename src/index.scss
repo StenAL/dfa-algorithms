@@ -437,8 +437,14 @@ button {
     }
 }
 
-.currentState {
-    fill: lightpink;
-    background-color: lightpink;
-    stroke-width: 2;
+.dfa-visualization {
+    max-width: 600px;
+    max-height: 600px;
+    overflow: auto;
+
+    .starting-state {
+        fill: lightpink;
+        background-color: lightpink;
+        stroke-width: 2;
+    }
 }
