@@ -11,7 +11,8 @@ import {
 } from "../../algorithm/TableFillingAlgorithm";
 import { Algorithm, AlgorithmMode } from "../../types/Algorithm";
 import { useForceUpdate } from "../../util/hooks";
-import { getAlgorithmModes, getAlgorithmName } from "../../util/util";
+import { dfaToNoamInput, getAlgorithmModes, getAlgorithmName } from "../../util/util";
+import DfaVisualization from "./dfa/DfaVisualization";
 import HopcroftAlgorithmVisualization from "./HopcroftAlgorithmVisualization";
 import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
@@ -104,6 +105,24 @@ export default function AlgorithmVisualization() {
             <Route path={"/algorithm/:algorithmType/run"}>
                 <div className={"algorithm-container"}>
                     <AlgorithmLog algorithm={algorithm!} />
+                    {algorithm ? (
+                        <div>
+                            <DfaVisualization
+                                initialState={algorithm!.input1.startingState.name}
+                                dfaString={dfaToNoamInput(algorithm!.input1)}
+                            />
+                            <DfaVisualization
+                                initialState={
+                                    algorithm!.input2 ? algorithm!.input2.startingState.name : ""
+                                }
+                                dfaString={
+                                    algorithm!.input2 ? dfaToNoamInput(algorithm!.input2) : ""
+                                }
+                            />
+                        </div>
+                    ) : (
+                        ""
+                    )}
                     {visualization}
                     <AlgorithmStepControls
                         algorithm={algorithm!}

@@ -1,7 +1,10 @@
+import _ from "lodash";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AlgorithmMode } from "../../../types/Algorithm";
 import { DFA } from "../../../types/DFA";
+import { dfaToNoamInput } from "../../../util/util";
+import DfaVisualization from "../../visualization/dfa/DfaVisualization";
 import AlphabetInput from "../dfa/AlphabetInput";
 import StatesInput from "../dfa/StatesInput";
 import DownloadButton from "./DownloadButton";
@@ -29,24 +32,76 @@ export default function AlgorithmInput({ mode, runCallback, runLink }: Algorithm
     return (
         <div className={"page-container"}>
             <h3>Use a pre-generated input:</h3>
-            <PreGeneratedInputs mode={mode} runLink={runLink} runCallback={runCallback} />
+            <PreGeneratedInputs
+                mode={mode}
+                runCallback={(input1, input2) => {
+                    setAlphabet(_.clone(input1.alphabet));
+                    setInput1(_.clone(input1));
+                    setInput2(_.clone(input2));
+                }}
+            />
             <h3>
                 ... or input {mode === AlgorithmMode.STATE_MINIMIZATION ? "a" : ""} custom DFA
                 {mode === AlgorithmMode.EQUIVALENCE_TESTING ? "s" : ""}
             </h3>
             <AlphabetInput alphabet={alphabet} callback={setAlphabet} />
+
             <div className={"dfa-inputs-container"}>
+                <DfaVisualization
+                    initialState={input1 ? input1.startingState.name : ""}
+                    dfaString={input1 ? dfaToNoamInput(input1) : ""}
+                />
                 <StatesInput
                     convertInputCallback={(dfa) => setInput1(dfa)}
+                    existingStates={input1 ? input1.states.map((s) => s.name) : []}
+                    existingFinalStates={
+                        input1 ? Array.from(input1.finalStates).map((s) => s.name) : []
+                    }
+                    existingTransitions={
+                        input1
+                            ? input1.states
+                                  .map((s) => {
+                                      const r: string[][] = [];
+                                      Array.from(s.transitions).forEach((entry) =>
+                                          r.push([s.name, entry[0], entry[1].name])
+                                      );
+                                      return r as [string, string, string][];
+                                  })
+                                  .flat()
+                            : []
+                    }
                     alphabet={alphabet}
                     alphabetValid={alphabetValid}
                 />
                 {mode === AlgorithmMode.EQUIVALENCE_TESTING ? (
-                    <StatesInput
-                        alphabet={alphabet}
-                        alphabetValid={alphabetValid}
-                        convertInputCallback={(dfa) => setInput2(dfa)}
-                    />
+                    <>
+                        <StatesInput
+                            alphabet={alphabet}
+                            existingStates={input2 ? input2.states.map((s) => s.name) : []}
+                            existingFinalStates={
+                                input2 ? Array.from(input2.finalStates).map((s) => s.name) : []
+                            }
+                            existingTransitions={
+                                input2
+                                    ? input2.states
+                                          .map((s) => {
+                                              const r: string[][] = [];
+                                              Array.from(s.transitions).forEach((entry) =>
+                                                  r.push([s.name, entry[0], entry[1].name])
+                                              );
+                                              return r as [string, string, string][];
+                                          })
+                                          .flat()
+                                    : []
+                            }
+                            alphabetValid={alphabetValid}
+                            convertInputCallback={(dfa) => setInput2(dfa)}
+                        />
+                        <DfaVisualization
+                            initialState={input2 ? input2.startingState.name : ""}
+                            dfaString={input2 ? dfaToNoamInput(input2) : ""}
+                        />
+                    </>
                 ) : (
                     ""
                 )}

@@ -40,7 +40,7 @@ export default function TransitionsInput({
                 const header = i === 0 || j === 0;
                 const symbol = rows[j][0];
                 const from = rows[j][i];
-                const to = transitions.get(from)?.get(symbol) ?? "";
+                const to = transitions.get([from, symbol]) ?? "";
                 let validTo = header || states.includes(to);
                 transitionsValid = transitionsValid && validTo;
                 return (
