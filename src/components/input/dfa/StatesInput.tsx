@@ -132,7 +132,7 @@ export default function StatesInput({
                     className={finalStatesValid ? "" : "invalid-input"}
                 />
             </div>
-            {states.length > 0 ? (
+            {states.length > 0 && alphabet.length > 0 ? (
                 <TransitionsInput
                     states={states}
                     alphabet={alphabet}

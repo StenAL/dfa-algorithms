@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width" />
+
+        <title>FSM Simulator</title>
+
+        <link
+            rel="stylesheet"
+            href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css"
+        />
+        <style>
+            .currentState {
+                fill: lightpink;
+                background-color: lightpink;
+                stroke-width: 2;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="content">
+            <div class="container controls">
+                <button id="generateDFA" class="btn">Generate random DFA</button>
+                <textarea
+                    id="fsm"
+                    class="input-block-level"
+                    placeholder="or write your own"
+                    spellcheck="false"
+                ></textarea>
+                <button id="createAutomaton" class="btn">Create automaton</button>
+            </div>
+        </div>
+
+        <div class="container graph">
+            <div id="automatonGraph"></div>
+        </div>
+
+        <script src="../../node_modules/jquery/dist/jquery.js"></script>
+        <script src="../../node_modules/viz.js/viz.js"></script>
+        <script src="../../node_modules/viz.js/lite.render.js"></script>
+        <script src="../../node_modules/noam/lib/browser/noam.js"></script>
+        <script src="scripts/fsm_simulator.js" type="module"></script>
+    </body>
+</html>
