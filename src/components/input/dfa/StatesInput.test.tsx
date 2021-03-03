@@ -1,3 +1,4 @@
+import HashMap from "hashmap";
 import React from "react";
 import { act } from "react-dom/test-utils";
 import StatesInput from "./StatesInput";
@@ -6,7 +7,14 @@ import TransitionsInput from "./TransitionsInput";
 
 it("should disallow duplicate state names", function () {
     const wrapper = shallow(
-        <StatesInput alphabet={["0", "1"]} alphabetValid={true} convertInputCallback={() => {}} />
+        <StatesInput
+            alphabet={["0", "1"]}
+            existingTransitions={[]}
+            existingFinalStates={[]}
+            existingStates={[]}
+            alphabetValid={true}
+            convertInputCallback={() => {}}
+        />
     );
     let stateInput = wrapper.find('input[name="states"]');
     expect(stateInput.hasClass("invalid-input")).toBe(true);
@@ -18,7 +26,14 @@ it("should disallow duplicate state names", function () {
 
 it("should only allow valid final states", function () {
     const wrapper = shallow(
-        <StatesInput alphabet={["0", "1"]} alphabetValid={true} convertInputCallback={() => {}} />
+        <StatesInput
+            alphabet={["0", "1"]}
+            existingTransitions={[]}
+            existingFinalStates={[]}
+            existingStates={[]}
+            alphabetValid={true}
+            convertInputCallback={() => {}}
+        />
     );
     let stateInput = wrapper.find('input[name="states"]');
     let finalStateInput = wrapper.find('input[name="finalStates"]');
@@ -39,85 +54,91 @@ it("should only allow valid final states", function () {
 
 it("should remove transitions when states are removed", function () {
     const wrapper = mount(
-        <StatesInput alphabet={["0", "1"]} alphabetValid={true} convertInputCallback={() => {}} />
+        <StatesInput
+            alphabet={["0", "1"]}
+            existingTransitions={[]}
+            existingFinalStates={[]}
+            existingStates={[]}
+            alphabetValid={true}
+            convertInputCallback={() => {}}
+        />
     );
     let stateInput = wrapper.find('input[name="states"]');
     stateInput.simulate("change", { target: { value: "q1,q2" } });
     let transitionInput = wrapper.find(TransitionsInput);
-    const setTransition = transitionInput.props().setTransition;
+    let setTransition = transitionInput.props().setTransition;
     act(() => setTransition("q1", "0", "q2"));
+    wrapper.setProps({});
+    setTransition = wrapper.find(TransitionsInput).props().setTransition;
     act(() => setTransition("q1", "1", "q2"));
+    wrapper.setProps({});
+    setTransition = wrapper.find(TransitionsInput).props().setTransition;
     act(() => setTransition("q2", "0", "q2"));
+    wrapper.setProps({});
+    setTransition = wrapper.find(TransitionsInput).props().setTransition;
     act(() => setTransition("q2", "1", "q2"));
+    wrapper.setProps({});
+    transitionInput = wrapper.find(TransitionsInput);
     expect(transitionInput.props().transitions).toEqual(
-        new Map([
-            [
-                "q1",
-                new Map([
-                    ["0", "q2"],
-                    ["1", "q2"],
-                ]),
-            ],
-            [
-                "q2",
-                new Map([
-                    ["0", "q2"],
-                    ["1", "q2"],
-                ]),
-            ],
+        new HashMap([
+            [["q1", "0"], "q2"],
+            [["q1", "1"], "q2"],
+            [["q2", "0"], "q2"],
+            [["q2", "1"], "q2"],
         ])
     );
     stateInput.simulate("change", { target: { value: "q1" } });
     transitionInput = wrapper.find(TransitionsInput);
     expect(transitionInput.props().transitions).toEqual(
-        new Map([
-            [
-                "q1",
-                new Map([
-                    ["0", "q2"],
-                    ["1", "q2"],
-                ]),
-            ],
+        new HashMap([
+            [["q1", "0"], "q2"],
+            [["q1", "1"], "q2"],
         ])
     );
 });
 
 it("should remove transitions when alphabet is changed", function () {
     const wrapper = mount(
-        <StatesInput alphabet={["0", "1"]} alphabetValid={true} convertInputCallback={() => {}} />
+        <StatesInput
+            alphabet={["0", "1"]}
+            existingTransitions={[]}
+            existingFinalStates={[]}
+            existingStates={[]}
+            alphabetValid={true}
+            convertInputCallback={() => {}}
+        />
     );
     let stateInput = wrapper.find('input[name="states"]');
     stateInput.simulate("change", { target: { value: "q1,q2" } });
     let transitionInput = wrapper.find(TransitionsInput);
-    const setTransition = transitionInput.props().setTransition;
+    let setTransition = transitionInput.props().setTransition;
     act(() => setTransition("q1", "0", "q2"));
+    wrapper.setProps({});
+    setTransition = wrapper.find(TransitionsInput).props().setTransition;
     act(() => setTransition("q1", "1", "q2"));
+    wrapper.setProps({});
+    setTransition = wrapper.find(TransitionsInput).props().setTransition;
     act(() => setTransition("q2", "0", "q2"));
+    wrapper.setProps({});
+    setTransition = wrapper.find(TransitionsInput).props().setTransition;
     act(() => setTransition("q2", "1", "q2"));
+    wrapper.setProps({});
+    transitionInput = wrapper.find(TransitionsInput);
     expect(transitionInput.props().transitions).toEqual(
-        new Map([
-            [
-                "q1",
-                new Map([
-                    ["0", "q2"],
-                    ["1", "q2"],
-                ]),
-            ],
-            [
-                "q2",
-                new Map([
-                    ["0", "q2"],
-                    ["1", "q2"],
-                ]),
-            ],
+        new HashMap([
+            [["q1", "0"], "q2"],
+            [["q1", "1"], "q2"],
+            [["q2", "0"], "q2"],
+            [["q2", "1"], "q2"],
         ])
     );
     wrapper.setProps({ alphabet: ["0"] });
+    wrapper.setProps({});
     transitionInput = wrapper.find(TransitionsInput);
     expect(transitionInput.props().transitions).toEqual(
-        new Map([
-            ["q1", new Map([["0", "q2"]])],
-            ["q2", new Map([["0", "q2"]])],
+        new HashMap([
+            [["q1", "0"], "q2"],
+            [["q2", "0"], "q2"],
         ])
     );
 });

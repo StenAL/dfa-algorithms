@@ -1,4 +1,5 @@
 import { mount } from "enzyme";
+import HashMap from "hashmap";
 import { DFA, State } from "../../../types/DFA";
 import InputConverter from "./InputConverter";
 
@@ -8,21 +9,11 @@ it("does not convert invalid input", function () {
         <InputConverter
             states={["q1", "q2"]}
             transitions={
-                new Map([
-                    [
-                        "q1",
-                        new Map([
-                            ["0", "q2"],
-                            ["1", "q2"],
-                        ]),
-                    ],
-                    [
-                        "q2",
-                        new Map([
-                            ["0", "q2"],
-                            ["1", "q2"],
-                        ]),
-                    ],
+                new HashMap([
+                    [["q1", "0"], "q2"],
+                    [["q1", "1"], "q2"],
+                    [["q2", "0"], "q2"],
+                    [["q2", "1"], "q2"],
                 ])
             }
             finalStates={["q1"]}
@@ -31,7 +22,7 @@ it("does not convert invalid input", function () {
             convertInputCallback={callbackMock}
         />
     );
-    expect(callbackMock).toHaveBeenLastCalledWith(undefined);
+    expect(callbackMock).toHaveBeenCalledTimes(0);
 });
 
 it("correctly converts valid input", function () {
@@ -40,21 +31,11 @@ it("correctly converts valid input", function () {
         <InputConverter
             states={["q1", "q2"]}
             transitions={
-                new Map([
-                    [
-                        "q1",
-                        new Map([
-                            ["0", "q2"],
-                            ["1", "q2"],
-                        ]),
-                    ],
-                    [
-                        "q2",
-                        new Map([
-                            ["0", "q2"],
-                            ["1", "q2"],
-                        ]),
-                    ],
+                new HashMap([
+                    [["q1", "0"], "q2"],
+                    [["q1", "1"], "q2"],
+                    [["q2", "0"], "q2"],
+                    [["q2", "1"], "q2"],
                 ])
             }
             finalStates={["q1"]}

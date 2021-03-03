@@ -10,11 +10,7 @@ import PreGeneratedInputs from "./PreGeneratedInputs";
 it("passes correct inputs for equivalence testing", function () {
     const callback = jest.fn();
     const wrapper = shallow(
-        <PreGeneratedInputs
-            mode={AlgorithmMode.EQUIVALENCE_TESTING}
-            runLink={"test"}
-            runCallback={callback}
-        />
+        <PreGeneratedInputs mode={AlgorithmMode.EQUIVALENCE_TESTING} runCallback={callback} />
     );
     const exampleInputs = wrapper.find("button").at(0);
     exampleInputs.simulate("click");
@@ -25,11 +21,7 @@ it("passes correct inputs for equivalence testing", function () {
 it("passes correct inputs for state minimization", function () {
     const callback = jest.fn();
     const wrapper = shallow(
-        <PreGeneratedInputs
-            mode={AlgorithmMode.STATE_MINIMIZATION}
-            runLink={"test"}
-            runCallback={callback}
-        />
+        <PreGeneratedInputs mode={AlgorithmMode.STATE_MINIMIZATION} runCallback={callback} />
     );
     const exampleInputs = wrapper.find("button").at(0);
     exampleInputs.simulate("click");
