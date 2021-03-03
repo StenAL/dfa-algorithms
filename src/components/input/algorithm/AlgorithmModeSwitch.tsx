@@ -9,7 +9,6 @@ interface AlgorithmModeSwitchProps {
 export default function AlgorithmModeSwitch({ mode, callback }: AlgorithmModeSwitchProps) {
     return (
         <div className={"algorithm-switch"}>
-            <h3>Choose mode:</h3>
             <span className={"switch-option right-align"}>Equivalence testing</span>
             <Switch
                 checked={mode === AlgorithmMode.STATE_MINIMIZATION}
