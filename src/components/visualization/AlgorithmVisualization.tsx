@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Route, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, Route, useParams } from "react-router-dom";
 import { HopcroftAlgorithm, HopcroftAlgorithmImpl } from "../../algorithm/HopcroftAlgorithm";
 import {
     NearlyLinearAlgorithm,
@@ -12,15 +12,15 @@ import {
 import { Algorithm, AlgorithmMode } from "../../types/Algorithm";
 import { useForceUpdate } from "../../util/hooks";
 import { dfaToNoamInput, getAlgorithmModes, getAlgorithmName } from "../../util/util";
-import DfaVisualization from "./dfa/DfaVisualization";
-import HopcroftAlgorithmVisualization from "./HopcroftAlgorithmVisualization";
-import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
+import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
 import WitnessSwitch from "../input/algorithm/WitnessSwitch";
-import NearlyLinearAlgorithmVisualization from "./NearlyLinearAlgorithmVisualization";
-import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualization";
 import AlgorithmLog from "./AlgorithmLog";
 import AlgorithmStepControls from "./AlgorithmStepControls";
+import DfaVisualization from "./dfa/DfaVisualization";
+import HopcroftAlgorithmVisualization from "./HopcroftAlgorithmVisualization";
+import NearlyLinearAlgorithmVisualization from "./NearlyLinearAlgorithmVisualization";
+import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualization";
 
 export type AlgorithmUrlString = "table-filling" | "hopcroft" | "nearly-linear";
 interface AlgorithmVisualizationRouteParams {
@@ -33,6 +33,12 @@ export default function AlgorithmVisualization() {
     const forceUpdate = useForceUpdate();
     const [mode, setMode] = useState<AlgorithmMode>(AlgorithmMode.EQUIVALENCE_TESTING);
     const [produceWitness, setProduceWitness] = useState(false);
+
+    useEffect(() => {
+        if (algorithmType === "nearly-linear") {
+            setMode(AlgorithmMode.EQUIVALENCE_TESTING);
+        }
+    }, [algorithmType]);
 
     let visualization: JSX.Element | undefined = undefined;
     const title = "The " + getAlgorithmName(algorithmType);
@@ -63,7 +69,33 @@ export default function AlgorithmVisualization() {
         <>
             <h2>{title}</h2>
             <Route path={"/algorithm/:algorithmType/input"}>
-                <p>todo: add buttons to switch algorithms here</p>
+                <h3>Wish to visualize a different algorithm?</h3>
+                {algorithmType !== "table-filling" ? (
+                    <p>
+                        <Link to={"/algorithm/table-filling/input"}>
+                            The Table-Filling Algorithm
+                        </Link>
+                    </p>
+                ) : (
+                    ""
+                )}
+                {algorithmType !== "hopcroft" ? (
+                    <p>
+                        <Link to={"/algorithm/hopcroft/input"}>The n lg n Hopcroft Algorithm</Link>
+                    </p>
+                ) : (
+                    ""
+                )}
+                {algorithmType !== "nearly-linear" ? (
+                    <p>
+                        <Link to={"/algorithm/nearly-linear/input"}>
+                            The (Nearly) Linear Algorithm
+                        </Link>
+                    </p>
+                ) : (
+                    ""
+                )}
+                <h3>Select mode</h3>
                 {supportedModes.length > 1 ? (
                     <AlgorithmModeSwitch
                         mode={mode}
@@ -126,7 +158,10 @@ export default function AlgorithmVisualization() {
                                             : ""
                                     }
                                     dfaString={
-                                        algorithm!.input2 ? dfaToNoamInput(algorithm!.input2) : ""
+                                        algorithm.mode === AlgorithmMode.EQUIVALENCE_TESTING &&
+                                        algorithm!.input2
+                                            ? dfaToNoamInput(algorithm!.input2)
+                                            : ""
                                     }
                                 />
                             </div>

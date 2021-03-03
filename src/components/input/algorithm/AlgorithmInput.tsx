@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AlgorithmMode } from "../../../types/Algorithm";
 import { DFA } from "../../../types/DFA";
@@ -21,6 +21,12 @@ export default function AlgorithmInput({ mode, runCallback, runLink }: Algorithm
     const [input2, setInput2] = useState<DFA>();
     const [alphabet, setAlphabet] = useState<string[]>([]);
     const alphabetValid = alphabet.length > 0 && new Set(alphabet).size === alphabet.length;
+
+    useEffect(() => {
+        if (mode === AlgorithmMode.STATE_MINIMIZATION) {
+            setInput2(undefined);
+        }
+    }, [mode]);
 
     let input1Valid = input1 !== undefined;
     let input2Valid = input2 !== undefined;
