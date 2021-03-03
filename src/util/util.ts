@@ -137,6 +137,7 @@ export const getPrettyDfaString = (dfa: DFA): string[] => {
 
 export function dfaToNoamInput(dfa: DFA) {
     const output: string[] = [];
+    dfa.states.forEach((s) => (s.name = s.name.replace(/,/g, "‚"))); // visualization refuses to render commas, use similar unicode character instead
     output.push("#states");
     dfa.states.forEach((s) => output.push(s.name));
     output.push("#initial");
@@ -153,6 +154,5 @@ export function dfaToNoamInput(dfa: DFA) {
     }
     const automatonString = output.join("\n");
     const automaton = noam.fsm.parseFsmFromString(automatonString);
-    const dotString = noam.fsm.printDotFormat(automaton) as string;
-    return dotString;
+    return noam.fsm.printDotFormat(automaton) as string;
 }

@@ -9,7 +9,7 @@
         "lodash": "^4.17.20",
         "md5": "^2.3.0",
         "mnemonist": "^0.38.1",
-        "noam": "github:izuzak/noam",
+        "noam": "git+https://github.com/izuzak/noam.git",
         "node-sass": "^4.14.1",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",

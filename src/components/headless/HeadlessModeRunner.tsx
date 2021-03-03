@@ -1,8 +1,15 @@
 import { useState } from "react";
-import { Algorithm, AlgorithmType, EquivalenceTestingResult } from "../../types/Algorithm";
+import {
+    Algorithm,
+    AlgorithmMode,
+    AlgorithmType,
+    CommonAlgorithmState,
+    EquivalenceTestingResult,
+} from "../../types/Algorithm";
 import { DFA } from "../../types/DFA";
-import { getAlgorithmName } from "../../util/util";
+import { dfaToNoamInput, getAlgorithmName } from "../../util/util";
 import DownloadButton from "../input/algorithm/DownloadButton";
+import DfaVisualization from "../visualization/dfa/DfaVisualization";
 
 interface HeadlessModeRunProps {
     algorithms: Algorithm[];
@@ -80,13 +87,18 @@ export default function HeadlessModeRunner({ algorithms }: HeadlessModeRunProps)
                         EquivalenceTestingResult.EQUIVALENT
                     ) {
                         result = "Equivalent";
-                    } else {
+                    } else if (
+                        algorithm.mode === AlgorithmMode.STATE_MINIMIZATION &&
+                        algorithm.result !== algorithm.input1
+                    ) {
                         result = (
                             <DownloadButton
                                 text={"Download minimized"}
                                 dfa={algorithm.result as DFA}
                             />
                         );
+                    } else {
+                        result = "DFA is minimal";
                     }
                     return (
                         <div className={"table-row"} key={`headless-${algorithm.type}`}>
@@ -100,6 +112,19 @@ export default function HeadlessModeRunner({ algorithms }: HeadlessModeRunProps)
                 })}
             </div>
             <button onClick={runAlgorithms}>Start</button>
+            {algorithms[0].mode === AlgorithmMode.STATE_MINIMIZATION &&
+            algorithms[0].state === CommonAlgorithmState.FINAL &&
+            algorithms[0].result !== algorithms[0].input1 ? (
+                <>
+                    <h3>Minimized result</h3>
+                    <DfaVisualization
+                        initialState={(algorithms[0].result as DFA).startingState.name}
+                        dfaString={dfaToNoamInput(algorithms[0].result as DFA)}
+                    />
+                </>
+            ) : (
+                ""
+            )}
         </div>
     );
 }

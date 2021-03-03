@@ -39,7 +39,5 @@ Tests can be run using `npm run test`
 
 ## Todo:
 
--   links to switch algorithm in input
--   display result state minimization in visualization mode
--   display result state minimization in headless mode
+-   add back button to algorithm visualizations to change input
 -   display generated data in data generation
