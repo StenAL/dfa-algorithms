@@ -8,7 +8,9 @@ import {
     EquivalenceTestingResult,
 } from "../../types/Algorithm";
 import { DFA } from "../../types/DFA";
+import { dfaToNoamInput } from "../../util/util";
 import DownloadButton from "../input/algorithm/DownloadButton";
+import DfaVisualization from "./dfa/DfaVisualization";
 
 interface AlgorithmVisualizationProps {
     algorithm: TableFillingAlgorithm;
@@ -117,12 +119,18 @@ export default function TableFillingAlgorithmVisualization({
             break;
     }
     return (
-        <div>
+        <div className={"table-filling-visualization"}>
             <p>Current state: {stateDescription}</p>
             {algorithm.mode === AlgorithmMode.STATE_MINIMIZATION &&
             algorithm.state === CommonAlgorithmState.FINAL &&
             algorithm.indistinguishableStateGroups.length > 0 ? (
-                <DownloadButton text={"Download minimized DFA"} dfa={algorithm.result as DFA} />
+                <>
+                    <DownloadButton text={"Download minimized DFA"} dfa={algorithm.result as DFA} />
+                    <DfaVisualization
+                        initialState={(algorithm.result as DFA).startingState.name}
+                        dfaString={dfaToNoamInput(algorithm.result as DFA)}
+                    />
+                </>
             ) : (
                 ""
             )}

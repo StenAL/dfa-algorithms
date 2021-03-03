@@ -42,9 +42,7 @@ export default function NearlyLinearAlgorithmVisualization({
     );
 
     const renderProcessingStack =
-        !algorithm.produceWitness &&
-        (algorithm.state === NearlyLinearAlgorithmState.COMBINING_SETS ||
-            algorithm.state === NearlyLinearAlgorithmState.ALL_SETS_COMBINED);
+        !algorithm.produceWitness && algorithm.state === NearlyLinearAlgorithmState.COMBINING_SETS;
     const processingStack = renderProcessingStack ? (
         <div className={"nearly-linear-stack"}>
             {Array.from(algorithm.processingStack).map(([p, q]) => (

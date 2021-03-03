@@ -7,7 +7,9 @@ import {
     EquivalenceTestingResult,
 } from "../../types/Algorithm";
 import { DFA } from "../../types/DFA";
+import { dfaToNoamInput } from "../../util/util";
 import DownloadButton from "../input/algorithm/DownloadButton";
+import DfaVisualization from "./dfa/DfaVisualization";
 
 interface HopcroftAlgorithmVisualizationProps {
     algorithm: HopcroftAlgorithm;
@@ -231,7 +233,13 @@ export default function HopcroftAlgorithmVisualization({
             {algorithm.mode === AlgorithmMode.STATE_MINIMIZATION &&
             algorithm.state === CommonAlgorithmState.FINAL &&
             Array.from(algorithm.blocks.values()).some((states) => states.size > 1) ? (
-                <DownloadButton text={"Download minimized DFA"} dfa={algorithm.result as DFA} />
+                <>
+                    <DownloadButton text={"Download minimized DFA"} dfa={algorithm.result as DFA} />
+                    <DfaVisualization
+                        initialState={(algorithm.result as DFA).startingState.name}
+                        dfaString={dfaToNoamInput(algorithm.result as DFA)}
+                    />
+                </>
             ) : (
                 ""
             )}
