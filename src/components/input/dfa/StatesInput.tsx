@@ -28,7 +28,6 @@ export default function StatesInput({
     const [finalStates, setFinalStates] = useState<string[]>([]);
     const [transitions, setTransitions] = useState<TransitionData>(new HashMap());
     const [transitionsValid, setTransitionsValid] = useState<boolean>(false);
-    console.log(existingTransitions);
     useEffect(() => {
         setStates(existingStates);
     }, [existingStates]);
@@ -72,120 +71,132 @@ export default function StatesInput({
 
     return (
         <div className={"states-input-container"}>
-            <div className={"states-input"}>
-                <label htmlFor={"states"}>
-                    States
-                    <span className={"info-tooltip"} data-tip data-for="states-help">
-                        ?
-                    </span>
-                </label>
-                <Tooltip
-                    place={"top"}
-                    type={"info"}
-                    id="states-help"
-                    effect={"solid"}
-                    multiline={true}
-                >
-                    <span>
-                        The states of the DFA in the form of comma-separated list
-                        <br /> e.g. 'q0,q1,q2' or 'p,q'. Can not contain duplicate states.
-                        <br />
-                        <br />
-                        The first state listed is assumed to be the starting state of the DFA.
-                    </span>
-                </Tooltip>
-                <input
-                    name={"states"}
-                    type={"text"}
-                    placeholder={"q1,q2..."}
-                    value={states.join(",")}
-                    onChange={(event) => {
-                        const newStates = event.target.value.split(",");
-                        if (newStates.length > 0 && newStates[newStates.length - 1] === "") {
-                            newStates.pop();
-                        }
-                        const transitionsCopy: TransitionData = new HashMap<
-                            [string, string],
-                            string
-                        >();
-                        for (let state of newStates) {
-                            for (let symbol of alphabet) {
-                                const pair: [string, string] = [state, symbol];
-                                if (transitions.has(pair)) {
-                                    transitionsCopy.set(pair, transitions.get(pair)!);
-                                } else {
-                                    transitionsCopy.set(pair, "");
+            <div>
+                <div className={"states-input"}>
+                    <label htmlFor={"states"}>
+                        States
+                        <span className={"info-tooltip"} data-tip data-for="states-help">
+                            ?
+                        </span>
+                    </label>
+                    <Tooltip
+                        place={"top"}
+                        type={"info"}
+                        id="states-help"
+                        effect={"solid"}
+                        multiline={true}
+                    >
+                        <span>
+                            The states of the DFA in the form of comma-separated list
+                            <br /> e.g. 'q0,q1,q2' or 'p,q'. Can not contain duplicate states.
+                            <br />
+                            <br />
+                            The first state listed is assumed to be the starting state of the DFA.
+                        </span>
+                    </Tooltip>
+                    {
+                        <input
+                            name={"states"}
+                            type={"text"}
+                            placeholder={"q1,q2..."}
+                            key={existingStates.join(",")}
+                            defaultValue={existingStates.join(",")}
+                            onChange={(event) => {
+                                const newStates = event.target.value.split(",");
+                                if (
+                                    newStates.length > 0 &&
+                                    newStates[newStates.length - 1] === ""
+                                ) {
+                                    newStates.pop();
                                 }
+                                const transitionsCopy: TransitionData = new HashMap<
+                                    [string, string],
+                                    string
+                                >();
+                                for (let state of newStates) {
+                                    for (let symbol of alphabet) {
+                                        const pair: [string, string] = [state, symbol];
+                                        if (transitions.has(pair)) {
+                                            transitionsCopy.set(pair, transitions.get(pair)!);
+                                        } else {
+                                            transitionsCopy.set(pair, "");
+                                        }
+                                    }
+                                }
+                                setStates(newStates);
+                                setTransitions(transitionsCopy);
+                            }}
+                            className={statesValid ? "" : "invalid-input"}
+                        />
+                    }
+                    <label htmlFor={"finalStates"}>
+                        Final states
+                        <span className={"info-tooltip"} data-tip data-for="final-states-help">
+                            ?
+                        </span>
+                    </label>
+                    <Tooltip
+                        place={"top"}
+                        type={"info"}
+                        id="final-states-help"
+                        effect={"solid"}
+                        multiline={true}
+                    >
+                        <span>
+                            The final (accepting) states of the DFA in the form of comma-separated
+                            list.
+                            <br /> These states must be listed in the 'States' field. Can not
+                            contain duplicates.
+                        </span>
+                    </Tooltip>
+                    <input
+                        key={existingFinalStates.join(",") + "final"}
+                        defaultValue={existingFinalStates.join(",")}
+                        name={"finalStates"}
+                        type={"text"}
+                        placeholder={"q1,..."}
+                        onChange={(event) => {
+                            const newFinalStates = event.target.value.split(",");
+                            if (
+                                newFinalStates.length > 0 &&
+                                newFinalStates[newFinalStates.length - 1] === ""
+                            ) {
+                                newFinalStates.pop();
                             }
-                        }
-                        setStates(newStates);
-                        setTransitions(transitionsCopy);
-                    }}
-                    className={statesValid ? "" : "invalid-input"}
-                />
-                <label htmlFor={"finalStates"}>
-                    Final states
-                    <span className={"info-tooltip"} data-tip data-for="final-states-help">
-                        ?
-                    </span>
-                </label>
-                <Tooltip
-                    place={"top"}
-                    type={"info"}
-                    id="final-states-help"
-                    effect={"solid"}
-                    multiline={true}
-                >
-                    <span>
-                        The final (accepting) states of the DFA in the form of comma-separated list.
-                        <br /> These states must be listed in the 'States' field. Can not contain
-                        duplicates.
-                    </span>
-                </Tooltip>
-                <input
-                    defaultValue={existingFinalStates.join(",")}
-                    name={"finalStates"}
-                    type={"text"}
-                    placeholder={"q1,..."}
-                    onChange={(event) => {
-                        const newFinalStates = event.target.value.split(",");
-                        if (
-                            newFinalStates.length > 0 &&
-                            newFinalStates[newFinalStates.length - 1] === ""
-                        ) {
-                            newFinalStates.pop();
-                        }
-                        setFinalStates(newFinalStates);
-                    }}
-                    className={finalStatesValid ? "" : "invalid-input"}
+                            setFinalStates(newFinalStates);
+                        }}
+                        className={finalStatesValid ? "" : "invalid-input"}
+                    />
+                </div>
+                {states.length > 0 && alphabet.length > 0 ? (
+                    <TransitionsInput
+                        states={states}
+                        alphabet={alphabet}
+                        transitions={transitions}
+                        setTransition={(from, symbol, to) => {
+                            const transitionsCopy: TransitionData = new HashMap<
+                                [string, string],
+                                string
+                            >(transitions);
+                            transitionsCopy.set([from, symbol], to);
+                            setTransitions(transitionsCopy);
+                        }}
+                        setTransitionsValid={setTransitionsValid}
+                    />
+                ) : (
+                    ""
+                )}
+                <InputConverter
+                    transitions={transitions}
+                    alphabet={alphabet}
+                    finalStates={finalStates}
+                    states={states}
+                    validInput={
+                        statesValid && alphabetValid && finalStatesValid && transitionsValid
+                    }
+                    convertInputCallback={convertInputCallback}
                 />
             </div>
-            {states.length > 0 && alphabet.length > 0 ? (
-                <TransitionsInput
-                    states={states}
-                    alphabet={alphabet}
-                    transitions={transitions}
-                    setTransition={(from, symbol, to) => {
-                        const transitionsCopy: TransitionData = new HashMap<
-                            [string, string],
-                            string
-                        >(transitions);
-                        transitionsCopy.set([from, symbol], to);
-                        setTransitions(transitionsCopy);
-                    }}
-                    setTransitionsValid={setTransitionsValid}
-                />
-            ) : (
-                ""
-            )}
-            <InputConverter
-                transitions={transitions}
-                alphabet={alphabet}
-                finalStates={finalStates}
-                states={states}
-                validInput={statesValid && alphabetValid && finalStatesValid && transitionsValid}
-                convertInputCallback={convertInputCallback}
-            />
         </div>
     );
 }

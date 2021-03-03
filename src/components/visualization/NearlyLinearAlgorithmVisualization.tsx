@@ -135,7 +135,7 @@ export default function NearlyLinearAlgorithmVisualization({
     }
 
     return (
-        <>
+        <div>
             <p>Current state: {stateDescription}</p>
             {renderSets ? (
                 <>
@@ -169,6 +169,6 @@ export default function NearlyLinearAlgorithmVisualization({
             ) : (
                 ""
             )}
-        </>
+        </div>
     );
 }
