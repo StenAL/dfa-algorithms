@@ -62,6 +62,7 @@ export default function AlgorithmVisualization() {
     return (
         <>
             <h2>{title}</h2>
+            <p>todo: add buttons to switch algorithms here</p>
             <Route path={"/algorithm/:algorithmType/input"}>
                 {supportedModes.length > 1 ? (
                     <AlgorithmModeSwitch
@@ -105,30 +106,34 @@ export default function AlgorithmVisualization() {
             <Route path={"/algorithm/:algorithmType/run"}>
                 <div className={"algorithm-container"}>
                     <AlgorithmLog algorithm={algorithm!} />
-                    {algorithm ? (
-                        <div>
-                            <DfaVisualization
-                                initialState={algorithm!.input1.startingState.name}
-                                dfaString={dfaToNoamInput(algorithm!.input1)}
-                            />
-                            <DfaVisualization
-                                initialState={
-                                    algorithm!.input2 ? algorithm!.input2.startingState.name : ""
-                                }
-                                dfaString={
-                                    algorithm!.input2 ? dfaToNoamInput(algorithm!.input2) : ""
-                                }
-                            />
-                        </div>
-                    ) : (
-                        ""
-                    )}
-                    {visualization}
                     <AlgorithmStepControls
                         algorithm={algorithm!}
                         stepBackwardCallback={() => forceUpdate()}
                         stepForwardCallback={() => forceUpdate()}
                     />
+                    {algorithm ? (
+                        <div className={"algorithm-visualization-container"}>
+                            {visualization}
+                            <div className={"algorithm-input-visualization"}>
+                                <DfaVisualization
+                                    initialState={algorithm!.input1.startingState.name}
+                                    dfaString={dfaToNoamInput(algorithm!.input1)}
+                                />
+                                <DfaVisualization
+                                    initialState={
+                                        algorithm!.input2
+                                            ? algorithm!.input2.startingState.name
+                                            : ""
+                                    }
+                                    dfaString={
+                                        algorithm!.input2 ? dfaToNoamInput(algorithm!.input2) : ""
+                                    }
+                                />
+                            </div>
+                        </div>
+                    ) : (
+                        ""
+                    )}
                 </div>
             </Route>
         </>

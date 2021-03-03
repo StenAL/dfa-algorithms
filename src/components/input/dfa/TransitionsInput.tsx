@@ -71,7 +71,7 @@ export default function TransitionsInput({
     });
     return (
         <div className={"transitions"}>
-            <p className={"transitions-"}>Transitions</p>
+            <p>Transitions</p>
             {elements}
         </div>
     );

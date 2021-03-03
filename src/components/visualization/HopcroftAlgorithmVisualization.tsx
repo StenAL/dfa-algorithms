@@ -226,7 +226,7 @@ export default function HopcroftAlgorithmVisualization({
     }
 
     return (
-        <>
+        <div>
             <p>Current state: {stateDescription}</p>
             {algorithm.mode === AlgorithmMode.STATE_MINIMIZATION &&
             algorithm.state === CommonAlgorithmState.FINAL &&
@@ -303,6 +303,6 @@ export default function HopcroftAlgorithmVisualization({
             ) : (
                 ""
             )}
-        </>
+        </div>
     );
 }
