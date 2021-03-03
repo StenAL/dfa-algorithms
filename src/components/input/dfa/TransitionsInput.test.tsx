@@ -1,17 +1,18 @@
 import { mount } from "enzyme";
+import HashMap from "hashmap";
 import TransitionsInput from "./TransitionsInput";
 
 it("detects invalid transitions", function () {
-    const transitions = new Map();
+    const transitions = new HashMap<[string, string], string>([[["q1", "0"], "q"]]);
     let valid = true;
-    transitions.set("q1", new Map());
-    transitions.get("q1").set("0", "q");
     mount(
         <TransitionsInput
             states={["q1"]}
             alphabet={["0"]}
             transitions={transitions}
-            setTransition={(from, symbol, to) => transitions.get(from)!.set(symbol, to)}
+            setTransition={(from, symbol, to) => {
+                transitions.set([from, symbol], to);
+            }}
             setTransitionsValid={(result) => {
                 valid = result;
             }}
@@ -21,17 +22,15 @@ it("detects invalid transitions", function () {
 });
 
 it("creates transitions on input", function () {
-    const transitions = new Map();
+    const transitions = new HashMap<[string, string], string>([[["q1", "0"], "q"]]);
     let valid = true;
-    transitions.set("q1", new Map());
-    transitions.get("q1").set("0", "q");
     const wrapper = mount(
         <TransitionsInput
             states={["q1"]}
             alphabet={["0"]}
             transitions={transitions}
             setTransition={(from, symbol, to) => {
-                transitions.get(from)!.set(symbol, to);
+                transitions.set([from, symbol], to);
             }}
             setTransitionsValid={(result) => {
                 valid = result;
@@ -43,5 +42,5 @@ it("creates transitions on input", function () {
     transitionInput.simulate("change", { target: { value: "q1" } });
     wrapper.setProps({}); // re-render
     expect(valid).toBe(true);
-    expect(transitions).toEqual(new Map([["q1", new Map([["0", "q1"]])]]));
+    expect(transitions).toEqual(new HashMap([[["q1", "0"], "q1"]]));
 });
