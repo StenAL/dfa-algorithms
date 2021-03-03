@@ -231,12 +231,7 @@ export default function HopcroftAlgorithmVisualization({
             {algorithm.mode === AlgorithmMode.STATE_MINIMIZATION &&
             algorithm.state === CommonAlgorithmState.FINAL &&
             Array.from(algorithm.blocks.values()).some((states) => states.size > 1) ? (
-                <DownloadButton
-                    disabled={false}
-                    text={"Download minimized DFA"}
-                    dfa1={algorithm.result as DFA}
-                    dfa2={undefined}
-                />
+                <DownloadButton text={"Download minimized DFA"} dfa={algorithm.result as DFA} />
             ) : (
                 ""
             )}

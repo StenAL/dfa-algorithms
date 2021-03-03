@@ -122,12 +122,7 @@ export default function TableFillingAlgorithmVisualization({
             {algorithm.mode === AlgorithmMode.STATE_MINIMIZATION &&
             algorithm.state === CommonAlgorithmState.FINAL &&
             algorithm.indistinguishableStateGroups.length > 0 ? (
-                <DownloadButton
-                    disabled={false}
-                    text={"Download minimized DFA"}
-                    dfa1={algorithm.result as DFA}
-                    dfa2={undefined}
-                />
+                <DownloadButton text={"Download minimized DFA"} dfa={algorithm.result as DFA} />
             ) : (
                 ""
             )}

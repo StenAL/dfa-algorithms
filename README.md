@@ -38,3 +38,8 @@ The software can be run as follows:
 Tests can be run using `npm run test`
 
 ## Todo:
+
+-   links to switch algorithm in input
+-   display result state minimization in visualization mode
+-   display result state minimization in headless mode
+-   display generated data in data generation

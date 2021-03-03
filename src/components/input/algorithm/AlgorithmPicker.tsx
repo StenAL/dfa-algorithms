@@ -37,7 +37,7 @@ export default function AlgorithmPicker({
     });
 
     return (
-        <div>
+        <div className={"algorithm-picker-container"}>
             <h3>Choose algorithms</h3>
             <div className={"algorithm-picker"}>{inputs}</div>
         </div>

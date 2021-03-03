@@ -4,10 +4,11 @@ import { default as Tooltip } from "react-tooltip";
 import { DFA } from "../../../types/DFA";
 import InputConverter from "./InputConverter";
 import TransitionsInput from "./TransitionsInput";
+import UploadDfa from "./UploadDfa";
 
 export type TransitionData = HashMap<[string, string], string>; // (from, symbol) -> to
 
-interface StatesInputProps {
+interface DfaInputProps {
     alphabet: string[];
     existingStates: string[];
     existingFinalStates: string[];
@@ -16,14 +17,14 @@ interface StatesInputProps {
     convertInputCallback: (dfa: DFA | undefined) => void;
 }
 
-export default function StatesInput({
+export default function DfaInput({
     convertInputCallback,
     existingStates,
     existingFinalStates,
     existingTransitions,
     alphabet,
     alphabetValid,
-}: StatesInputProps) {
+}: DfaInputProps) {
     const [states, setStates] = useState<string[]>([]);
     const [finalStates, setFinalStates] = useState<string[]>([]);
     const [transitions, setTransitions] = useState<TransitionData>(new HashMap());
@@ -186,6 +187,7 @@ export default function StatesInput({
                 ) : (
                     ""
                 )}
+                <UploadDfa callback={convertInputCallback} />
                 <InputConverter
                     transitions={transitions}
                     alphabet={alphabet}

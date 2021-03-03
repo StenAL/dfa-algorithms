@@ -1,19 +1,11 @@
-import { mount, shallow } from "enzyme";
-import { DFA } from "../../types/DFA";
+import { mount } from "enzyme";
+import DownloadButton from "../input/algorithm/DownloadButton";
 import DatasetGenerator from "./DatasetGenerator";
 
 it("generates DFA according to parameters", function () {
-    const callback = jest.fn();
     const statesCount = 10;
     const finalStatesCount = 5;
-    const wrapper = shallow(
-        <DatasetGenerator
-            statePrefix={"test"}
-            existingDfa={undefined}
-            alphabet={["0", "1"]}
-            callback={callback}
-        />
-    );
+    const wrapper = mount(<DatasetGenerator statePrefix={"test"} alphabet={["0", "1"]} />);
 
     const statesCountInput = wrapper.find('input[name="statesCount"]');
     statesCountInput.simulate("change", { target: { value: statesCount.toString() } });
@@ -22,27 +14,22 @@ it("generates DFA according to parameters", function () {
     expect(finalStatesCountInput.hasClass("invalid-input")).toBe(false);
     expect(statesCountInput.hasClass("invalid-input")).toBe(false);
 
-    const generateButton = wrapper.find("button");
+    const generateButton = wrapper
+        .find("button")
+        .findWhere((el) => el.text() === "Generate")
+        .at(0);
     generateButton.simulate("click");
-    expect(callback).toHaveBeenCalledTimes(1);
-    const dfa: DFA = callback.mock.calls[0][0];
+    const downloadButton = wrapper.find(DownloadButton);
+    const dfa = downloadButton.props().dfa!;
     expect(dfa.states.map((s) => s.name).every((name) => name.startsWith("test"))).toBe(true);
     expect(dfa.states.length).toBe(statesCount);
     expect(dfa.finalStates.size).toBe(finalStatesCount);
 });
 
 it("validates input", function () {
-    const callback = jest.fn();
     const statesCount = 3;
     const finalStatesCount = 5;
-    const wrapper = mount(
-        <DatasetGenerator
-            statePrefix={"test"}
-            existingDfa={undefined}
-            alphabet={["0", "1"]}
-            callback={callback}
-        />
-    );
+    const wrapper = mount(<DatasetGenerator statePrefix={"test"} alphabet={["0", "1"]} />);
 
     let statesCountInput = wrapper.find('input[name="statesCount"]');
     statesCountInput.simulate("change", { target: { value: statesCount.toString() } });

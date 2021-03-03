@@ -84,9 +84,7 @@ export default function HeadlessModeRunner({ algorithms }: HeadlessModeRunProps)
                         result = (
                             <DownloadButton
                                 text={"Download minimized"}
-                                disabled={false}
-                                dfa1={algorithm.result as DFA}
-                                dfa2={undefined}
+                                dfa={algorithm.result as DFA}
                             />
                         );
                     }

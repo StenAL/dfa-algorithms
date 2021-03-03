@@ -3,25 +3,21 @@ import { DFA } from "../../../types/DFA";
 import { serializeDfa } from "../../../util/util";
 
 interface DownloadButtonProps {
-    disabled: boolean;
     text: string;
-    dfa1: DFA;
-    dfa2: DFA | undefined;
+    dfa: DFA | undefined;
 }
 
-export default function DownloadButton({ disabled, text, dfa1, dfa2 }: DownloadButtonProps) {
+export default function DownloadButton({ text, dfa }: DownloadButtonProps) {
     return (
         <button
-            disabled={disabled}
+            disabled={!dfa}
             onClick={() => {
-                const json1 = JSON.stringify(serializeDfa(dfa1!));
-                const json2 = dfa2 ? JSON.stringify(serializeDfa(dfa2!)) : "0";
-                const result = JSON.stringify({ input1: json1, input2: json2 });
-                const file = new Blob([result], { type: "json" });
+                const json = JSON.stringify(serializeDfa(dfa!));
+                const file = new Blob([json], { type: "json" });
 
                 const fakeLink = document.createElement("a");
                 fakeLink.href = URL.createObjectURL(file);
-                fakeLink.download = `dfa-${md5(result)}.json`;
+                fakeLink.download = `dfa-${md5(json)}.json`;
                 fakeLink.click();
             }}
         >
