@@ -7,24 +7,20 @@ import {
 import { DatasetType } from "../../types/Dataset";
 import { DFA } from "../../types/DFA";
 import { getPrettyDfaString } from "../../util/util";
+import DownloadButton from "../input/algorithm/DownloadButton";
 import DatasetModeSelect from "./DatasetModeSelect";
 
 interface GeneratorProps {
     statePrefix: string;
-    existingDfa: DFA | undefined;
     alphabet: string[];
-    callback: (dfa: DFA) => void;
 }
 
-export default function DatasetGenerator({
-    existingDfa,
-    alphabet,
-    callback,
-    statePrefix,
-}: GeneratorProps) {
+export default function DatasetGenerator({ alphabet, statePrefix }: GeneratorProps) {
     const [generationMode, setGenerationMode] = useState(DatasetType.RANDOM);
     const [statesCount, setStatesCount] = useState(7);
     const [finalStatesCount, setFinalStatesCount] = useState(1);
+    const [dfa, setDfa] = useState<DFA>();
+
     const alphabetValid = alphabet.length > 0 && new Set(alphabet).size === alphabet.length;
     const statesCountValid = !isNaN(statesCount) && statesCount > 0;
     const finalStatesCountValid = !isNaN(finalStatesCount) && statesCount >= finalStatesCount;
@@ -73,19 +69,22 @@ export default function DatasetGenerator({
                             break;
                     }
                     const dfa = generator(statesCount, alphabet, finalStatesCount, statePrefix);
-                    callback(dfa);
+                    setDfa(dfa);
                 }}
             >
                 Generate
             </button>
-            {existingDfa ? (
-                <div className={"log"}>
-                    {getPrettyDfaString(existingDfa)
-                        .reverse()
-                        .map((s) => (
-                            <p key={s}>{s}</p>
-                        ))}
-                </div>
+            {dfa ? (
+                <>
+                    <div className={"log"}>
+                        {getPrettyDfaString(dfa)
+                            .reverse()
+                            .map((s) => (
+                                <p key={s}>{s}</p>
+                            ))}
+                    </div>
+                    <DownloadButton text={"Download"} dfa={dfa} />
+                </>
             ) : (
                 ""
             )}

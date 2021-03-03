@@ -6,7 +6,7 @@ import { DFA } from "../../../types/DFA";
 import { dfaToNoamInput } from "../../../util/util";
 import DfaVisualization from "../../visualization/dfa/DfaVisualization";
 import AlphabetInput from "../dfa/AlphabetInput";
-import StatesInput from "../dfa/StatesInput";
+import DfaInput from "../dfa/DfaInput";
 import DownloadButton from "./DownloadButton";
 import PreGeneratedInputs from "./PreGeneratedInputs";
 
@@ -22,12 +22,28 @@ export default function AlgorithmInput({ mode, runCallback, runLink }: Algorithm
     const [alphabet, setAlphabet] = useState<string[]>([]);
     const alphabetValid = alphabet.length > 0 && new Set(alphabet).size === alphabet.length;
 
-    let inputValid = false;
-    if (mode === AlgorithmMode.EQUIVALENCE_TESTING && input1 && input2) {
-        inputValid = true;
+    let input1Valid = input1 !== undefined;
+    let input2Valid = input2 !== undefined;
+    let inputValid = true;
+    if (mode === AlgorithmMode.EQUIVALENCE_TESTING && input1Valid && input2Valid) {
+        for (let state of input1!.states) {
+            const transitionKeys = new Set(state.transitions.keys());
+            input1Valid = input1Valid && alphabet.every((symbol) => transitionKeys.has(symbol));
+        }
+        for (let state of input2!.states) {
+            const transitionKeys = new Set(state.transitions.keys());
+            input2Valid = input2Valid && alphabet.every((symbol) => transitionKeys.has(symbol));
+        }
+        inputValid = inputValid && input2Valid;
     } else if (mode === AlgorithmMode.STATE_MINIMIZATION && input1) {
-        inputValid = true;
+        for (let state of input1.states) {
+            const transitionKeys = new Set(state.transitions.keys());
+            input1Valid = input1Valid && alphabet.every((symbol) => transitionKeys.has(symbol));
+        }
+    } else {
+        inputValid = false;
     }
+    inputValid = inputValid && input1Valid;
 
     return (
         <div className={"page-container"}>
@@ -35,9 +51,9 @@ export default function AlgorithmInput({ mode, runCallback, runLink }: Algorithm
             <PreGeneratedInputs
                 mode={mode}
                 runCallback={(input1, input2) => {
-                    setAlphabet(_.clone(input1.alphabet));
-                    setInput1(_.clone(input1));
-                    setInput2(_.clone(input2));
+                    setAlphabet(_.cloneDeep(input1.alphabet));
+                    setInput1(_.cloneDeep(input1));
+                    setInput2(_.cloneDeep(input2));
                 }}
             />
             <h3>
@@ -79,8 +95,13 @@ export default function AlgorithmInput({ mode, runCallback, runLink }: Algorithm
 
             <div className={"dfa-inputs-container"}>
                 <div className={"input-visualization-container"}>
-                    <StatesInput
-                        convertInputCallback={(dfa) => setInput1(dfa)}
+                    <DfaInput
+                        convertInputCallback={(dfa) => {
+                            setInput1(dfa);
+                            if (dfa) {
+                                setAlphabet(dfa.alphabet);
+                            }
+                        }}
                         existingStates={input1 ? input1.states.map((s) => s.name) : []}
                         existingFinalStates={
                             input1 ? Array.from(input1.finalStates).map((s) => s.name) : []
@@ -101,14 +122,15 @@ export default function AlgorithmInput({ mode, runCallback, runLink }: Algorithm
                         alphabet={alphabet}
                         alphabetValid={alphabetValid}
                     />
+                    <DownloadButton text={"Save to File"} dfa={input1} />
                     <DfaVisualization
                         initialState={input1 ? input1.startingState.name : ""}
-                        dfaString={input1 ? dfaToNoamInput(input1) : ""}
+                        dfaString={input1Valid ? dfaToNoamInput(input1!) : ""}
                     />
                 </div>
                 {mode === AlgorithmMode.EQUIVALENCE_TESTING ? (
                     <div className={"input-visualization-container"}>
-                        <StatesInput
+                        <DfaInput
                             alphabet={alphabet}
                             existingStates={input2 ? input2.states.map((s) => s.name) : []}
                             existingFinalStates={
@@ -128,23 +150,23 @@ export default function AlgorithmInput({ mode, runCallback, runLink }: Algorithm
                                     : []
                             }
                             alphabetValid={alphabetValid}
-                            convertInputCallback={(dfa) => setInput2(dfa)}
+                            convertInputCallback={(dfa) => {
+                                setInput2(dfa);
+                                if (dfa) {
+                                    setAlphabet(dfa.alphabet);
+                                }
+                            }}
                         />
+                        <DownloadButton text={"Save to File"} dfa={input2} />
                         <DfaVisualization
                             initialState={input2 ? input2.startingState.name : ""}
-                            dfaString={input2 ? dfaToNoamInput(input2) : ""}
+                            dfaString={input2Valid ? dfaToNoamInput(input2!) : ""}
                         />
                     </div>
                 ) : (
                     ""
                 )}
             </div>
-            <DownloadButton
-                disabled={!inputValid}
-                text={"Save to File"}
-                dfa1={input1!}
-                dfa2={input2}
-            />
             <Link className={inputValid ? "" : "disabled-link"} to={runLink}>
                 <button disabled={!inputValid} onClick={() => runCallback(input1!, input2)}>
                     Run

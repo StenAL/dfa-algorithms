@@ -1,13 +1,13 @@
 import HashMap from "hashmap";
 import React from "react";
 import { act } from "react-dom/test-utils";
-import StatesInput from "./StatesInput";
+import DfaInput from "./DfaInput";
 import { mount, shallow } from "enzyme";
 import TransitionsInput from "./TransitionsInput";
 
 it("should disallow duplicate state names", function () {
     const wrapper = shallow(
-        <StatesInput
+        <DfaInput
             alphabet={["0", "1"]}
             existingTransitions={[]}
             existingFinalStates={[]}
@@ -26,7 +26,7 @@ it("should disallow duplicate state names", function () {
 
 it("should only allow valid final states", function () {
     const wrapper = shallow(
-        <StatesInput
+        <DfaInput
             alphabet={["0", "1"]}
             existingTransitions={[]}
             existingFinalStates={[]}
@@ -54,7 +54,7 @@ it("should only allow valid final states", function () {
 
 it("should remove transitions when states are removed", function () {
     const wrapper = mount(
-        <StatesInput
+        <DfaInput
             alphabet={["0", "1"]}
             existingTransitions={[]}
             existingFinalStates={[]}
@@ -99,7 +99,7 @@ it("should remove transitions when states are removed", function () {
 
 it("should remove transitions when alphabet is changed", function () {
     const wrapper = mount(
-        <StatesInput
+        <DfaInput
             alphabet={["0", "1"]}
             existingTransitions={[]}
             existingFinalStates={[]}

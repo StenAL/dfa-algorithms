@@ -9,9 +9,7 @@ it("saving input to file works", function (done) {
     console.error = jest.fn(); // temporarily mock this to avoid JSDOM error about navigation
     const createUrlMock = jest.fn((_) => "fake-url");
     global.URL.createObjectURL = createUrlMock;
-    const wrapper = shallow(
-        <DownloadButton disabled={false} text={"download"} dfa1={exampleDfa1} dfa2={undefined} />
-    );
+    const wrapper = shallow(<DownloadButton text={"download"} dfa={exampleDfa1} />);
 
     let button = wrapper.find("button").at(0);
     button.simulate("click");
@@ -21,10 +19,8 @@ it("saving input to file works", function (done) {
 
     const reader = new FileReader();
     reader.addEventListener("loadend", function (_) {
-        expect(reader.result).toEqual(
-            JSON.stringify({ input1: JSON.stringify(serializeDfa(exampleDfa1)), input2: "0" })
-        );
         console.error = consoleError;
+        expect(reader.result).toEqual(JSON.stringify(serializeDfa(exampleDfa1)));
         done();
     });
 

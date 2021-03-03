@@ -62,8 +62,8 @@ export default function AlgorithmVisualization() {
     return (
         <>
             <h2>{title}</h2>
-            <p>todo: add buttons to switch algorithms here</p>
             <Route path={"/algorithm/:algorithmType/input"}>
+                <p>todo: add buttons to switch algorithms here</p>
                 {supportedModes.length > 1 ? (
                     <AlgorithmModeSwitch
                         mode={mode}

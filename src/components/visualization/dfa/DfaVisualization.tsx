@@ -13,25 +13,27 @@ export default function DfaVisualization({ dfaString, initialState }: DfaVisuali
     const [visualization, setVisualization] = useState("");
     const inputHash = "a" + md5(dfaString);
 
-    async function renderGraph() {
-        let svgGraph = await viz.renderString(dfaString, { format: "svg" });
-        svgGraph = svgGraph
-            .replaceAll('fill="#ffffff"', 'fill="transparent"')
-            .replaceAll("finite_state_machine", "");
-        setVisualization(svgGraph);
-    }
-
-    function colorStartingState() {
-        const element = Array.from(
-            document.querySelector(`#${inputHash}`)!.querySelectorAll("title")
-        ).filter((title) => title.textContent === initialState)[0].parentNode!;
-        element.querySelector("ellipse")!.classList.add("starting-state");
-    }
-
     useEffect(() => {
+        async function renderGraph() {
+            let svgGraph = await viz.renderString(dfaString, { format: "svg" });
+            svgGraph = svgGraph
+                .replaceAll('fill="#ffffff"', 'fill="transparent"')
+                .replaceAll("finite_state_machine", "");
+            setVisualization(svgGraph);
+        }
+
+        function colorStartingState() {
+            const element = Array.from(
+                document.querySelector(`#${inputHash}`)!.querySelectorAll("title")
+            ).filter((title) => title.textContent === initialState)[0].parentNode!;
+            element.querySelector("ellipse")!.classList.add("starting-state");
+        }
+
         if (dfaString === "") return;
-        renderGraph().then(colorStartingState).catch(console.log);
-    }, [dfaString]);
+        renderGraph()
+            .then(colorStartingState)
+            .catch((e) => e);
+    }, [dfaString, initialState, viz, inputHash]);
 
     return (
         <div

@@ -4,7 +4,7 @@ import { act } from "react-dom/test-utils";
 import { BrowserRouter } from "react-router-dom";
 import { exampleDfa1, exampleDfa2 } from "../../../algorithm/data/exampleData";
 import { AlgorithmMode } from "../../../types/Algorithm";
-import StatesInput from "../dfa/StatesInput";
+import DfaInput from "../dfa/DfaInput";
 import AlgorithmInput from "./AlgorithmInput";
 
 it("passes DFA input to callback", function () {
@@ -24,8 +24,8 @@ it("passes DFA input to callback", function () {
         )
     );
     act(() => {
-        wrapper.find(StatesInput).at(0).props().convertInputCallback(exampleDfa1);
-        wrapper.find(StatesInput).at(1).props().convertInputCallback(exampleDfa2);
+        wrapper.find(DfaInput).at(0).props().convertInputCallback(exampleDfa1);
+        wrapper.find(DfaInput).at(1).props().convertInputCallback(exampleDfa2);
     });
     let button = wrapper
         .find("button")
@@ -79,9 +79,9 @@ it("only passes one DFA in callback when in STATE_MINIMIZATION mode", function (
             }
         )
     );
-    expect(wrapper.find(StatesInput).length).toBe(1);
+    expect(wrapper.find(DfaInput).length).toBe(1);
     act(() => {
-        wrapper.find(StatesInput).props().convertInputCallback(exampleDfa1);
+        wrapper.find(DfaInput).props().convertInputCallback(exampleDfa1);
     });
     let button = wrapper
         .find("button")
