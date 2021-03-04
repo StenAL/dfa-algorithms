@@ -5,12 +5,14 @@ on:
         branches:
             - main
         paths: # limit workflow only to changes in src and public folders
+            - ".github/**"
             - "src/**"
             - "public/**"
     pull_request:
         branches:
             - main
         paths:
+            - ".github/**"
             - "src/**"
             - "public/**"
 
