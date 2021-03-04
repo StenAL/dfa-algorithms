@@ -118,6 +118,7 @@ export default function HeadlessModeRunner({ algorithms }: HeadlessModeRunProps)
                 <>
                     <h3>Minimized result</h3>
                     <DfaVisualization
+                        className={"single-visualization"}
                         initialState={(algorithms[0].result as DFA).startingState.name}
                         dfaString={dfaToNoamInput(algorithms[0].result as DFA)}
                     />

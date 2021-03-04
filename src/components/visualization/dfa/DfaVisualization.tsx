@@ -6,9 +6,14 @@ import { Module, render } from "viz.js/lite.render";
 interface DfaVisualizationProps {
     initialState: string;
     dfaString: string;
+    className: "single-visualization" | "double-visualization";
 }
 
-export default function DfaVisualization({ dfaString, initialState }: DfaVisualizationProps) {
+export default function DfaVisualization({
+    dfaString,
+    initialState,
+    className,
+}: DfaVisualizationProps) {
     const [viz] = useState(new Viz({ render, Module }));
     const [visualization, setVisualization] = useState("");
     const inputHash = "a" + md5(dfaString);
@@ -38,7 +43,7 @@ export default function DfaVisualization({ dfaString, initialState }: DfaVisuali
     return (
         <div
             id={inputHash}
-            className={"dfa-visualization"}
+            className={`dfa-visualization ${className}`}
             dangerouslySetInnerHTML={{ __html: visualization }}
         />
     );

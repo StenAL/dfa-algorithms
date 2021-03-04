@@ -148,10 +148,16 @@ export default function AlgorithmVisualization() {
                             {visualization}
                             <div className={"algorithm-input-visualization"}>
                                 <DfaVisualization
+                                    className={
+                                        mode === AlgorithmMode.STATE_MINIMIZATION
+                                            ? "single-visualization"
+                                            : "double-visualization"
+                                    }
                                     initialState={algorithm!.input1.startingState.name}
                                     dfaString={dfaToNoamInput(algorithm!.input1)}
                                 />
                                 <DfaVisualization
+                                    className={"double-visualization"}
                                     initialState={
                                         algorithm!.input2
                                             ? algorithm!.input2.startingState.name

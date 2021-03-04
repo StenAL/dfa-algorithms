@@ -78,6 +78,7 @@ export default function DatasetGenerator({ alphabet, statePrefix }: GeneratorPro
             {dfa ? (
                 <>
                     <DfaVisualization
+                        className={"single-visualization"}
                         initialState={dfa.startingState.name}
                         dfaString={dfaToNoamInput(dfa)}
                     />
