@@ -100,7 +100,6 @@ export default function DfaInput({
                             name={"states"}
                             type={"text"}
                             placeholder={"q1,q2..."}
-                            key={existingStates.join(",")}
                             defaultValue={existingStates.join(",")}
                             onChange={(event) => {
                                 const newStates = event.target.value.split(",");
@@ -151,7 +150,6 @@ export default function DfaInput({
                         </span>
                     </Tooltip>
                     <input
-                        key={existingFinalStates.join(",") + "final"}
                         defaultValue={existingFinalStates.join(",")}
                         name={"finalStates"}
                         type={"text"}
