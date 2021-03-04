@@ -471,6 +471,13 @@ button {
     }
 }
 
+.single-visualization {
+    max-width: 90vw;
+}
+.double-visualization {
+    max-width: 45vw;
+}
+
 .algorithm-visualization-container {
     display: flex;
     flex-direction: column;

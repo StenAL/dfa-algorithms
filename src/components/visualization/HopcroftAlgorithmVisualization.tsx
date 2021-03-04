@@ -236,6 +236,7 @@ export default function HopcroftAlgorithmVisualization({
                 <>
                     <DownloadButton text={"Download minimized DFA"} dfa={algorithm.result as DFA} />
                     <DfaVisualization
+                        className={"single-visualization"}
                         initialState={(algorithm.result as DFA).startingState.name}
                         dfaString={dfaToNoamInput(algorithm.result as DFA)}
                     />
