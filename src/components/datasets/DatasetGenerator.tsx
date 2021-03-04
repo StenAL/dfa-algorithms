@@ -6,8 +6,9 @@ import {
 } from "../../algorithm/data/datasetGenerator";
 import { DatasetType } from "../../types/Dataset";
 import { DFA } from "../../types/DFA";
-import { getPrettyDfaString } from "../../util/util";
+import { dfaToNoamInput } from "../../util/util";
 import DownloadButton from "../input/algorithm/DownloadButton";
+import DfaVisualization from "../visualization/dfa/DfaVisualization";
 import DatasetModeSelect from "./DatasetModeSelect";
 
 interface GeneratorProps {
@@ -76,13 +77,10 @@ export default function DatasetGenerator({ alphabet, statePrefix }: GeneratorPro
             </button>
             {dfa ? (
                 <>
-                    <div className={"log"}>
-                        {getPrettyDfaString(dfa)
-                            .reverse()
-                            .map((s) => (
-                                <p key={s}>{s}</p>
-                            ))}
-                    </div>
+                    <DfaVisualization
+                        initialState={dfa.startingState.name}
+                        dfaString={dfaToNoamInput(dfa)}
+                    />
                     <DownloadButton text={"Download"} dfa={dfa} />
                 </>
             ) : (
