@@ -1,6 +1,22 @@
 import { DatasetGenerator } from "../../types/Dataset";
 import { State } from "../../types/DFA";
 
+const shuffle = <T>(array: T[]) => {
+    let currentIndex = array.length,
+        temporaryValue,
+        randomIndex;
+
+    while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+};
+
 /**
  * creates a DFA with a transition graph that is connected but transitions are allocated randomly between states
  */
@@ -19,7 +35,7 @@ const randomDatasetGenerator: DatasetGenerator = (
         states.push({ name: `${statePrefix}${i}`, transitions: new Map<string, State>() });
     }
 
-    let deadStates = [...states.slice(1)];
+    let deadStates = shuffle(states.slice(1));
     let fromStates = [states[0]];
 
     // connect all states with transitions
@@ -28,10 +44,9 @@ const randomDatasetGenerator: DatasetGenerator = (
         const existingTransitions = Array.from(from.transitions.keys());
         const eligibleTransitions = alphabet.filter((s) => !existingTransitions.includes(s));
         const symbol = eligibleTransitions[Math.floor(Math.random() * eligibleTransitions.length)];
-        const dest = deadStates[Math.floor(Math.random() * deadStates.length)];
+        const dest = deadStates.pop()!;
 
         from.transitions.set(symbol, dest);
-        deadStates = deadStates.filter((s) => s !== dest);
         fromStates.push(dest);
         if (eligibleTransitions.length === 1) {
             // exhausted all possible transitions of 'from'

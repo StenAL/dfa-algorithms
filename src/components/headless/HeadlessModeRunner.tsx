@@ -7,7 +7,7 @@ import {
     EquivalenceTestingResult,
 } from "../../types/Algorithm";
 import { DFA } from "../../types/DFA";
-import { dfaToNoamInput, getAlgorithmName } from "../../util/util";
+import { dfaToNoamInput, getAlgorithmName, getPrettyDfaString } from "../../util/util";
 import DownloadButton from "../input/algorithm/DownloadButton";
 import DfaVisualization from "../visualization/dfa/DfaVisualization";
 
@@ -117,11 +117,21 @@ export default function HeadlessModeRunner({ algorithms }: HeadlessModeRunProps)
             algorithms[0].result !== algorithms[0].input1 ? (
                 <>
                     <h3>Minimized result</h3>
-                    <DfaVisualization
-                        className={"single-visualization"}
-                        initialState={(algorithms[0].result as DFA).startingState.name}
-                        dfaString={dfaToNoamInput(algorithms[0].result as DFA)}
-                    />
+                    {(algorithms[0].result as DFA).states.length <= 100 ? (
+                        <DfaVisualization
+                            className={"single-visualization"}
+                            initialState={(algorithms[0].result as DFA).startingState.name}
+                            dfaString={dfaToNoamInput(algorithms[0].result as DFA)}
+                        />
+                    ) : (
+                        <div className={"log"}>
+                            {getPrettyDfaString(algorithms[0].result as DFA)
+                                .reverse()
+                                .map((s) => (
+                                    <p key={s}>{s}</p>
+                                ))}
+                        </div>
+                    )}
                 </>
             ) : (
                 ""

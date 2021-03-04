@@ -39,5 +39,4 @@ Tests can be run using `npm run test`
 
 ## Todo:
 
--   add back button to algorithm visualizations to change input
--   display generated data in data generation
+-   add navigation algorithm visualizations / headless to use same input elsewhere
