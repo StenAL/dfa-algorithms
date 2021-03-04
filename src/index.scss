@@ -130,6 +130,10 @@ input[type="text"] {
     align-items: center;
 }
 
+.state-prefix {
+    max-width: 30px;
+}
+
 .dfa-inputs-container {
     display: flex;
     flex-direction: row;
