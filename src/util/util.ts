@@ -4,6 +4,20 @@ import { AlgorithmMode, AlgorithmType } from "../types/Algorithm";
 import { DatasetType, PreGeneratedDatasetName } from "../types/Dataset";
 import { DFA, SerializedDfa, State } from "../types/DFA";
 
+export function algorithmTypeToUrlString(type: AlgorithmType): AlgorithmUrlString {
+    switch (type) {
+        case "tableFilling":
+        case "tableFillingWitness":
+            return "table-filling";
+        case "hopcroft":
+        case "hopcroftWitness":
+            return "hopcroft";
+        case "nearlyLinear":
+        case "nearlyLinearWitness":
+            return "nearly-linear";
+    }
+}
+
 export function getAlgorithmName(type: AlgorithmType | AlgorithmUrlString) {
     switch (type) {
         case "tableFilling":

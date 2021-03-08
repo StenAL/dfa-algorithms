@@ -12,14 +12,22 @@ import PreGeneratedInputs from "./PreGeneratedInputs";
 
 interface AlgorithmInputProps {
     mode: AlgorithmMode;
+    existingInput1?: DFA;
+    existingInput2?: DFA;
     runCallback: (input1: DFA, input2: DFA | undefined) => void;
     runLink: string;
 }
 
-export default function AlgorithmInput({ mode, runCallback, runLink }: AlgorithmInputProps) {
-    const [input1, setInput1] = useState<DFA>();
-    const [input2, setInput2] = useState<DFA>();
-    const [alphabet, setAlphabet] = useState<string[]>([]);
+export default function AlgorithmInput({
+    mode,
+    existingInput1,
+    existingInput2,
+    runCallback,
+    runLink,
+}: AlgorithmInputProps) {
+    const [input1, setInput1] = useState<DFA | undefined>(existingInput1);
+    const [input2, setInput2] = useState<DFA | undefined>(existingInput2);
+    const [alphabet, setAlphabet] = useState<string[]>(existingInput1?.alphabet || []);
     const [inputKey, setInputKey] = useState(0);
     const alphabetValid = alphabet.length > 0 && new Set(alphabet).size === alphabet.length;
 

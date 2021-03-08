@@ -6,10 +6,10 @@ export default function Help() {
             <p>
                 This page contains the implementation side of my 6CCS3PRJ Final Year Project at
                 King's College London entitled&nbsp;
-                <pre>
+                <code>
                     Finite State Machine Educational Tools: Implementing Equivalence Testing and
                     State Minimization Algorithms
-                </pre>
+                </code>
             </p>
             <p>
                 The project aims to implement three DFA state minimization and equivalence testing
@@ -21,7 +21,7 @@ export default function Help() {
                 to induce worst-case behaviour in the algorithms.
             </p>
             <p>
-                The theoretical report accompanying the software can be found{" "}
+                The report accompanying the software can be found&nbsp;
                 <a href={process.env.PUBLIC_URL + "/report.pdf"}>here</a>.
             </p>
             <h3>Algorithms</h3>
@@ -31,7 +31,7 @@ export default function Help() {
                 and equivalence testing by distinguishing individual states of DFAs. It does this by
                 storing a table of pairs and marking pairs based on their successors. The
                 Table-Filling Algorithm has a worst-case time complexity of&nbsp;
-                <pre>O(n^4)</pre>.
+                <code>O(n^4)</code>.
             </p>
             <p>
                 In the visualization of the Table-Filling Algorithm, users are shown the table and
@@ -44,7 +44,7 @@ export default function Help() {
                 indistinguishable. For that, it utilizes the inverse-transition function of the
                 DFAs, seeing which states lead to different partitions. The n-lg-n Hopcroft
                 Algorithm (unsurprisingly) has a worst-case time complexity of&nbsp;
-                <pre>O(n lg n)</pre>.
+                <code>O(n lg n)</code>.
             </p>
             <p>
                 In the visualization of the n lg n Hopcroft Algorithm, users are shown the partition
@@ -61,7 +61,7 @@ export default function Help() {
                 then scans the sets to identify if any contradictions have arisen and the initial
                 assumption is false. The (Nearly) Linear Algorithm has a worst-case time complexity
                 of&nbsp;
-                <pre>O(a(n))</pre>, where a is the inverse Ackermann function.
+                <code>O(a(n))</code>, where a is the inverse Ackermann function.
             </p>
             <h3>Datasets</h3>
             <p>Coming soon</p>

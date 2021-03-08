@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Route } from "react-router-dom";
+import { Route, useLocation } from "react-router-dom";
 import { HopcroftAlgorithmImpl } from "../../algorithm/HopcroftAlgorithm";
 import { NearlyLinearAlgorithmImpl } from "../../algorithm/NearlyLinearAlgorithm";
 import { TableFillingAlgorithmImpl } from "../../algorithm/TableFillingAlgorithm";
 import { Algorithm, AlgorithmMode, AlgorithmsSelected } from "../../types/Algorithm";
+import { DFA } from "../../types/DFA";
+import { deserializeDfa } from "../../util/util";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
 import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
 import AlgorithmPicker from "../input/algorithm/AlgorithmPicker";
@@ -20,6 +22,23 @@ export default function HeadlessMode() {
         nearlyLinear: false,
         nearlyLinearWitness: false,
     });
+    const location = useLocation();
+    const [existingInput1, setExistingInput1] = useState<DFA | undefined>();
+    const [existingInput2, setExistingInput2] = useState<DFA | undefined>();
+    useEffect(() => {
+        if (location.search.length > 0) {
+            const serialized = location.search.substr(1);
+            const inputs = serialized.split(";");
+            setExistingInput1(deserializeDfa(JSON.parse(inputs[0])));
+
+            if (inputs.length === 2) {
+                setExistingInput2(deserializeDfa(JSON.parse(inputs[1])));
+                setMode(AlgorithmMode.EQUIVALENCE_TESTING);
+            } else {
+                setMode(AlgorithmMode.STATE_MINIMIZATION);
+            }
+        }
+    }, [location.search]);
 
     useEffect(() => {
         if (mode === AlgorithmMode.STATE_MINIMIZATION) {
@@ -50,6 +69,8 @@ export default function HeadlessMode() {
                 />
                 {Object.values(algorithmsSelected).filter((v) => v).length > 0 ? (
                     <AlgorithmInput
+                        existingInput1={existingInput1}
+                        existingInput2={existingInput2}
                         runLink={"/headless/run"}
                         mode={mode}
                         runCallback={(input1, input2) => {
