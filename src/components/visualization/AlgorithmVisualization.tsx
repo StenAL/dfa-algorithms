@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, Route, useParams } from "react-router-dom";
+import { Link, Route, useHistory, useLocation, useParams } from "react-router-dom";
 import { HopcroftAlgorithm, HopcroftAlgorithmImpl } from "../../algorithm/HopcroftAlgorithm";
 import {
     NearlyLinearAlgorithm,
@@ -11,7 +11,13 @@ import {
 } from "../../algorithm/TableFillingAlgorithm";
 import { Algorithm, AlgorithmMode } from "../../types/Algorithm";
 import { useForceUpdate } from "../../util/hooks";
-import { dfaToNoamInput, getAlgorithmModes, getAlgorithmName } from "../../util/util";
+import {
+    deserializeDfa,
+    dfaToNoamInput,
+    getAlgorithmModes,
+    getAlgorithmName,
+    serializeDfa,
+} from "../../util/util";
 import AlgorithmInput from "../input/algorithm/AlgorithmInput";
 import AlgorithmModeSwitch from "../input/algorithm/AlgorithmModeSwitch";
 import WitnessSwitch from "../input/algorithm/WitnessSwitch";
@@ -23,6 +29,7 @@ import NearlyLinearAlgorithmVisualization from "./NearlyLinearAlgorithmVisualiza
 import TableFillingAlgorithmVisualization from "./TableFillingAlgorithmVisualization";
 
 export type AlgorithmUrlString = "table-filling" | "hopcroft" | "nearly-linear";
+
 interface AlgorithmVisualizationRouteParams {
     algorithmType: AlgorithmUrlString;
 }
@@ -33,12 +40,43 @@ export default function AlgorithmVisualization() {
     const forceUpdate = useForceUpdate();
     const [mode, setMode] = useState<AlgorithmMode>(AlgorithmMode.EQUIVALENCE_TESTING);
     const [produceWitness, setProduceWitness] = useState(false);
+    const history = useHistory();
 
     useEffect(() => {
         if (algorithmType === "nearly-linear") {
             setMode(AlgorithmMode.EQUIVALENCE_TESTING);
         }
     }, [algorithmType]);
+
+    const location = useLocation();
+    useEffect(() => {
+        if (location.search.length > 0 && location.pathname.includes("from-headless")) {
+            const serialized = location.search.substr(1);
+            const inputs = serialized.split(";");
+            const input1 = deserializeDfa(JSON.parse(inputs[1]));
+            const witness = JSON.parse(inputs[0]);
+            let input2 = undefined;
+
+            if (inputs.length === 3) {
+                setMode(AlgorithmMode.EQUIVALENCE_TESTING);
+                input2 = deserializeDfa(JSON.parse(inputs[2]));
+            } else {
+                setMode(AlgorithmMode.STATE_MINIMIZATION);
+            }
+            switch (algorithmType) {
+                case "table-filling":
+                    setAlgorithm(new TableFillingAlgorithmImpl(input1, input2, witness));
+                    break;
+                case "hopcroft":
+                    setAlgorithm(new HopcroftAlgorithmImpl(input1, input2, witness));
+                    break;
+                case "nearly-linear":
+                    setAlgorithm(new NearlyLinearAlgorithmImpl(input1, input2!, witness));
+                    break;
+            }
+            history.push(`/algorithm/${algorithmType}/run`);
+        }
+    }, [location.search, algorithmType, history, location.pathname]);
 
     let visualization: JSX.Element | undefined = undefined;
     const title = "The " + getAlgorithmName(algorithmType);
@@ -113,6 +151,8 @@ export default function AlgorithmVisualization() {
                 )}
                 <AlgorithmInput
                     mode={mode}
+                    existingInput1={algorithm?.input1}
+                    existingInput2={algorithm?.input2}
                     runLink={`/algorithm/${algorithmType}/run`}
                     runCallback={(input1, input2) => {
                         switch (algorithmType) {
@@ -136,8 +176,86 @@ export default function AlgorithmVisualization() {
                 />
             </Route>
             <Route path={"/algorithm/:algorithmType/run"}>
+                <p>
+                    <Link to={`/algorithm/${algorithmType}/input`}>Modify input</Link>
+                </p>
+                <p>
+                    <Link
+                        to={`/headless/input?${
+                            algorithm ? JSON.stringify(serializeDfa(algorithm.input1)) : ""
+                        }${
+                            algorithm && mode === AlgorithmMode.EQUIVALENCE_TESTING
+                                ? ";" + JSON.stringify(serializeDfa(algorithm.input2!))
+                                : ""
+                        }`}
+                    >
+                        Run in headless mode
+                    </Link>
+                </p>
+                <h3>Visualize other algorithms</h3>
+                {algorithmType !== "table-filling" ? (
+                    <p>
+                        <Link
+                            to={"/algorithm/table-filling/run"}
+                            onClick={() =>
+                                setAlgorithm(
+                                    new TableFillingAlgorithmImpl(
+                                        algorithm!.input1,
+                                        mode === AlgorithmMode.EQUIVALENCE_TESTING
+                                            ? algorithm!.input2
+                                            : undefined
+                                    )
+                                )
+                            }
+                        >
+                            The {getAlgorithmName("table-filling")}
+                        </Link>
+                    </p>
+                ) : (
+                    ""
+                )}
+                {algorithmType !== "hopcroft" ? (
+                    <p>
+                        <Link
+                            to={"/algorithm/hopcroft/run"}
+                            onClick={() =>
+                                setAlgorithm(
+                                    new HopcroftAlgorithmImpl(
+                                        algorithm!.input1,
+                                        mode === AlgorithmMode.EQUIVALENCE_TESTING
+                                            ? algorithm!.input2
+                                            : undefined
+                                    )
+                                )
+                            }
+                        >
+                            The {getAlgorithmName("hopcroft")}
+                        </Link>
+                    </p>
+                ) : (
+                    ""
+                )}
+                {algorithmType !== "nearly-linear" && mode === AlgorithmMode.EQUIVALENCE_TESTING ? (
+                    <p>
+                        <Link
+                            to={"/algorithm/nearly-linear/run"}
+                            onClick={() =>
+                                setAlgorithm(
+                                    new NearlyLinearAlgorithmImpl(
+                                        algorithm!.input1,
+                                        algorithm!.input2!
+                                    )
+                                )
+                            }
+                        >
+                            The {getAlgorithmName("nearly-linear")}
+                        </Link>
+                    </p>
+                ) : (
+                    ""
+                )}
                 <div className={"algorithm-container"}>
-                    <AlgorithmLog algorithm={algorithm!} />
+                    <AlgorithmLog algorithm={algorithm!} key={algorithm?.type} />
                     <AlgorithmStepControls
                         algorithm={algorithm!}
                         stepBackwardCallback={() => forceUpdate()}

@@ -7,11 +7,18 @@ import {
     EquivalenceTestingResult,
 } from "../../types/Algorithm";
 import { DFA } from "../../types/DFA";
-import { dfaToNoamInput, getAlgorithmName, getPrettyDfaString } from "../../util/util";
+import { Link } from "react-router-dom";
+import {
+    algorithmTypeToUrlString,
+    dfaToNoamInput,
+    getAlgorithmName,
+    getPrettyDfaString,
+    serializeDfa,
+} from "../../util/util";
 import DownloadButton from "../input/algorithm/DownloadButton";
 import DfaVisualization from "../visualization/dfa/DfaVisualization";
 
-interface HeadlessModeRunProps {
+interface HeadlessModeRunnerProps {
     algorithms: Algorithm[];
 }
 
@@ -31,7 +38,7 @@ const initialStatus: AlgorithmStatus = {
     result: EquivalenceTestingResult.NOT_AVAILABLE,
 };
 
-export default function HeadlessModeRunner({ algorithms }: HeadlessModeRunProps) {
+export default function HeadlessModeRunner({ algorithms }: HeadlessModeRunnerProps) {
     const [algorithmStatuses, setAlgorithmStatuses] = useState<AlgorithmStatuses>({
         tableFilling: { ...initialStatus },
         tableFillingWitness: { ...initialStatus },
@@ -62,6 +69,7 @@ export default function HeadlessModeRunner({ algorithms }: HeadlessModeRunProps)
                     <div className={"headless-header"}>Algorithm</div>
                     <div className={"headless-cell"}>Duration (ms)</div>
                     <div className={"headless-cell"}>Result</div>
+                    <div className={"headless-cell"} />
                 </div>
                 {Array.from(algorithms).map((algorithm) => {
                     const doneRunning = algorithmStatuses[algorithm.type].end !== 0;
@@ -107,6 +115,21 @@ export default function HeadlessModeRunner({ algorithms }: HeadlessModeRunProps)
                             </div>
                             <div className={"headless-cell"}>{doneRunning ? duration : ""}</div>
                             <div className={"headless-cell"}>{result}</div>
+                            <div className={"headless-cell"}>
+                                <Link
+                                    to={`/algorithm/${algorithmTypeToUrlString(
+                                        algorithm.type
+                                    )}/from-headless?${algorithm.produceWitness};${JSON.stringify(
+                                        serializeDfa(algorithm.input1)
+                                    )}${
+                                        algorithm.mode === AlgorithmMode.EQUIVALENCE_TESTING
+                                            ? ";" + JSON.stringify(serializeDfa(algorithm.input2!))
+                                            : ""
+                                    }`}
+                                >
+                                    <button>Visualize</button>
+                                </Link>
+                            </div>
                         </div>
                     );
                 })}
