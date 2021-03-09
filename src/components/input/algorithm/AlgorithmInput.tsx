@@ -28,7 +28,8 @@ export default function AlgorithmInput({
     const [input1, setInput1] = useState<DFA | undefined>(existingInput1);
     const [input2, setInput2] = useState<DFA | undefined>(existingInput2);
     const [alphabet, setAlphabet] = useState<string[]>(existingInput1?.alphabet || []);
-    const [inputKey, setInputKey] = useState(0);
+    const [input1Key, setInput1Key] = useState(0);
+    const [input2Key, setInput2Key] = useState(0);
     const alphabetValid = alphabet.length > 0 && new Set(alphabet).size === alphabet.length;
 
     useEffect(() => {
@@ -69,7 +70,8 @@ export default function AlgorithmInput({
                     setAlphabet(_.cloneDeep(input1.alphabet));
                     setInput1(_.cloneDeep(input1));
                     setInput2(_.cloneDeep(input2));
-                    setInputKey(inputKey + 1);
+                    setInput1Key(input1Key + 1);
+                    setInput2Key(input2Key + 1);
                 }}
             />
             <h3>
@@ -112,11 +114,13 @@ export default function AlgorithmInput({
             <div className={"dfa-inputs-container"}>
                 <div className={"input-visualization-container"}>
                     <DfaInput
-                        key={inputKey}
+                        key={input1Key}
                         convertInputCallback={(dfa) => {
                             setInput1(dfa);
                             if (dfa) {
                                 setAlphabet(dfa.alphabet);
+                            } else {
+                                setInput1Key(input1Key + 1);
                             }
                         }}
                         existingStates={input1 ? input1.states.map((s) => s.name) : []}
@@ -157,7 +161,7 @@ export default function AlgorithmInput({
                 {mode === AlgorithmMode.EQUIVALENCE_TESTING ? (
                     <div className={"input-visualization-container"}>
                         <DfaInput
-                            key={inputKey}
+                            key={input2Key}
                             alphabet={alphabet}
                             existingStates={input2 ? input2.states.map((s) => s.name) : []}
                             existingFinalStates={
@@ -181,6 +185,8 @@ export default function AlgorithmInput({
                                 setInput2(dfa);
                                 if (dfa) {
                                     setAlphabet(dfa.alphabet);
+                                } else {
+                                    setInput2Key(input2Key + 1);
                                 }
                             }}
                         />
