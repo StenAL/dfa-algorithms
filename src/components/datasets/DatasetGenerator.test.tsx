@@ -5,7 +5,9 @@ import DatasetGenerator from "./DatasetGenerator";
 it("generates DFA according to parameters", function () {
     const statesCount = 10;
     const finalStatesCount = 5;
-    const wrapper = mount(<DatasetGenerator statePrefix={"test"} alphabet={["0", "1"]} />);
+    const wrapper = mount(
+        <DatasetGenerator callback={jest.fn()} statePrefix={"test"} alphabet={["0", "1"]} />
+    );
 
     const statesCountInput = wrapper.find('input[name="statesCount"]');
     statesCountInput.simulate("change", { target: { value: statesCount.toString() } });
@@ -29,7 +31,9 @@ it("generates DFA according to parameters", function () {
 it("validates input", function () {
     const statesCount = 3;
     const finalStatesCount = 5;
-    const wrapper = mount(<DatasetGenerator statePrefix={"test"} alphabet={["0", "1"]} />);
+    const wrapper = mount(
+        <DatasetGenerator callback={jest.fn()} statePrefix={"test"} alphabet={["0", "1"]} />
+    );
 
     let statesCountInput = wrapper.find('input[name="statesCount"]');
     statesCountInput.simulate("change", { target: { value: statesCount.toString() } });

@@ -147,7 +147,11 @@ export default function AlgorithmInput({
                                 : "double-visualization"
                         }
                         initialState={input1 ? input1.startingState.name : ""}
-                        dfaString={input1Valid ? dfaToNoamInput(input1!) : ""}
+                        dfaString={
+                            input1Valid && input1!.states.length < 100
+                                ? dfaToNoamInput(input1!)
+                                : ""
+                        }
                     />
                 </div>
                 {mode === AlgorithmMode.EQUIVALENCE_TESTING ? (
@@ -184,7 +188,11 @@ export default function AlgorithmInput({
                         <DfaVisualization
                             className={"double-visualization"}
                             initialState={input2 ? input2.startingState.name : ""}
-                            dfaString={input2Valid ? dfaToNoamInput(input2!) : ""}
+                            dfaString={
+                                input2Valid && input2!.states.length < 100
+                                    ? dfaToNoamInput(input2!)
+                                    : ""
+                            }
                         />
                     </div>
                 ) : (

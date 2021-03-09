@@ -50,7 +50,7 @@ export default function AlgorithmVisualization() {
 
     const location = useLocation();
     useEffect(() => {
-        if (location.search.length > 0 && location.pathname.includes("from-headless")) {
+        if (location.search.length > 0 && location.pathname.includes("from")) {
             const serialized = location.search.substr(1);
             const inputs = serialized.split(";");
             const input1 = deserializeDfa(JSON.parse(inputs[1]));
@@ -272,7 +272,11 @@ export default function AlgorithmVisualization() {
                                             : "double-visualization"
                                     }
                                     initialState={algorithm!.input1.startingState.name}
-                                    dfaString={dfaToNoamInput(algorithm!.input1)}
+                                    dfaString={
+                                        algorithm.input1.states.length <= 100
+                                            ? dfaToNoamInput(algorithm!.input1)
+                                            : ""
+                                    }
                                 />
                                 <DfaVisualization
                                     className={"double-visualization"}
@@ -283,7 +287,8 @@ export default function AlgorithmVisualization() {
                                     }
                                     dfaString={
                                         algorithm.mode === AlgorithmMode.EQUIVALENCE_TESTING &&
-                                        algorithm!.input2
+                                        algorithm!.input2 &&
+                                        algorithm!.input2.states.length <= 100
                                             ? dfaToNoamInput(algorithm!.input2)
                                             : ""
                                     }
