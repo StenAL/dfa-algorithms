@@ -64,7 +64,6 @@ export default function DfaInput({
         setTransitions(newTransitions);
     }, [existingTransitions]);
 
-    // transitions.entries().forEach(([[from, symbol], to]) => console.log(`${from}:${symbol} > ${to}`));
     const statesValid = states.length > 0 && new Set(states).size === states.length;
     const finalStatesValid =
         new Set(finalStates).size === finalStates.length &&
@@ -196,6 +195,18 @@ export default function DfaInput({
                     }
                     convertInputCallback={convertInputCallback}
                 />
+                <button
+                    onClick={() => {
+                        console.log(states);
+                        console.log("reset");
+                        setStates([]);
+                        setTransitions(new HashMap());
+                        setFinalStates([]);
+                        convertInputCallback(undefined);
+                    }}
+                >
+                    Clear
+                </button>
             </div>
         </div>
     );
