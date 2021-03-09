@@ -14,9 +14,10 @@ import DatasetModeSelect from "./DatasetModeSelect";
 interface GeneratorProps {
     statePrefix: string;
     alphabet: string[];
+    callback: (dfa: DFA) => void;
 }
 
-export default function DatasetGenerator({ alphabet, statePrefix }: GeneratorProps) {
+export default function DatasetGenerator({ alphabet, statePrefix, callback }: GeneratorProps) {
     const [generationMode, setGenerationMode] = useState(DatasetType.RANDOM);
     const [statesCount, setStatesCount] = useState(7);
     const [finalStatesCount, setFinalStatesCount] = useState(1);
@@ -71,6 +72,7 @@ export default function DatasetGenerator({ alphabet, statePrefix }: GeneratorPro
                     }
                     const dfa = generator(statesCount, alphabet, finalStatesCount, statePrefix);
                     setDfa(dfa);
+                    callback(dfa);
                 }}
             >
                 Generate
