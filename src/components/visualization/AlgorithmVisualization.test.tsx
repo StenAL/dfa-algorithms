@@ -51,7 +51,7 @@ it("renders witness switch only in EQUIVALENCE_TESTING mode", function () {
     expect(wrapper.find(WitnessSwitch).exists()).toBe(false);
 });
 
-it("initializes table-filling algorithm correctly", function () {
+it("initializes table-filling algorithm correctly", async function () {
     const wrapper = mount(
         <MemoryRouter initialEntries={["/algorithm/table-filling/input"]} initialIndex={0}>
             <Route path={"/algorithm/:algorithmType/"}>
@@ -64,8 +64,9 @@ it("initializes table-filling algorithm correctly", function () {
     expect(wrapper.find(AlgorithmLog).exists()).toBe(false);
     expect(wrapper.find(AlgorithmStepControls).exists()).toBe(false);
     const runInputCallback = wrapper.find(AlgorithmInput).props().runCallback;
-    act(() => {
+    await act(async () => {
         runInputCallback(dfa, dfa);
+        await new Promise((resolve) => setImmediate(resolve));
     });
 
     let link = wrapper
@@ -73,14 +74,18 @@ it("initializes table-filling algorithm correctly", function () {
         .findWhere((l) => l.text() === "Run")
         .at(0);
     expect(link.exists()).toBe(true);
-    link.simulate("click", { button: 0 });
+    await act(async () => {
+        link.simulate("click", { button: 0 });
+        await new Promise((resolve) => setImmediate(resolve));
+    });
+    wrapper.update();
     expect(wrapper.find(TableFillingAlgorithmVisualization).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).props().algorithm.type).toBe("tableFilling");
     expect(wrapper.find(AlgorithmStepControls).exists()).toBe(true);
 });
 
-it("initializes hopcroft algorithm correctly", function () {
+it("initializes hopcroft algorithm correctly", async function () {
     const wrapper = mount(
         <MemoryRouter initialEntries={["/algorithm/hopcroft/input"]} initialIndex={0}>
             <Route path={"/algorithm/:algorithmType/"}>
@@ -93,8 +98,9 @@ it("initializes hopcroft algorithm correctly", function () {
     expect(wrapper.find(AlgorithmLog).exists()).toBe(false);
     expect(wrapper.find(AlgorithmStepControls).exists()).toBe(false);
     const runInputCallback = wrapper.find(AlgorithmInput).props().runCallback;
-    act(() => {
+    await act(async () => {
         runInputCallback(dfa, dfa);
+        await new Promise((resolve) => setImmediate(resolve));
     });
 
     let link = wrapper
@@ -102,14 +108,18 @@ it("initializes hopcroft algorithm correctly", function () {
         .findWhere((l) => l.text() === "Run")
         .at(0);
     expect(link.exists()).toBe(true);
-    link.simulate("click", { button: 0 });
+    await act(async () => {
+        link.simulate("click", { button: 0 });
+        await new Promise((resolve) => setImmediate(resolve));
+    });
+    wrapper.update();
     expect(wrapper.find(HopcroftAlgorithmVisualization).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).props().algorithm.type).toBe("hopcroft");
     expect(wrapper.find(AlgorithmStepControls).exists()).toBe(true);
 });
 
-it("initializes nearly linear algorithm correctly", function () {
+it("initializes nearly linear algorithm correctly", async function () {
     const wrapper = mount(
         <MemoryRouter initialEntries={["/algorithm/nearly-linear/input"]} initialIndex={0}>
             <Route path={"/algorithm/:algorithmType/"}>
@@ -122,8 +132,9 @@ it("initializes nearly linear algorithm correctly", function () {
     expect(wrapper.find(AlgorithmLog).exists()).toBe(false);
     expect(wrapper.find(AlgorithmStepControls).exists()).toBe(false);
     const runInputCallback = wrapper.find(AlgorithmInput).props().runCallback;
-    act(() => {
+    await act(async () => {
         runInputCallback(dfa, dfa);
+        await new Promise((resolve) => setImmediate(resolve));
     });
 
     let link = wrapper
@@ -131,7 +142,11 @@ it("initializes nearly linear algorithm correctly", function () {
         .findWhere((l) => l.text() === "Run")
         .at(0);
     expect(link.exists()).toBe(true);
-    link.simulate("click", { button: 0 });
+    await act(async () => {
+        link.simulate("click", { button: 0 });
+        await new Promise((resolve) => setImmediate(resolve));
+    });
+    wrapper.update();
     expect(wrapper.find(NearlyLinearAlgorithmVisualization).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).exists()).toBe(true);
     expect(wrapper.find(AlgorithmLog).props().algorithm.type).toBe("nearlyLinear");

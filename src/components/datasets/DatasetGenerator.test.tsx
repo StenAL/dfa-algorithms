@@ -1,8 +1,9 @@
 import { mount } from "enzyme";
+import { act } from "react-dom/test-utils";
 import DownloadButton from "../input/algorithm/DownloadButton";
 import DatasetGenerator from "./DatasetGenerator";
 
-it("generates DFA according to parameters", function () {
+it("generates DFA according to parameters", async function () {
     const statesCount = 10;
     const finalStatesCount = 5;
     const wrapper = mount(
@@ -20,7 +21,11 @@ it("generates DFA according to parameters", function () {
         .find("button")
         .findWhere((el) => el.text() === "Generate")
         .at(0);
-    generateButton.simulate("click");
+    await act(async () => {
+        generateButton.simulate("click");
+        await new Promise((resolve) => setImmediate(resolve));
+    });
+    wrapper.update();
     const downloadButton = wrapper.find(DownloadButton);
     const dfa = downloadButton.props().dfa!;
     expect(dfa.states.map((s) => s.name).every((name) => name.startsWith("test"))).toBe(true);
