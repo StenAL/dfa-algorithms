@@ -1,4 +1,5 @@
 import { mount } from "enzyme";
+import { act } from "react-dom/test-utils";
 import { preGeneratedDatasets } from "../../algorithm/data/datasets";
 import { exampleDfa1, exampleDfa2 } from "../../algorithm/data/exampleData";
 import { HopcroftAlgorithmImpl, HopcroftAlgorithmState } from "../../algorithm/HopcroftAlgorithm";
@@ -76,10 +77,14 @@ it("renders witness table correctly", function () {
     expect(firstRow.find(".table-cell").at(4).text()).toBe("0");
 });
 
-it("creates download link for minimized DFA", function () {
+it("creates download link for minimized DFA", async function () {
     const algorithm = new HopcroftAlgorithmImpl(preGeneratedDatasets.sprawling[0]);
     algorithm.run();
     const wrapper = mount(<HopcroftAlgorithmVisualization algorithm={algorithm} />);
+    await act(async () => {
+        // for async DfaVisualization rendering
+        await new Promise((resolve) => setImmediate(resolve));
+    });
     const downloadButton = wrapper.find("button").at(0);
     expect(downloadButton.text()).toContain("Download minimized");
     const resultDescription = wrapper.find("p");

@@ -22,8 +22,8 @@ export default function DfaVisualization({
         async function renderGraph() {
             let svgGraph = await viz.renderString(dfaString, { format: "svg" });
             svgGraph = svgGraph
-                .replaceAll('fill="#ffffff"', 'fill="transparent"')
-                .replaceAll("finite_state_machine", "");
+                .replace(/fill="#ffffff"/g, 'fill="transparent"')
+                .replace(/finite_state_machine/g, "");
             setVisualization(svgGraph);
         }
 

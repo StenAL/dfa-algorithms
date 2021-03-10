@@ -1,4 +1,5 @@
 import { mount, shallow } from "enzyme";
+import { act } from "react-dom/test-utils";
 import { preGeneratedDatasets } from "../../algorithm/data/datasets";
 import { exampleDfa1, exampleDfa2 } from "../../algorithm/data/exampleData";
 import {
@@ -63,10 +64,14 @@ it("renders state minimization table correctly", function () {
     expect(wrapper.text()).toContain("All states are distinguishable");
 });
 
-it("creates download link for minimized DFA", function () {
+it("creates download link for minimized DFA", async function () {
     const algorithm = new TableFillingAlgorithmImpl(preGeneratedDatasets.sprawling[0]);
     algorithm.run();
     const wrapper = mount(<TableFillingAlgorithmVisualization algorithm={algorithm} />);
+    await act(async () => {
+        // for async DfaVisualization rendering
+        await new Promise((resolve) => setImmediate(resolve));
+    });
     const downloadButton = wrapper.find("button").at(0);
     expect(downloadButton.text()).toContain("Download minimized");
     const resultDescription = wrapper.find("p");

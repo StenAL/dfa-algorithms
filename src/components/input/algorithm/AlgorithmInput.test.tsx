@@ -7,7 +7,7 @@ import { AlgorithmMode } from "../../../types/Algorithm";
 import DfaInput from "../dfa/DfaInput";
 import AlgorithmInput from "./AlgorithmInput";
 
-it("passes DFA input to callback", function () {
+it("passes DFA input to callback", async function () {
     const runCallback = jest.fn();
     const wrapper = mount(
         React.createElement(
@@ -23,9 +23,10 @@ it("passes DFA input to callback", function () {
             }
         )
     );
-    act(() => {
+    await act(async () => {
         wrapper.find(DfaInput).at(0).props().convertInputCallback(exampleDfa1);
         wrapper.find(DfaInput).at(1).props().convertInputCallback(exampleDfa2);
+        await new Promise((resolve) => setImmediate(resolve));
     });
     let button = wrapper
         .find("button")
@@ -63,7 +64,7 @@ it("prevents invalid input from being run", function () {
     expect(button.props().disabled).toBe(true);
 });
 
-it("only passes one DFA in callback when in STATE_MINIMIZATION mode", function () {
+it("only passes one DFA in callback when in STATE_MINIMIZATION mode", async function () {
     const runCallback = jest.fn();
     const wrapper = mount(
         React.createElement(
@@ -80,9 +81,11 @@ it("only passes one DFA in callback when in STATE_MINIMIZATION mode", function (
         )
     );
     expect(wrapper.find(DfaInput).length).toBe(1);
-    act(() => {
+    await act(async () => {
         wrapper.find(DfaInput).props().convertInputCallback(exampleDfa1);
+        await new Promise((resolve) => setImmediate(resolve));
     });
+
     let button = wrapper
         .find("button")
         .findWhere((b) => b.text() === "Run")
