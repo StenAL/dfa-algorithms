@@ -24,6 +24,24 @@ export default function Help() {
                 The report accompanying the software can be found&nbsp;
                 <a href={process.env.PUBLIC_URL + "/report.pdf"}>here</a>.
             </p>
+            <h3>Glossary</h3>
+            <p>
+                <b>Indistinguishable states</b> of DFAs are groups of states where computations on
+                every input terminate the same way. If a computation from a state on some input ends
+                in an accepting state, then all states that are indistinguishable with the state
+                must also eventually transition to an accepting state on the same input.
+                Analogously, if the state terminates in a non-accepting state on an input, all
+                indistinguishable states must also terminate in a non-accepting state on that input.
+            </p>
+            <p>
+                <b>Equivalent DFAs</b> are DFAs that have indistinguishable starting states. The
+                process of determining whether DFAs are equivalent is <b>equivalence testing</b>.
+            </p>
+            <p>
+                <b>State minimization</b> is the process of creating a new DFA from some DFA where
+                all groups of indistinguishable states are combined into single states.
+            </p>
+
             <h3>Algorithms</h3>
             <h4>The Table-Filling Algorithm</h4>
             <p>
