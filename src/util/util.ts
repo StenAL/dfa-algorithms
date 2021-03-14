@@ -168,5 +168,5 @@ export function dfaToNoamInput(dfa: DFA) {
     }
     const automatonString = output.join("\n");
     const automaton = noam.fsm.parseFsmFromString(automatonString);
-    return noam.fsm.printDotFormat(automaton) as string;
+    return noam.fsm.printDotFormat(automaton);
 }
