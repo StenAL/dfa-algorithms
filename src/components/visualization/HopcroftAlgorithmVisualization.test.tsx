@@ -55,7 +55,7 @@ it("visualizes inverse transition function, partitions, states with predecessors
     firstRow = partitions.find(".table-row").at(1);
     expect(partitions.find(".table-row").length).toBe(algorithm.blocks.size + 1);
     expect(firstRow.find(".visualization-header").at(0).text()).toBe("1");
-    expect(firstRow.find(".visualization-cell").at(0).text()).toBe("{q2}");
+    expect(firstRow.find(".visualization-cell").at(0).text()).toBe("{q6}");
 });
 
 it("renders witness table correctly", function () {
