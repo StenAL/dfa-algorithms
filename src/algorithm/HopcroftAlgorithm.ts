@@ -1,4 +1,5 @@
 import HashMap from "hashmap";
+import { subtract } from "mnemonist/set";
 import {
     Algorithm,
     AlgorithmMode,
@@ -217,13 +218,8 @@ export class HopcroftAlgorithmImpl implements HopcroftAlgorithm {
 
     initializeStatesWithPredecessorSets() {
         this.log?.log("Initializing sets of states with predecessors for blocks 1 and 2");
-        this.createStatesWithPredecessorsSets([1, 2]);
-        this.state = HopcroftAlgorithmState.SETS_OF_STATES_WITH_PREDECESSORS_CREATED;
-    }
-
-    createStatesWithPredecessorsSets(blockNumbers: number[]) {
         for (let symbol of this.input1.alphabet) {
-            for (let i of blockNumbers) {
+            for (let i of [1, 2]) {
                 const block = this.blocks.get(i)!;
                 const statesWithPredecessors = new Set<State>();
                 for (let state of block) {
@@ -238,7 +234,9 @@ export class HopcroftAlgorithmImpl implements HopcroftAlgorithm {
                     this.log?.log(
                         `State${singleState ? "" : "s"} {${Array.from(statesWithPredecessors)
                             .map((s) => s.name)
-                            .join(", ")}} in block ${i} have predecessors on input ${symbol}`
+                            .join(", ")}} in block ${i} ${
+                            singleState ? "has" : "have"
+                        } predecessors on input ${symbol}`
                     );
                 } else {
                     this.log?.log(
@@ -246,6 +244,45 @@ export class HopcroftAlgorithmImpl implements HopcroftAlgorithm {
                     );
                 }
             }
+        }
+        this.state = HopcroftAlgorithmState.SETS_OF_STATES_WITH_PREDECESSORS_CREATED;
+    }
+
+    updateStatesWithPredecessors(blockNumbers: [number, number]) {
+        for (let symbol of this.input1.alphabet) {
+            const existing = this.statesWithPredecessors.get([symbol, blockNumbers[0]])!;
+            const b1 = this.blocks.get(blockNumbers[0])!;
+            const b2 = this.blocks.get(blockNumbers[1])!;
+            const smallerBlock = b1.size <= b2.size ? b1 : b2;
+            const smallerIndex = smallerBlock === b1 ? blockNumbers[0] : blockNumbers[1];
+            const largerIndex =
+                smallerIndex === blockNumbers[0] ? blockNumbers[1] : blockNumbers[0];
+
+            let smallerBlockPredecessors = new Set<State>();
+            for (let el of smallerBlock) {
+                if (existing.has(el)) {
+                    smallerBlockPredecessors.add(el);
+                }
+            }
+            this.statesWithPredecessors.set([symbol, smallerIndex], smallerBlockPredecessors);
+            subtract(existing, smallerBlock);
+            this.statesWithPredecessors.set([symbol, largerIndex], existing);
+            let single = smallerBlockPredecessors.size === 1;
+            this.log?.log(
+                `State${single ? "" : "s"} {${Array.from(smallerBlockPredecessors)
+                    .map((s) => s.name)
+                    .join(", ")}} in block ${smallerIndex} ${
+                    single ? "has" : "have"
+                } predecessors on input ${symbol}`
+            );
+            single = existing.size === 1;
+            this.log?.log(
+                `State${single ? "" : "s"} {${Array.from(existing)
+                    .map((s) => s.name)
+                    .join(", ")}} in block ${largerIndex} ${
+                    single ? "has" : "have"
+                }  predecessors on input ${symbol}`
+            );
         }
     }
 
@@ -285,36 +322,17 @@ export class HopcroftAlgorithmImpl implements HopcroftAlgorithm {
             ).join(", ")}}`
         );
 
-        const block = this.blocks.get(blockNumber)!;
-        const predecessors = Array.from(block)
-            .map((s) => this.inverseTransitionFunction.get([s, toDoListSymbol]))
-            .filter<Set<State>>((s): s is Set<State> => s !== undefined)
-            .reduce((acc, value) => {
-                value.forEach((s) => acc.add(s));
-                return acc;
-            }, new Set());
-
-        if (predecessors.size === 0) {
-            this.log?.log(
-                `Block ${blockNumber} has no predecessors on input ${toDoListSymbol}. No blocks will be split.`
-            );
-        }
-
-        const blocksToBeSplit = new Map<number, Set<State>>(); // block number -> states in the block that will be partitioned into a new block
-        for (let predecessor of predecessors) {
-            const predecessorBlockNumber = this.stateToBlockNumber.get(predecessor)!;
-            if (!blocksToBeSplit.has(predecessorBlockNumber)) {
-                blocksToBeSplit.set(predecessorBlockNumber, new Set<State>());
-            }
-            blocksToBeSplit.get(predecessorBlockNumber)!.add(predecessor);
-        }
+        const blocksToBeSplit = this.getBlocksToBeSplit(blockNumber, toDoListSymbol);
 
         for (let newBlockEntry of blocksToBeSplit.entries()) {
-            const newBlock = newBlockEntry[1];
+            let newBlock = newBlockEntry[1];
             const splitBlockNumber = newBlockEntry[0];
             const existingBlock = this.blocks.get(splitBlockNumber)!;
             if (newBlock.size < existingBlock.size) {
-                const blockK = new Set([...existingBlock].filter((x) => !newBlock.has(x)));
+                subtract(existingBlock, newBlock);
+                let blockK = newBlock;
+                newBlock = existingBlock;
+
                 this.blocks.set(this.k, blockK);
                 this.blocks.set(splitBlockNumber, newBlock);
                 blockK.forEach((state) => this.stateToBlockNumber.set(state, this.k));
@@ -349,7 +367,7 @@ export class HopcroftAlgorithmImpl implements HopcroftAlgorithm {
                 this.log?.log(
                     `Updating sets of states with predecessors for blocks ${splitBlockNumber} and ${this.k}`
                 );
-                this.createStatesWithPredecessorsSets([splitBlockNumber, this.k]);
+                this.updateStatesWithPredecessors([splitBlockNumber, this.k]);
                 for (let s of this.input1.alphabet) {
                     const numberAddedToToDoList =
                         !this.toDoLists.get(s)!.has(splitBlockNumber) &&
@@ -370,7 +388,7 @@ export class HopcroftAlgorithmImpl implements HopcroftAlgorithm {
                 this.log?.log(`Incrementing k. It is now ${this.k}.`);
             } else {
                 this.log?.log(
-                    `All predecessors of block ${blockNumber} transition to block ${blockNumber} on input ${toDoListSymbol}. Therefore no blocks can be split.`
+                    `All predecessors of block ${blockNumber} in block ${splitBlockNumber} transition to block ${blockNumber} on input ${toDoListSymbol}. Therefore block ${splitBlockNumber} can not be split.`
                 );
             }
         }
@@ -393,6 +411,33 @@ export class HopcroftAlgorithmImpl implements HopcroftAlgorithm {
             );
             this.state = HopcroftAlgorithmState.ALL_BLOCKS_PARTITIONED;
         }
+    }
+
+    private getBlocksToBeSplit(blockNumber: number, toDoListSymbol: string) {
+        const block = this.blocks.get(blockNumber)!;
+        const predecessors = Array.from(block)
+            .map((s) => this.inverseTransitionFunction.get([s, toDoListSymbol]))
+            .filter<Set<State>>((s): s is Set<State> => s !== undefined)
+            .reduce((acc, value) => {
+                value.forEach((s) => acc.add(s));
+                return acc;
+            }, new Set<State>());
+
+        if (predecessors.size === 0) {
+            this.log?.log(
+                `Block ${blockNumber} has no predecessors on input ${toDoListSymbol}. No blocks will be split.`
+            );
+        }
+
+        const blocksToBeSplit = new Map<number, Set<State>>(); // block number -> states in the block that will be partitioned into a new block
+        for (let predecessor of predecessors) {
+            const predecessorBlockNumber = this.stateToBlockNumber.get(predecessor)!;
+            if (!blocksToBeSplit.has(predecessorBlockNumber)) {
+                blocksToBeSplit.set(predecessorBlockNumber, new Set<State>());
+            }
+            blocksToBeSplit.get(predecessorBlockNumber)!.add(predecessor);
+        }
+        return blocksToBeSplit;
     }
 
     testStartingStatesAreDistinguishable() {

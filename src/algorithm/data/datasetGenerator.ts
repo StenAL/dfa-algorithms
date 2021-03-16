@@ -80,6 +80,51 @@ const randomDatasetGenerator: DatasetGenerator = (
     };
 };
 
+const webDatasetGenerator: DatasetGenerator = (
+    statesCount,
+    alphabet,
+    finalStatesCount,
+    statePrefix
+) => {
+    const states: State[] = [];
+    const finalStates: Set<State> = new Set<State>();
+    for (let i = 0; i < statesCount; i++) {
+        const state = { name: `${statePrefix}${i}`, transitions: new Map<string, State>() };
+        states.push(state);
+    }
+
+    let window = 1;
+    let windowSum = 1;
+    for (let i = 0; i < states.length; i++) {
+        if (i >= windowSum) {
+            window *= 2;
+            windowSum += window;
+        }
+        for (let j = 0; j < alphabet.length; j++) {
+            const symbol = alphabet[j];
+            const dest = i + window * (j + 1);
+            // console.log(`(window ${window}) from ${i} to ${dest}`);
+            if (dest < states.length) {
+                states[i].transitions.set(symbol, states[dest]);
+            } else {
+                states[i].transitions.set(symbol, states[0]); // todo loop around?
+            }
+        }
+
+        if (i >= window - 1 && i < (windowSum + window) / 2 - 1) {
+            finalStates.add(states[i]);
+            // console.log(`add final state ${states[i].name}`);
+        }
+    }
+
+    return {
+        alphabet: alphabet,
+        finalStates: finalStates,
+        startingState: states[0],
+        states: states,
+    };
+};
+
 /**
  * creates a full n-ary tree where n = alphabet.length. Final states are assigned starting from leaf nodes in a reverse-BFS manner.
  */
@@ -162,4 +207,9 @@ const linearDatasetGenerator: DatasetGenerator = (
     };
 };
 
-export { randomDatasetGenerator, sprawlingDatasetGenerator, linearDatasetGenerator };
+export {
+    randomDatasetGenerator,
+    sprawlingDatasetGenerator,
+    linearDatasetGenerator,
+    webDatasetGenerator,
+};

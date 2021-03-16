@@ -138,7 +138,7 @@ it("steps change state as expected", function () {
     algorithm.step();
     expect(algorithm.state).toBe(HopcroftAlgorithmState.PARTITIONING_BLOCKS);
     expect(algorithm.blocks.size).toBe(4);
-    expect(algorithm.toDoLists.get("0")).toEqual(new Set([2, 4]));
+    expect(algorithm.toDoLists.get("0")).toEqual(new Set([3, 4]));
     expect(algorithm.toDoLists.get("1")).toEqual(new Set([3, 1]));
 
     algorithm.step();
