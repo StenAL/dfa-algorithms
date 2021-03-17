@@ -82,6 +82,7 @@ export default function Help() {
                 <code>O(a(n))</code>, where a is the inverse Ackermann function.
             </p>
             <h3>Datasets</h3>
+            <p>Add dataset visualizations here</p>
             <p>Coming soon</p>
             <h4>Random</h4>
             <p>Coming soon</p>

@@ -45,6 +45,8 @@ export function getDatasetTypeName(type: DatasetType): string {
             return "Sprawling";
         case DatasetType.LINEAR:
             return "Linear";
+        case DatasetType.DE_BRUIJN:
+            return "De Bruijn";
     }
 }
 
@@ -65,7 +67,15 @@ export function getDatasetTypeDescription(type: DatasetType) {
             return (
                 "Linear datasets are DFAs in which the transition graph forms a straight line. Each state will only have " +
                 "transitions going to it from the previous state and will only transition to the next state. Final " +
-                "states are assigned to be at the end of the chain. Linear datasets induce worst-case performance in The Table-Filling Algorithm"
+                "states are assigned to be at the end of the chain. Linear datasets induce worst-case performance in The Table-Filling Algorithm."
+            );
+        case DatasetType.DE_BRUIJN:
+            return (
+                "De Bruijn datasets are DFAs generated from binary de Bruijn words. A binary de Bruijn word is a string of ones and zeroes of length 2^n " +
+                "where all binary words of length n are present exactly once in a cycle formed by the de Bruijn word. For the generated " +
+                "DFA, transitions are assigned to form a cycle and final states are those which correspond to a 1 in a binary de Bruijn " +
+                "word that has at least as many characters as the DFA has states. De Bruijn datasets induce worst-case performance in the n lg n Hopcroft Algorithm if they are generated " +
+                "with 2^n states and half of the states are final states."
             );
     }
 }
@@ -80,6 +90,8 @@ export function getPreGeneratedDatasetPrintName(type: PreGeneratedDatasetName): 
             return "Sprawling tree";
         case "linear":
             return "Linear";
+        case "deBruijn":
+            return "De Bruijn cycle";
     }
 }
 
