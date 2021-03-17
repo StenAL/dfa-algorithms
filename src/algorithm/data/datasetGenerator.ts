@@ -2,9 +2,9 @@ import { DatasetGenerator } from "../../types/Dataset";
 import { State } from "../../types/DFA";
 
 const shuffle = <T>(array: T[]) => {
-    let currentIndex = array.length,
-        temporaryValue,
-        randomIndex;
+    let currentIndex = array.length;
+    let temporaryValue;
+    let randomIndex;
 
     while (0 !== currentIndex) {
         randomIndex = Math.floor(Math.random() * currentIndex);
@@ -80,49 +80,72 @@ const randomDatasetGenerator: DatasetGenerator = (
     };
 };
 
-const webDatasetGenerator: DatasetGenerator = (
+const getDeBruijnString = (alphabet: string, n: number): string => {
+    const length = alphabet.length;
+    let a: number[] = Array(length * n).fill(0);
+    let sequence: number[] = [];
+
+    const db = (t: number, p: number) => {
+        if (t > n) {
+            if (n % p === 0) {
+                const extendBy = a.slice(1, p + 1);
+                sequence.push(...extendBy);
+            }
+        } else {
+            a[t] = a[t - p];
+            db(t + 1, p);
+            for (let j = a[t - p] + 1; j < length; j++) {
+                a[t] = j;
+                db(t + 1, t);
+            }
+        }
+    };
+    db(1, 1);
+    return sequence.map((i) => alphabet[i]).join("");
+};
+
+const deBruijnDatasetGenerator: DatasetGenerator = (
     statesCount,
     alphabet,
     finalStatesCount,
     statePrefix
 ) => {
+    if (alphabet.length === 0 || statesCount === 0 || statesCount < finalStatesCount) {
+        throw Error("Invalid input to dataset generator");
+    }
+
     const states: State[] = [];
-    const finalStates: Set<State> = new Set<State>();
     for (let i = 0; i < statesCount; i++) {
-        const state = { name: `${statePrefix}${i}`, transitions: new Map<string, State>() };
-        states.push(state);
+        states.push({ name: `${statePrefix}${i}`, transitions: new Map<string, State>() });
     }
 
-    let window = 1;
-    let windowSum = 1;
     for (let i = 0; i < states.length; i++) {
-        if (i >= windowSum) {
-            window *= 2;
-            windowSum += window;
-        }
-        for (let j = 0; j < alphabet.length; j++) {
-            const symbol = alphabet[j];
-            const dest = i + window * (j + 1);
-            // console.log(`(window ${window}) from ${i} to ${dest}`);
-            if (dest < states.length) {
-                states[i].transitions.set(symbol, states[dest]);
-            } else {
-                states[i].transitions.set(symbol, states[0]); // todo loop around?
-            }
-        }
-
-        if (i >= window - 1 && i < (windowSum + window) / 2 - 1) {
-            finalStates.add(states[i]);
-            // console.log(`add final state ${states[i].name}`);
+        const from = states[i];
+        for (let symbol of alphabet) {
+            const target = states[(i + 1) % states.length];
+            from.transitions.set(symbol, target);
         }
     }
 
-    return {
-        alphabet: alphabet,
-        finalStates: finalStates,
-        startingState: states[0],
-        states: states,
-    };
+    const finalStates = new Set<State>();
+    let x = 0;
+    while (2 ** x < statesCount) {
+        x += 1;
+    }
+    const deBruijnString = getDeBruijnString("01", x);
+    for (let i = 0; i < statesCount; i++) {
+        if (finalStates.size === finalStatesCount) break;
+        if (deBruijnString[i] === "1") {
+            finalStates.add(states[i]);
+        }
+    }
+
+    while (finalStates.size < finalStatesCount) {
+        const nonFinalState = states.find((s) => !finalStates.has(s))!;
+        finalStates.add(nonFinalState);
+    }
+
+    return { states, startingState: states[0], finalStates, alphabet };
 };
 
 /**
@@ -211,5 +234,5 @@ export {
     randomDatasetGenerator,
     sprawlingDatasetGenerator,
     linearDatasetGenerator,
-    webDatasetGenerator,
+    deBruijnDatasetGenerator,
 };

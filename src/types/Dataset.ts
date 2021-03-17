@@ -4,9 +4,10 @@ export enum DatasetType {
     RANDOM,
     SPRAWLING,
     LINEAR,
+    DE_BRUIJN,
 }
 
-export type PreGeneratedDatasetName = "example" | "random" | "sprawling" | "linear";
+export type PreGeneratedDatasetName = "example" | "random" | "sprawling" | "linear" | "deBruijn";
 
 export type DatasetGenerator = (
     statesCount: number,

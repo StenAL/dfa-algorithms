@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+    deBruijnDatasetGenerator,
     linearDatasetGenerator,
     randomDatasetGenerator,
     sprawlingDatasetGenerator,
@@ -69,6 +70,8 @@ export default function DatasetGenerator({ alphabet, statePrefix, callback }: Ge
                         case DatasetType.LINEAR:
                             generator = linearDatasetGenerator;
                             break;
+                        case DatasetType.DE_BRUIJN:
+                            generator = deBruijnDatasetGenerator;
                     }
                     const dfa = generator(statesCount, alphabet, finalStatesCount, statePrefix);
                     setDfa(dfa);
