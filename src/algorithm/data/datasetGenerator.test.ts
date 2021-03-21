@@ -1,6 +1,7 @@
 import { State } from "../../types/DFA";
 import Queue from "mnemonist/queue";
 import {
+    deBruijnDatasetGenerator,
     linearDatasetGenerator,
     randomDatasetGenerator,
     sprawlingDatasetGenerator,
@@ -62,6 +63,40 @@ it("sprawling dataset is connected, assigns final states correctly", function ()
     for (let expectedFinalState of expectedFinalStates) {
         expect(dfa.finalStates.has(expectedFinalState)).toBe(true);
     }
+});
+
+it("de bruijn dataset is connected, matches de bruinj string", function () {
+    const alphabet = ["a", "b", "c"];
+    const statesCount = 32;
+    const finalStatesCount = 16;
+    const dfa = deBruijnDatasetGenerator(statesCount, alphabet, finalStatesCount);
+    for (let i = 0; i < statesCount; i++) {
+        const from = dfa.states[i];
+        for (let symbol of alphabet) {
+            const toIndex = (i + 1) % statesCount;
+            expect(from.transitions.get(symbol)!).toBe(dfa.states[toIndex]);
+        }
+    }
+
+    const visited = new Set<State>();
+    const queue = [dfa.startingState];
+    while (queue.length > 0) {
+        const currentState = queue.pop()!;
+        if (visited.has(currentState)) {
+            continue;
+        }
+
+        const transitionTo = Array.from(currentState.transitions.values()).flat();
+        visited.add(currentState);
+        queue.push(...transitionTo);
+    }
+    expect(visited.size).toBe(dfa.states.length);
+    const deBruijnString = "00000100011001010011101011011111";
+    const expectedFinalStates = Array.from(deBruijnString)
+        .map((s, i) => (s === "1" ? i : -1))
+        .filter((n) => n !== -1)
+        .map((i) => dfa.states[i]);
+    expect(Array.from(dfa.finalStates)).toEqual(expectedFinalStates);
 });
 
 it("linear dataset is connected, assigns final states correctly", function () {
