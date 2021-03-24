@@ -1,4 +1,18 @@
+import {
+    deBruijnDatasetGenerator,
+    linearDatasetGenerator,
+    randomDatasetGenerator,
+    sprawlingDatasetGenerator,
+} from "../algorithm/data/datasetGenerator";
+import { exampleDfa1 } from "../algorithm/data/exampleData";
+import { dfaToNoamInput } from "../util/util";
+import DfaVisualization from "./visualization/dfa/DfaVisualization";
+
 export default function Help() {
+    const randomDfaExample = randomDatasetGenerator(5, ["0", "1"], 1);
+    const sprawlingDfaExample = sprawlingDatasetGenerator(7, ["0", "1"], 1);
+    const linearDfaExample = linearDatasetGenerator(5, ["0", "1"], 1);
+    const deBruijnDfaExample = deBruijnDatasetGenerator(4, ["0", "1"], 2);
     return (
         <div className={"page-container help"}>
             <h2>Help</h2>
@@ -41,7 +55,6 @@ export default function Help() {
                 <b>State minimization</b> is the process of creating a new DFA from some DFA where
                 all groups of indistinguishable states are combined into single states.
             </p>
-
             <h3>Algorithms</h3>
             <h4>The Table-Filling Algorithm</h4>
             <p>
@@ -82,14 +95,66 @@ export default function Help() {
                 <code>O(a(n))</code>, where a is the inverse Ackermann function.
             </p>
             <h3>Datasets</h3>
-            <p>Add dataset visualizations here</p>
-            <p>Coming soon</p>
+            <p>
+                Datasets are concrete DFAs created from templates and can be used to run and compare
+                algorithms. This project defines four different templates, which can be accessed
+                from the dataset generation page.
+            </p>
+            <DfaVisualization
+                initialState={exampleDfa1.startingState.name}
+                dfaString={dfaToNoamInput(exampleDfa1)}
+                className={"single-visualization"}
+            />
             <h4>Random</h4>
-            <p>Coming soon</p>
+            <p>
+                Random datasets consist of DFAs where transitions and final states are allocated
+                randomly. The DFA might or might not contain cycles, the only thing that is
+                guaranteed is that all states in the DFA are connected. Random datasets are useful
+                for comparing different algorithms and benchmarking them against each other.
+            </p>
+            <DfaVisualization
+                initialState={randomDfaExample.startingState.name}
+                dfaString={dfaToNoamInput(randomDfaExample)}
+                className={"single-visualization"}
+            />
             <h4>Linear</h4>
-            <p>Coming soon</p>
+            <p>
+                Linear datasets are DFAs in which the transition graph forms a straight line. Each
+                state only has transitions going to it from the previous state and will only
+                transition to the next state. These DFAs induce worst-case performance in The
+                Table-Filling Algorithm.
+            </p>
+            <DfaVisualization
+                initialState={linearDfaExample.startingState.name}
+                dfaString={dfaToNoamInput(linearDfaExample)}
+                className={"single-visualization"}
+            />
             <h4>Sprawling</h4>
-            <p>Coming soon</p>
+            <p>
+                Sprawling datasets create transitions that form full trees. They are as broad as
+                possible and induce worst-case performance in The (Nearly) Linear Algorithm."
+            </p>
+            <DfaVisualization
+                initialState={sprawlingDfaExample.startingState.name}
+                dfaString={dfaToNoamInput(sprawlingDfaExample)}
+                className={"single-visualization"}
+            />
+            <h4>De Bruijn</h4>
+            <p>
+                De Bruijn datasets are DFAs generated from binary de Bruijn words. A binary de
+                Bruijn word is a string of ones and zeroes of length 2^n where all binary words of
+                length n are present exactly once in a cycle formed by the word. In a de Bruinj DFA,
+                transitions are assigned to form a cycle and final states are those which correspond
+                to a 1 in a binary de Bruijn word that has at least as many characters as the DFA
+                has states. De Bruijn datasets induce worst-case performance in the n lg n Hopcroft
+                Algorithm if they are generated with 2^n states and half of the states are final
+                states.
+            </p>
+            <DfaVisualization
+                initialState={deBruijnDfaExample.startingState.name}
+                dfaString={dfaToNoamInput(deBruijnDfaExample)}
+                className={"single-visualization"}
+            />
         </div>
     );
 }
