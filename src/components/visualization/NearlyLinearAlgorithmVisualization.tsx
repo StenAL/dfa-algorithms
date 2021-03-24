@@ -126,8 +126,6 @@ export default function NearlyLinearAlgorithmVisualization({
             ) {
                 resultString += `. Witness: ${algorithm.witness}.`;
             }
-            // todo output link to or JSON of minimized DFA somewhere here
-            // const result: DFA = algorithm.result as DFA;
             stateDescription += ". " + resultString;
             break;
     }

@@ -108,7 +108,7 @@ const deBruijnDatasetGenerator: DatasetGenerator = (
     statesCount,
     alphabet,
     finalStatesCount,
-    statePrefix
+    statePrefix = "q"
 ) => {
     if (alphabet.length === 0 || statesCount === 0 || statesCount < finalStatesCount) {
         throw Error("Invalid input to dataset generator");
