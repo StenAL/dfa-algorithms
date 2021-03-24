@@ -23,15 +23,6 @@ export default function AlgorithmStepControls({
                 {"<<"}
             </button>
             <button
-                disabled={true}
-                onClick={() => {
-                    // todo: step backwards
-                    stepBackwardCallback();
-                }}
-            >
-                {"<"}
-            </button>
-            <button
                 disabled={algorithm.state === CommonAlgorithmState.FINAL}
                 onClick={() => {
                     algorithm.step();

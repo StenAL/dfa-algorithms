@@ -43,18 +43,28 @@ it("buttons call corresponding algorithm functions and invoke callback", functio
             stepForwardCallback={stepForwardCallback}
         />
     );
-    let stepForwardButton = wrapper.find("button").at(2);
+    let stepForwardButton = wrapper
+        .find("button")
+        .findWhere((w) => w.text() === ">")
+        .at(0);
     stepForwardButton.simulate("click");
     expect(algorithm.state).toBe(TableFillingAlgorithmState.ALL_PAIRS_MARKED);
     stepForwardButton.simulate("click");
     expect(stepForwardCallback).toHaveBeenCalledTimes(2);
     expect(algorithm.state).toBe(CommonAlgorithmState.FINAL);
 
-    let resetButton = wrapper.find("button").at(0);
+    let resetButton = wrapper
+        .find("button")
+        .findWhere((w) => w.text() === "<<")
+        .at(0);
     resetButton.simulate("click");
     expect(stepBackwardCallback).toHaveBeenCalledTimes(1);
     expect(algorithm.state).toBe(CommonAlgorithmState.INITIAL);
-    let skipButton = wrapper.find("button").at(3);
+
+    let skipButton = wrapper
+        .find("button")
+        .findWhere((w) => w.text() === ">>")
+        .at(0);
     skipButton.simulate("click");
     expect(stepForwardCallback).toHaveBeenCalledTimes(3);
     expect(algorithm.state).toBe(CommonAlgorithmState.FINAL);
@@ -94,12 +104,19 @@ it("disables invalid step buttons", function () {
             stepForwardCallback={stepForwardCallback}
         />
     );
-    let resetButton = wrapper.find("button").at(0);
-    let stepBackwardButton = wrapper.find("button").at(1);
-    let stepForwardButton = wrapper.find("button").at(2);
-    let skipButton = wrapper.find("button").at(3);
+    let resetButton = wrapper
+        .find("button")
+        .findWhere((w) => w.text() === "<<")
+        .at(0);
+    let stepForwardButton = wrapper
+        .find("button")
+        .findWhere((w) => w.text() === ">")
+        .at(0);
+    let skipButton = wrapper
+        .find("button")
+        .findWhere((w) => w.text() === ">>")
+        .at(0);
     expect(resetButton.get(0).props.disabled).toBe(true);
-    expect(stepBackwardButton.get(0).props.disabled).toBe(true);
     expect(stepForwardButton.get(0).props.disabled).toBe(false);
     expect(skipButton.get(0).props.disabled).toBe(false);
 
@@ -110,8 +127,14 @@ it("disables invalid step buttons", function () {
 
     stepForwardButton.simulate("click");
     wrapper.setProps({});
-    stepForwardButton = wrapper.find("button").at(2);
-    skipButton = wrapper.find("button").at(3);
+    stepForwardButton = wrapper
+        .find("button")
+        .findWhere((w) => w.text() === ">")
+        .at(0);
+    skipButton = wrapper
+        .find("button")
+        .findWhere((w) => w.text() === ">>")
+        .at(0);
     expect(stepForwardButton.get(0).props.disabled).toBe(true);
     expect(skipButton.get(0).props.disabled).toBe(true);
 });
