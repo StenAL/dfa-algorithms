@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
 
+$narrow-width: 1100px;
+
 :root {
     --pastel-red: #ff6961;
     --pastel-green: #77dd77;
@@ -7,10 +9,10 @@
     --purple: #a084ce;
 }
 
-html,
 body,
 #root {
     margin: 0 auto;
+    padding: 0 10px;
     font-family: "Open Sans", sans-serif;
     display: flex;
     flex-direction: column;
@@ -498,6 +500,13 @@ button {
 }
 .double-visualization {
     max-width: 45vw;
+}
+
+@media (max-width: $narrow-width) {
+    .dfa-visualization,
+    .double-visualization {
+        max-width: inherit;
+    }
 }
 
 .algorithm-visualization-container {
