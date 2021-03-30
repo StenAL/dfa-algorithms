@@ -36,7 +36,9 @@ export default function Help() {
             </p>
             <p>
                 The report accompanying the software can be found&nbsp;
-                <a href={process.env.PUBLIC_URL + "/report.pdf"}>here</a>.
+                <a href={process.env.PUBLIC_URL + "/report.pdf"}>here</a>. The report contains
+                in-depth information about the background and implementation of this project,
+                including concrete examples describing and running the algorithms.
             </p>
             <h3>Glossary</h3>
             <p>
@@ -54,6 +56,40 @@ export default function Help() {
             <p>
                 <b>State minimization</b> is the process of creating a new DFA from some DFA where
                 all groups of indistinguishable states are combined into single states.
+            </p>
+            <h3>Manual</h3>
+            <h4>Input</h4>
+            <p>
+                Whether visualizing an algorithm or running one in headless mode, input is needed.
+                One way to do this is to use pre-generated datasets available in buttons above
+                custom input fields. In this case the input fields are filled in automatically and
+                the results are visualized. These fields can then be modified to customize the DFAs.
+                Alternatively, custom DFAs can be input by filling in the alphabet, states, final
+                states, and transitions fields. The alphabet, states, and final states fields expect
+                a list comma-separated values. The transition fields are dynamically generated from
+                the alphabet and state values and are shown as a table. Validation is performed on
+                the fields to ensure the input is correct.
+            </p>
+            <p>
+                Custom inputs can be saved to a local JSON file using the "Save to File" button.
+                They can later be loaded using the "Select file..." button to fill in the DFA input
+                fields.
+            </p>
+            <h4>Headless mode</h4>
+            <p>
+                Headless mode can be used to run algorithms without visualizing them. Simply select
+                the algorithms you wish to run, input some data (or use pre-generated inputs), and
+                click "Run". This transitions you to the headless mode runner screen, where all
+                selected algorithms are run sequentially and their results and running times are
+                shown in a report.
+            </p>
+            <h4>Dataset generation</h4>
+            <p>
+                To avoid manually inputting DFAs, dataset generators can be used. These generators
+                take an alphabet, a number of states, and a number of final states as parameters and
+                generate a DFA from a pre-defined template. These templates are described below in
+                the Datasets section. Datasets can be saved to a JSON file using the "Download"
+                button.
             </p>
             <h3>Algorithms</h3>
             <h4>The Table-Filling Algorithm</h4>
